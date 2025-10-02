@@ -1,0 +1,4 @@
+/root/multi_view_stereo/build/CMakeFiles/rebuild_cache.dir
+/root/multi_view_stereo/build/CMakeFiles/edit_cache.dir
+/root/multi_view_stereo/build/CMakeFiles/run_visualize_trajectories.dir
+/root/multi_view_stereo/build/CMakeFiles/run_multi_view_stereo.dir
