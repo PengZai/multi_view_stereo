@@ -74,11 +74,16 @@ void Dataset::readTrajectory(const Camera *cameras, const std::string& path, int
 }
 
 Image::Image()
-{
+:ptr_gray_data_(nullptr)
+{   
     id_ = Nimage_;
     Nimage_++ ;
 }
 
+
+Image::~Image(){
+    delete[] ptr_gray_data_;
+}
 
 const Eigen::Vector3f & Image::getTranslation() const
 {
@@ -154,26 +159,59 @@ void Image::loadData()
         std::cout <<  "path of image id :" << id_ << " is empty " << std::endl;
     }
 
-    rgb_data_ = cv::imread(path_, cv::IMREAD_COLOR);
-    gray_data_ = cv::imread(path_, cv::IMREAD_GRAYSCALE);
+    cv::Mat cv_gray_data;
+    if (!cv_rgb_data_.empty()) {
+        // Successfully read as RGB
+        cv::cvtColor(cv_rgb_data_, cv_gray_data, cv::COLOR_BGR2GRAY);
+    } else {
+        // Failed to read RGB, try grayscale
+        cv_gray_data = cv::imread(path_, cv::IMREAD_GRAYSCALE);
+        if (cv_gray_data.empty()) {
+            std::cout << "Error: Failed to load image from " << path_ << std::endl;
+            return; // or throw an exception
+        }
+    }
+
+    width_ = cv_gray_data.cols;
+    height_ = cv_gray_data.rows;
+    
+    ptr_gray_data_ = new uint8_t[width_ * height_];
+
+    for (int i = 0; i < height_; i++) {
+        for (int j = 0; j < width_; j++) {
+            ptr_gray_data_[i * width_ + j] = cv_gray_data.at<uint8_t>(i, j);
+        }
+    }
+
+
  
 }
 
-
-cv::Mat Image::getGrayData() const
+uint32_t Image::getWidth() const
 {
-    return gray_data_;
+    return width_;
+}
+
+uint32_t Image::getHeight() const
+{
+    return height_;
+}
+
+
+uint8_t* Image::getGrayDataPtr() const
+{
+    return ptr_gray_data_;
 }
 
 cv::Mat Image::getRGBData() const
 {
-    return rgb_data_;
+    return cv_rgb_data_;
 }
 
 
 bool Image::isInImage(float u, float v, int border) const
 {
-    if(gray_data_.empty()==false)
+    if(ptr_gray_data_!= nullptr)
     {
         // int int_u = round(u);
         // int int_v = round(v);
@@ -181,7 +219,7 @@ bool Image::isInImage(float u, float v, int border) const
         // {
         //     return true;
         // }
-        if(u >=border && v >= border && u < gray_data_.cols - border - 1 && v < gray_data_.rows - border - 1)
+        if(u >=border && v >= border && u < width_ - border - 1 && v < height_ - border - 1)
         {
             return true;
         }

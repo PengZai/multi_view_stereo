@@ -1,0 +1,52 @@
+[
+{
+  "directory": "/root/multi_view_stereo/build",
+  "command": "/usr/bin/c++  -DMATPLOT_BUILD_HIGH_RESOLUTION_WORLD_MAP -DNOMINMAX -isystem /usr/include/opencv4 -isystem /usr/include/eigen3  -O3   -std=c++17 -o CMakeFiles/run_visualize_trajectories.dir/test/visualize_trajectories.cc.o -c /root/multi_view_stereo/test/visualize_trajectories.cc",
+  "file": "/root/multi_view_stereo/test/visualize_trajectories.cc"
+},
+{
+  "directory": "/root/multi_view_stereo/build",
+  "command": "/usr/bin/c++  -DMATPLOT_BUILD_HIGH_RESOLUTION_WORLD_MAP -DNOMINMAX -isystem /usr/include/opencv4 -isystem /usr/include/eigen3  -O3   -std=c++17 -o CMakeFiles/run_visualize_trajectories.dir/src/configs.cc.o -c /root/multi_view_stereo/src/configs.cc",
+  "file": "/root/multi_view_stereo/src/configs.cc"
+},
+{
+  "directory": "/root/multi_view_stereo/build",
+  "command": "/usr/bin/c++  -DMATPLOT_BUILD_HIGH_RESOLUTION_WORLD_MAP -DNOMINMAX -isystem /usr/include/opencv4 -isystem /usr/include/eigen3  -O3   -std=c++17 -o CMakeFiles/run_visualize_trajectories.dir/src/data.cc.o -c /root/multi_view_stereo/src/data.cc",
+  "file": "/root/multi_view_stereo/src/data.cc"
+},
+{
+  "directory": "/root/multi_view_stereo/build",
+  "command": "/usr/bin/c++  -DMATPLOT_BUILD_HIGH_RESOLUTION_WORLD_MAP -DNOMINMAX -isystem /usr/include/opencv4 -isystem /usr/include/eigen3  -O3   -std=c++17 -o CMakeFiles/run_visualize_trajectories.dir/src/multi_view_stereo.cc.o -c /root/multi_view_stereo/src/multi_view_stereo.cc",
+  "file": "/root/multi_view_stereo/src/multi_view_stereo.cc"
+},
+{
+  "directory": "/root/multi_view_stereo/build",
+  "command": "/usr/bin/c++  -DMATPLOT_BUILD_HIGH_RESOLUTION_WORLD_MAP -DNOMINMAX -isystem /usr/include/opencv4 -isystem /usr/include/eigen3  -O3   -std=c++17 -o CMakeFiles/run_visualize_trajectories.dir/src/utils.cc.o -c /root/multi_view_stereo/src/utils.cc",
+  "file": "/root/multi_view_stereo/src/utils.cc"
+},
+{
+  "directory": "/root/multi_view_stereo/build",
+  "command": "/usr/bin/c++  -DMATPLOT_BUILD_HIGH_RESOLUTION_WORLD_MAP -DNOMINMAX -isystem /usr/include/opencv4 -isystem /usr/include/eigen3  -O3   -std=c++17 -o CMakeFiles/run_multi_view_stereo.dir/src/main.cc.o -c /root/multi_view_stereo/src/main.cc",
+  "file": "/root/multi_view_stereo/src/main.cc"
+},
+{
+  "directory": "/root/multi_view_stereo/build",
+  "command": "/usr/bin/c++  -DMATPLOT_BUILD_HIGH_RESOLUTION_WORLD_MAP -DNOMINMAX -isystem /usr/include/opencv4 -isystem /usr/include/eigen3  -O3   -std=c++17 -o CMakeFiles/run_multi_view_stereo.dir/src/configs.cc.o -c /root/multi_view_stereo/src/configs.cc",
+  "file": "/root/multi_view_stereo/src/configs.cc"
+},
+{
+  "directory": "/root/multi_view_stereo/build",
+  "command": "/usr/bin/c++  -DMATPLOT_BUILD_HIGH_RESOLUTION_WORLD_MAP -DNOMINMAX -isystem /usr/include/opencv4 -isystem /usr/include/eigen3  -O3   -std=c++17 -o CMakeFiles/run_multi_view_stereo.dir/src/data.cc.o -c /root/multi_view_stereo/src/data.cc",
+  "file": "/root/multi_view_stereo/src/data.cc"
+},
+{
+  "directory": "/root/multi_view_stereo/build",
+  "command": "/usr/bin/c++  -DMATPLOT_BUILD_HIGH_RESOLUTION_WORLD_MAP -DNOMINMAX -isystem /usr/include/opencv4 -isystem /usr/include/eigen3  -O3   -std=c++17 -o CMakeFiles/run_multi_view_stereo.dir/src/multi_view_stereo.cc.o -c /root/multi_view_stereo/src/multi_view_stereo.cc",
+  "file": "/root/multi_view_stereo/src/multi_view_stereo.cc"
+},
+{
+  "directory": "/root/multi_view_stereo/build",
+  "command": "/usr/bin/c++  -DMATPLOT_BUILD_HIGH_RESOLUTION_WORLD_MAP -DNOMINMAX -isystem /usr/include/opencv4 -isystem /usr/include/eigen3  -O3   -std=c++17 -o CMakeFiles/run_multi_view_stereo.dir/src/utils.cc.o -c /root/multi_view_stereo/src/utils.cc",
+  "file": "/root/multi_view_stereo/src/utils.cc"
+}
+]

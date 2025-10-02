@@ -46,7 +46,7 @@ class Config
     float min_depth_;
     float max_depth_;
     std::vector<int> start_match_uv_;
-    int window_size_;
+    int half_window_size_;
     std::string save_figure_path_;
     bool debug_plot_;
     Camera* cameras_;

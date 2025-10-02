@@ -16,6 +16,10 @@ vector
 filesystem
 -
 
+/root/multi_view_stereo/src/data.cc
+data.h
+/root/multi_view_stereo/src/data.h
+
 /root/multi_view_stereo/src/data.h
 Eigen/Core
 -
@@ -29,6 +33,22 @@ filesystem
 -
 configs.h
 /root/multi_view_stereo/src/configs.h
+
+/root/multi_view_stereo/src/main.cc
+iostream
+-
+opencv2/opencv.hpp
+-
+string
+-
+vector
+-
+configs.h
+/root/multi_view_stereo/src/configs.h
+data.h
+/root/multi_view_stereo/src/data.h
+multi_view_stereo.h
+/root/multi_view_stereo/src/multi_view_stereo.h
 
 /root/multi_view_stereo/src/multi_view_stereo.cc
 multi_view_stereo.h

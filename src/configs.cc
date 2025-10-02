@@ -14,7 +14,7 @@ Config::Config(cv::FileStorage* fs)
     (*fs)["system"]["min_depth"] >> min_depth_;
     (*fs)["system"]["max_depth"] >> max_depth_;
     (*fs)["system"]["start_match_uv"] >> start_match_uv_;
-    (*fs)["system"]["window_size"] >> window_size_;
+    (*fs)["system"]["half_window_size"] >> half_window_size_;
     (*fs)["system"]["save_figure_path"] >> save_figure_path_;
     (*fs)["system"]["debug_plot"] >> debug_plot_;
 

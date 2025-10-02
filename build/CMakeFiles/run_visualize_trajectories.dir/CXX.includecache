@@ -16,6 +16,10 @@ vector
 filesystem
 -
 
+/root/multi_view_stereo/src/data.cc
+data.h
+/root/multi_view_stereo/src/data.h
+
 /root/multi_view_stereo/src/data.h
 Eigen/Core
 -
@@ -53,6 +57,24 @@ opencv2/opencv.hpp
 -
 Eigen/Core
 -
+
+/root/multi_view_stereo/test/visualize_trajectories.cc
+iostream
+-
+opencv2/opencv.hpp
+-
+string
+-
+vector
+-
+pangolin/pangolin.h
+-
+../src/configs.h
+/root/multi_view_stereo/src/configs.h
+../src/data.h
+/root/multi_view_stereo/src/data.h
+../src/utils.h
+/root/multi_view_stereo/src/utils.h
 
 /usr/include/eigen3/Eigen/Cholesky
 Core

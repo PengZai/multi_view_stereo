@@ -7,7 +7,7 @@ namespace MVS
 MultiViewStereo::MultiViewStereo(Config* const config)
 {
     config_ = config;
-    ws_ = config_->window_size_;
+    half_ws_ = config_->half_window_size_;
     max_inv_depth_ = 1/config->min_depth_;
     min_inv_depth_ = 1/config->max_depth_;
 
@@ -71,14 +71,15 @@ void MultiViewStereo::match(Image* const ref_image, Image* const tar_image, bool
     Eigen::Matrix3f KRKi = K_tar * R_tar_ref * K_ref.inverse();
     Eigen::Vector3f Kt = K_tar * t_tar_ref;
 
-    cv::Mat ref_gray_data = ref_image->getGrayData();
     cv::Mat ref_rgb_data = ref_image->getRGBData();
 
+    uint8_t* ref_ptr_gray_data = ref_image->getGrayDataPtr();
+    int width = ref_image->getWidth();
+    int height = ref_image->getHeight();
 
-
-    for(size_t v=ws_; v < ref_gray_data.rows - ws_; v++)
+    for(size_t v=half_ws_; v < height - half_ws_; v++)
     {
-        for(size_t u=ws_; u < ref_gray_data.cols - ws_; u++)
+        for(size_t u=half_ws_; u < width - half_ws_; u++)
         {
             // KRKi * (u,v,1) + dmin_inv * Kt = pt_min
             // KRKi * (u,v,1) + dmax_inv * Kt = pt_max
@@ -115,14 +116,15 @@ void MultiViewStereo::match(Image* const ref_image, Image* const tar_image, bool
 
             // start = std::chrono::steady_clock::now();        
             // const cv::Mat ref_gray_patch = getSubpixelPatch(ref_gray_data, u,  v, ws_, ws_);
-            cv::Mat ref_gray_patch;
-            getRoundPixelPatch(ref_gray_data, u, v, ws_, ws_, ref_gray_patch);
+            // uint8_t* ref_ptr_gray_patch = ref_ptr_gray_data + v*width + u;
+            // getRoundPixelPatch(ref_gray_data, u, v, half_ws_, half_ws_, ref_gray_patch);
+
             // end = std::chrono::steady_clock::now();
             // elapsed_us = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
             // printf("getSubpixelPatch done ! Timing : %lld µs\n", (long long)elapsed_us);
 
             // auto start = std::chrono::steady_clock::now();        
-            epipolarSearch(ref_gray_patch, tar_image, uv_min, uv_max, uv_best_match, debug_plot);
+            epipolarSearch(ref_ptr_gray_data, u, v, tar_image, uv_min, uv_max, uv_best_match, debug_plot);
             // auto end = std::chrono::steady_clock::now();
             // auto elapsed_us = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
             // printf("epipolar search done ! Timing : %lld µs\n", (long long)elapsed_us);
@@ -138,38 +140,42 @@ void MultiViewStereo::match(Image* const ref_image, Image* const tar_image, bool
 
 }
 
-void MultiViewStereo::epipolarSearch(const cv::Mat ref_data_patch, const Image* const tar_image, 
-    const Eigen::Vector2f &uv_min, const Eigen::Vector2f &uv_max, Eigen::Vector2f uv_best_match, bool debug_plot)
+void MultiViewStereo::epipolarSearch(const uint8_t* const ref_ptr_gray_data, uint32_t ref_u, uint32_t ref_v, const Image* const tar_image, 
+    const Eigen::Vector2f &tar_uv_min, const Eigen::Vector2f &tar_uv_max, Eigen::Vector2f tar_uv_best_match, bool debug_plot)
 {
 
-    cv::Mat tar_data = tar_image->getGrayData();
-    Eigen::Vector2f epipolar_vector = Eigen::Vector2f(uv_max[0] - uv_min[0], uv_max[1] - uv_min[1]);
+    uint8_t* tar_ptr_gray_data = tar_image->getGrayDataPtr();
+    uint32_t width = tar_image->getWidth();
+    uint32_t height = tar_image->getWidth();
+
+    Eigen::Vector2f epipolar_vector = Eigen::Vector2f(tar_uv_max[0] - tar_uv_min[0], tar_uv_max[1] - tar_uv_min[1]);
     float epipolar_length = epipolar_vector.norm();
-    epipolar_vector.normalize();
+    Eigen::Vector2f unit_epipolar_vector =  epipolar_vector / epipolar_length;
 
     float s = 0;
     float min_cost = std::numeric_limits<float>::infinity();
     int best_s_idx = 0;
     Eigen::Vector2f uv_best_tmp(-1, -1);
+    Eigen::Vector2f uv_best_match(-1, -1);
     int best_s_idx_temp = 0;
     std::vector<float> costs;
     std::vector<float> steps;
     std::vector<Eigen::Vector2f> valid_uvs;
     while(s <= epipolar_length)
     {   
-        Eigen::Vector2f uv_current  = uv_min + s * epipolar_vector;
-        if(tar_image->isInImage(uv_current[0], uv_current[1], ws_/2)){
-            cv::Mat tar_data_patch;
+        Eigen::Vector2f tar_uv_current  = tar_uv_min + s * unit_epipolar_vector;
+        if(tar_image->isInImage(tar_uv_current[0], tar_uv_current[1], half_ws_)){
             // cv::getRectSubPix(tar_data, cv::Size(ws_, ws_), cv::Point2f(uv_current[0],  uv_current[1]), tar_data_patch, CV_32F);
-            getRoundPixelPatch(tar_data, uv_current[0], uv_current[1], ws_, ws_, tar_data_patch);
-            float cost = SAD(ref_data_patch, tar_data_patch);
-            valid_uvs.push_back(uv_current);
+            // getRoundPixelPatch(tar_data, uv_current[0], uv_current[1], ws_, ws_, tar_data_patch);
+
+            float cost = SAD(ref_ptr_gray_data, ref_u, ref_v, tar_ptr_gray_data, round(tar_uv_current[0]), round(tar_uv_current[1]), width, height, half_ws_);
+            valid_uvs.push_back(tar_uv_current);
             costs.push_back(cost);
             steps.push_back(s);
             if(cost < min_cost)
             {
                 min_cost = cost;
-                uv_best_tmp = uv_current;
+                uv_best_tmp = tar_uv_current;
                 best_s_idx_temp = steps.size()-1;
             }
         }
@@ -236,17 +242,21 @@ void MultiViewStereo::epipolarSearch(const cv::Mat ref_data_patch, const Image* 
 }
 
 
-float MultiViewStereo::SAD(const cv::Mat p1, const cv::Mat p2)
+float MultiViewStereo::SAD(const uint8_t* ref_ptr, uint32_t ref_u, uint32_t ref_v, const uint8_t* tar_ptr, uint32_t tar_u, uint32_t tar_v, uint32_t width, uint32_t height, uint32_t half_ws)
 {
-    CV_Assert(p1.size() == p2.size());
 
     float cost = 0;
-    const int rows = p1.rows;
-    const int cols = p1.cols;
+    for (int y = -half_ws; y < half_ws; y++)
+    {
+        uint32_t ref_row = (ref_v + y)*width;
+        uint32_t tar_row = (tar_v + y)*width;
+        for (int x = -half_ws; x < half_ws; x++)
+        {
+            cost += std::abs(ref_ptr[ref_row + ref_u + x]-tar_ptr[tar_row+tar_u+x]);
+        }
+    }
 
-    for (int y = 0; y < rows; y++)
-        for (int x = 0; x < cols; x++)
-            cost += std::abs(p1.at<uchar>(y,x) - p2.at<uchar>(y,x));
+
     return cost;
 
     // return static_cast<float>(cv::norm(p1, p2, cv::NORM_L1));
