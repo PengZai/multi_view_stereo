@@ -21,9 +21,25 @@
         "name": "run_visualize_trajectories",
         "type": "cppdbg",
         "request": "launch",
-        "program": "${workspaceFolder}/build/run_visualize_trajectories",
+        "program": "${workspaceFolder}/build/test/run_visualize_trajectories",
         "args": [
             "../configs/BotanicGarden.yaml"
+        ],
+        "stopAtEntry": false,
+        "cwd": "${fileDirname}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb"
+    },
+    {
+        "name": "run_pixel_operation_comparison",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/test/run_pixel_operation_comparison",
+        "args": [
+            "../data/BotanicGarden_rectified_1/left_1666059840150278091.png",
+            "../data/BotanicGarden_rectified_1/right_1666059840150278091.png"
+
         ],
         "stopAtEntry": false,
         "cwd": "${fileDirname}",

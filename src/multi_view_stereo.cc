@@ -10,12 +10,16 @@ MultiViewStereo::MultiViewStereo(Config* const config)
     half_ws_ = config_->half_window_size_;
     max_inv_depth_ = 1/config->min_depth_;
     min_inv_depth_ = 1/config->max_depth_;
+    visualizer_ = new Visualizer(config);
 
 
 }
 
 MultiViewStereo::~MultiViewStereo()
 {
+
+    delete visualizer_;
+
 }
 
 
@@ -33,7 +37,6 @@ void MultiViewStereo::setReferenceImage(Image* const image)
 
 void MultiViewStereo::run()
 {
-
     Image* ref_image = dataset_->images_[config_->ref_image_idx_];
     setReferenceImage(ref_image);
 
@@ -50,8 +53,12 @@ void MultiViewStereo::run()
         auto tt = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
         printf("match Done! Timing : %lf s for ref %d and tar %d\n", tt.count() / 1000.0, config_->ref_image_idx_, config_->tar_image_start_idx_);
 
+        visualizer_->showDepth(ref_image_);
+        cv::waitKey(0);
+
         break;
     }
+
 
 }
 
@@ -74,6 +81,8 @@ void MultiViewStereo::match(Image* const ref_image, Image* const tar_image, bool
     cv::Mat ref_rgb_data = ref_image->getRGBData();
 
     uint8_t* ref_ptr_gray_data = ref_image->getGrayDataPtr();
+    float* ref_ptr_depth_data = ref_image->getDepthPtr();
+
     int width = ref_image->getWidth();
     int height = ref_image->getHeight();
 
@@ -109,6 +118,11 @@ void MultiViewStereo::match(Image* const ref_image, Image* const tar_image, bool
             Eigen::Vector3f pt_max = KRKi_uv_homo + min_inv_depth_ * Kt;
             Eigen::Vector2f uv_min = Eigen::Vector2f(pt_min[0]/pt_min[2], pt_min[1]/pt_min[2]);
             Eigen::Vector2f uv_max = Eigen::Vector2f(pt_max[0]/pt_max[2], pt_max[1]/pt_max[2]);
+            Eigen::Vector2f epipolar_vector = Eigen::Vector2f(uv_max[0] - uv_min[0], uv_max[1] - uv_min[1]);
+            float epipolar_length = epipolar_vector.norm();
+            Eigen::Vector2f unit_epipolar_vector =  epipolar_vector / epipolar_length;
+
+            
             Eigen::Vector2f uv_best_match;
             // auto end = std::chrono::steady_clock::now();    
             // auto elapsed_us = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
@@ -124,12 +138,38 @@ void MultiViewStereo::match(Image* const ref_image, Image* const tar_image, bool
             // printf("getSubpixelPatch done ! Timing : %lld µs\n", (long long)elapsed_us);
 
             // auto start = std::chrono::steady_clock::now();        
-            epipolarSearch(ref_ptr_gray_data, u, v, tar_image, uv_min, uv_max, uv_best_match, debug_plot);
+            bool isValid = epipolarSearch(ref_ptr_gray_data, u, v, tar_image, uv_min, unit_epipolar_vector, epipolar_length, uv_best_match, debug_plot);
             // auto end = std::chrono::steady_clock::now();
             // auto elapsed_us = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
             // printf("epipolar search done ! Timing : %lld µs\n", (long long)elapsed_us);
 
+            // dx*dx > dy*dy
+            float inv_depth = 0;
+            if(isValid == true){
+                if(unit_epipolar_vector[0] * unit_epipolar_vector[0] >= unit_epipolar_vector[1] * unit_epipolar_vector[1])
+                {   
+                    // inv_depth = (Kt[0] - uv_best_match[0]*Kt[2])/(uv_best_match[0] * KRKi_uv_homo[2] - KRKi_uv_homo[0]);
+                    inv_depth = (KRKi_uv_homo[2]*uv_best_match[0] - KRKi_uv_homo[0])/(Kt[0] - Kt[2]*uv_best_match[0]);
 
+
+
+                }
+                else
+                {
+                    // inv_depth = (Kt[1] - uv_best_match[1]*Kt[2])/(uv_best_match[1] * KRKi_uv_homo[2] - KRKi_uv_homo[1]);
+                    inv_depth = (KRKi_uv_homo[2]*uv_best_match[1] - KRKi_uv_homo[1])/(Kt[1] - Kt[2]*uv_best_match[1]);
+
+                }
+                if(inv_depth >= min_inv_depth_ && inv_depth <= max_inv_depth_){
+                    ref_ptr_depth_data[v*width+u] = 1.0/inv_depth;
+                }
+                // if(inv_depth >= config_->min_depth_ && inv_depth <= config_->max_depth_){
+                //     ref_ptr_depth_data[v*width+u] = inv_depth;
+                // }
+            }
+            
+
+            // std::cout << "u,v,d: " << u << "," <<  v <<  "," << ref_ptr_depth_data[v*width+u]  << std::endl;
         }
 
     }
@@ -140,43 +180,49 @@ void MultiViewStereo::match(Image* const ref_image, Image* const tar_image, bool
 
 }
 
-void MultiViewStereo::epipolarSearch(const uint8_t* const ref_ptr_gray_data, uint32_t ref_u, uint32_t ref_v, const Image* const tar_image, 
-    const Eigen::Vector2f &tar_uv_min, const Eigen::Vector2f &tar_uv_max, Eigen::Vector2f tar_uv_best_match, bool debug_plot)
+bool MultiViewStereo::epipolarSearch(const uint8_t* const ref_ptr_gray_data, uint32_t ref_u, uint32_t ref_v, const Image* const tar_image, 
+     const Eigen::Vector2f &tar_uv_min, const Eigen::Vector2f& unit_epipolar_vector, float epipolar_length, Eigen::Vector2f& tar_uv_best_match, bool debug_plot)
 {
 
     uint8_t* tar_ptr_gray_data = tar_image->getGrayDataPtr();
     uint32_t width = tar_image->getWidth();
-    uint32_t height = tar_image->getWidth();
-
-    Eigen::Vector2f epipolar_vector = Eigen::Vector2f(tar_uv_max[0] - tar_uv_min[0], tar_uv_max[1] - tar_uv_min[1]);
-    float epipolar_length = epipolar_vector.norm();
-    Eigen::Vector2f unit_epipolar_vector =  epipolar_vector / epipolar_length;
+    uint32_t height = tar_image->getHeight();    
 
     float s = 0;
     float min_cost = std::numeric_limits<float>::infinity();
     int best_s_idx = 0;
-    Eigen::Vector2f uv_best_tmp(-1, -1);
-    Eigen::Vector2f uv_best_match(-1, -1);
     int best_s_idx_temp = 0;
+
+    Eigen::Vector2f uv_best_tmp(-1, -1);
+
+    // for debug_plot
     std::vector<float> costs;
     std::vector<float> steps;
     std::vector<Eigen::Vector2f> valid_uvs;
+
     while(s <= epipolar_length)
     {   
         Eigen::Vector2f tar_uv_current  = tar_uv_min + s * unit_epipolar_vector;
         if(tar_image->isInImage(tar_uv_current[0], tar_uv_current[1], half_ws_)){
-            // cv::getRectSubPix(tar_data, cv::Size(ws_, ws_), cv::Point2f(uv_current[0],  uv_current[1]), tar_data_patch, CV_32F);
-            // getRoundPixelPatch(tar_data, uv_current[0], uv_current[1], ws_, ws_, tar_data_patch);
-
             float cost = SAD(ref_ptr_gray_data, ref_u, ref_v, tar_ptr_gray_data, round(tar_uv_current[0]), round(tar_uv_current[1]), width, height, half_ws_);
-            valid_uvs.push_back(tar_uv_current);
-            costs.push_back(cost);
-            steps.push_back(s);
+            
+            if(debug_plot == true)
+            {
+                valid_uvs.push_back(tar_uv_current);
+                costs.push_back(cost);
+                steps.push_back(s);
+            }
+
+            
+            
             if(cost < min_cost)
             {
                 min_cost = cost;
                 uv_best_tmp = tar_uv_current;
-                best_s_idx_temp = steps.size()-1;
+
+                if(debug_plot == true){
+                    best_s_idx_temp = steps.size()-1;
+                }
             }
         }
         
@@ -185,15 +231,14 @@ void MultiViewStereo::epipolarSearch(const uint8_t* const ref_ptr_gray_data, uin
 
     }
 
-    // std::cout << "epipolar_length : " << steps.size() << std::endl;
+    // std::cout << "epipolar_length : " << epipolar_length << std::endl;
 
     if(min_cost < std::numeric_limits<float>::infinity()){
-        uv_best_match = uv_best_tmp;
-        best_s_idx = best_s_idx_temp;
+        tar_uv_best_match = uv_best_tmp;
 
         if(debug_plot == true)
         {
-
+            best_s_idx = best_s_idx_temp;
             cv::Point2i cv_uv_best(round(uv_best_tmp[0]),round(uv_best_tmp[1]));
             cv::Point2i cv_uv_start(round(valid_uvs.front()[0]),round(valid_uvs.front()[1]));
             cv::Point2i cv_uv_end(round(valid_uvs.back()[0]),round(valid_uvs.back()[1]));
@@ -213,7 +258,7 @@ void MultiViewStereo::epipolarSearch(const uint8_t* const ref_ptr_gray_data, uin
 
 
 
-            std::cout << "uv_best_tmp : " << uv_best_tmp[0] << " , " << uv_best_tmp[1] << " starting from (" 
+            std::cout << "uv_best_tmp : " << tar_uv_best_match[0] << " , " << tar_uv_best_match[1] << " starting from (" 
                 << cv_uv_start.x << "," << cv_uv_start.y  << ") end at (" << cv_uv_end.x << "," << cv_uv_end.y << ")" << std::endl;
             cv::circle(vis_tar_data, cv_uv_best, 3, cv::Scalar(255,0,255), 2); // pink
             cv::circle(vis_tar_data, cv_uv_start, 2, cv::Scalar(0,0,255), 2); // red
@@ -225,14 +270,15 @@ void MultiViewStereo::epipolarSearch(const uint8_t* const ref_ptr_gray_data, uin
             cv::imshow("vis_tar_data", vis_tar_data);
             cv::waitKey(0);
 
-            
-
-
         }
+
+
+        return true;
     }
     else
     {
         // std::cout << " nothing to match " << std::endl;
+        return false;
     }
 
     
@@ -242,15 +288,15 @@ void MultiViewStereo::epipolarSearch(const uint8_t* const ref_ptr_gray_data, uin
 }
 
 
-float MultiViewStereo::SAD(const uint8_t* ref_ptr, uint32_t ref_u, uint32_t ref_v, const uint8_t* tar_ptr, uint32_t tar_u, uint32_t tar_v, uint32_t width, uint32_t height, uint32_t half_ws)
+float MultiViewStereo::SAD(const uint8_t* ref_ptr, uint32_t ref_u, uint32_t ref_v, const uint8_t* tar_ptr, uint32_t tar_u, uint32_t tar_v, uint32_t width, uint32_t height, int half_ws)
 {
 
     float cost = 0;
-    for (int y = -half_ws; y < half_ws; y++)
+    for (int y = -half_ws; y <= half_ws; y++)
     {
         uint32_t ref_row = (ref_v + y)*width;
         uint32_t tar_row = (tar_v + y)*width;
-        for (int x = -half_ws; x < half_ws; x++)
+        for (int x = -half_ws; x <= half_ws; x++)
         {
             cost += std::abs(ref_ptr[ref_row + ref_u + x]-tar_ptr[tar_row+tar_u+x]);
         }
@@ -259,13 +305,6 @@ float MultiViewStereo::SAD(const uint8_t* ref_ptr, uint32_t ref_u, uint32_t ref_
 
     return cost;
 
-    // return static_cast<float>(cv::norm(p1, p2, cv::NORM_L1));
-
-
-    // cv::Mat diff;
-    // cv::absdiff(p1, p2, diff);   // element-wise |p1 - p2|
-    // float cost = static_cast<float>(cv::sum(diff)[0]);  // sum over all pixels
-    // return cost;
 }
 
 float MultiViewStereo::ZSAD(const cv::Mat p1, const cv::Mat p2)

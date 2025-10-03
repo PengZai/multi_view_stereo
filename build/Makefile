@@ -111,19 +111,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named run_visualize_trajectories
-
-# Build rule for target.
-run_visualize_trajectories: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 run_visualize_trajectories
-.PHONY : run_visualize_trajectories
-
-# fast build rule for target.
-run_visualize_trajectories/fast:
-	$(MAKE) -f CMakeFiles/run_visualize_trajectories.dir/build.make CMakeFiles/run_visualize_trajectories.dir/build
-.PHONY : run_visualize_trajectories/fast
-
-#=============================================================================
 # Target rules for targets named run_multi_view_stereo
 
 # Build rule for target.
@@ -136,13 +123,38 @@ run_multi_view_stereo/fast:
 	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/build
 .PHONY : run_multi_view_stereo/fast
 
+#=============================================================================
+# Target rules for targets named run_pixel_operation_comparison
+
+# Build rule for target.
+run_pixel_operation_comparison: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 run_pixel_operation_comparison
+.PHONY : run_pixel_operation_comparison
+
+# fast build rule for target.
+run_pixel_operation_comparison/fast:
+	$(MAKE) -f test/CMakeFiles/run_pixel_operation_comparison.dir/build.make test/CMakeFiles/run_pixel_operation_comparison.dir/build
+.PHONY : run_pixel_operation_comparison/fast
+
+#=============================================================================
+# Target rules for targets named run_visualize_trajectories
+
+# Build rule for target.
+run_visualize_trajectories: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 run_visualize_trajectories
+.PHONY : run_visualize_trajectories
+
+# fast build rule for target.
+run_visualize_trajectories/fast:
+	$(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/build
+.PHONY : run_visualize_trajectories/fast
+
 src/configs.o: src/configs.cc.o
 
 .PHONY : src/configs.o
 
 # target to build an object file
 src/configs.cc.o:
-	$(MAKE) -f CMakeFiles/run_visualize_trajectories.dir/build.make CMakeFiles/run_visualize_trajectories.dir/src/configs.cc.o
 	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/configs.cc.o
 .PHONY : src/configs.cc.o
 
@@ -152,7 +164,6 @@ src/configs.i: src/configs.cc.i
 
 # target to preprocess a source file
 src/configs.cc.i:
-	$(MAKE) -f CMakeFiles/run_visualize_trajectories.dir/build.make CMakeFiles/run_visualize_trajectories.dir/src/configs.cc.i
 	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/configs.cc.i
 .PHONY : src/configs.cc.i
 
@@ -162,7 +173,6 @@ src/configs.s: src/configs.cc.s
 
 # target to generate assembly for a file
 src/configs.cc.s:
-	$(MAKE) -f CMakeFiles/run_visualize_trajectories.dir/build.make CMakeFiles/run_visualize_trajectories.dir/src/configs.cc.s
 	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/configs.cc.s
 .PHONY : src/configs.cc.s
 
@@ -172,7 +182,6 @@ src/data.o: src/data.cc.o
 
 # target to build an object file
 src/data.cc.o:
-	$(MAKE) -f CMakeFiles/run_visualize_trajectories.dir/build.make CMakeFiles/run_visualize_trajectories.dir/src/data.cc.o
 	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/data.cc.o
 .PHONY : src/data.cc.o
 
@@ -182,7 +191,6 @@ src/data.i: src/data.cc.i
 
 # target to preprocess a source file
 src/data.cc.i:
-	$(MAKE) -f CMakeFiles/run_visualize_trajectories.dir/build.make CMakeFiles/run_visualize_trajectories.dir/src/data.cc.i
 	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/data.cc.i
 .PHONY : src/data.cc.i
 
@@ -192,7 +200,6 @@ src/data.s: src/data.cc.s
 
 # target to generate assembly for a file
 src/data.cc.s:
-	$(MAKE) -f CMakeFiles/run_visualize_trajectories.dir/build.make CMakeFiles/run_visualize_trajectories.dir/src/data.cc.s
 	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/data.cc.s
 .PHONY : src/data.cc.s
 
@@ -229,7 +236,6 @@ src/multi_view_stereo.o: src/multi_view_stereo.cc.o
 
 # target to build an object file
 src/multi_view_stereo.cc.o:
-	$(MAKE) -f CMakeFiles/run_visualize_trajectories.dir/build.make CMakeFiles/run_visualize_trajectories.dir/src/multi_view_stereo.cc.o
 	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/multi_view_stereo.cc.o
 .PHONY : src/multi_view_stereo.cc.o
 
@@ -239,7 +245,6 @@ src/multi_view_stereo.i: src/multi_view_stereo.cc.i
 
 # target to preprocess a source file
 src/multi_view_stereo.cc.i:
-	$(MAKE) -f CMakeFiles/run_visualize_trajectories.dir/build.make CMakeFiles/run_visualize_trajectories.dir/src/multi_view_stereo.cc.i
 	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/multi_view_stereo.cc.i
 .PHONY : src/multi_view_stereo.cc.i
 
@@ -249,7 +254,6 @@ src/multi_view_stereo.s: src/multi_view_stereo.cc.s
 
 # target to generate assembly for a file
 src/multi_view_stereo.cc.s:
-	$(MAKE) -f CMakeFiles/run_visualize_trajectories.dir/build.make CMakeFiles/run_visualize_trajectories.dir/src/multi_view_stereo.cc.s
 	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/multi_view_stereo.cc.s
 .PHONY : src/multi_view_stereo.cc.s
 
@@ -259,7 +263,6 @@ src/utils.o: src/utils.cc.o
 
 # target to build an object file
 src/utils.cc.o:
-	$(MAKE) -f CMakeFiles/run_visualize_trajectories.dir/build.make CMakeFiles/run_visualize_trajectories.dir/src/utils.cc.o
 	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/utils.cc.o
 .PHONY : src/utils.cc.o
 
@@ -269,7 +272,6 @@ src/utils.i: src/utils.cc.i
 
 # target to preprocess a source file
 src/utils.cc.i:
-	$(MAKE) -f CMakeFiles/run_visualize_trajectories.dir/build.make CMakeFiles/run_visualize_trajectories.dir/src/utils.cc.i
 	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/utils.cc.i
 .PHONY : src/utils.cc.i
 
@@ -279,36 +281,35 @@ src/utils.s: src/utils.cc.s
 
 # target to generate assembly for a file
 src/utils.cc.s:
-	$(MAKE) -f CMakeFiles/run_visualize_trajectories.dir/build.make CMakeFiles/run_visualize_trajectories.dir/src/utils.cc.s
 	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/utils.cc.s
 .PHONY : src/utils.cc.s
 
-test/visualize_trajectories.o: test/visualize_trajectories.cc.o
+src/visualizer.o: src/visualizer.cc.o
 
-.PHONY : test/visualize_trajectories.o
+.PHONY : src/visualizer.o
 
 # target to build an object file
-test/visualize_trajectories.cc.o:
-	$(MAKE) -f CMakeFiles/run_visualize_trajectories.dir/build.make CMakeFiles/run_visualize_trajectories.dir/test/visualize_trajectories.cc.o
-.PHONY : test/visualize_trajectories.cc.o
+src/visualizer.cc.o:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/visualizer.cc.o
+.PHONY : src/visualizer.cc.o
 
-test/visualize_trajectories.i: test/visualize_trajectories.cc.i
+src/visualizer.i: src/visualizer.cc.i
 
-.PHONY : test/visualize_trajectories.i
+.PHONY : src/visualizer.i
 
 # target to preprocess a source file
-test/visualize_trajectories.cc.i:
-	$(MAKE) -f CMakeFiles/run_visualize_trajectories.dir/build.make CMakeFiles/run_visualize_trajectories.dir/test/visualize_trajectories.cc.i
-.PHONY : test/visualize_trajectories.cc.i
+src/visualizer.cc.i:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/visualizer.cc.i
+.PHONY : src/visualizer.cc.i
 
-test/visualize_trajectories.s: test/visualize_trajectories.cc.s
+src/visualizer.s: src/visualizer.cc.s
 
-.PHONY : test/visualize_trajectories.s
+.PHONY : src/visualizer.s
 
 # target to generate assembly for a file
-test/visualize_trajectories.cc.s:
-	$(MAKE) -f CMakeFiles/run_visualize_trajectories.dir/build.make CMakeFiles/run_visualize_trajectories.dir/test/visualize_trajectories.cc.s
-.PHONY : test/visualize_trajectories.cc.s
+src/visualizer.cc.s:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/visualizer.cc.s
+.PHONY : src/visualizer.cc.s
 
 # Help Target
 help:
@@ -318,8 +319,9 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... run_visualize_trajectories"
 	@echo "... run_multi_view_stereo"
+	@echo "... run_pixel_operation_comparison"
+	@echo "... run_visualize_trajectories"
 	@echo "... src/configs.o"
 	@echo "... src/configs.i"
 	@echo "... src/configs.s"
@@ -335,9 +337,9 @@ help:
 	@echo "... src/utils.o"
 	@echo "... src/utils.i"
 	@echo "... src/utils.s"
-	@echo "... test/visualize_trajectories.o"
-	@echo "... test/visualize_trajectories.i"
-	@echo "... test/visualize_trajectories.s"
+	@echo "... src/visualizer.o"
+	@echo "... src/visualizer.i"
+	@echo "... src/visualizer.s"
 .PHONY : help
 
 

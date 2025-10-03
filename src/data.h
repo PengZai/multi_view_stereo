@@ -38,6 +38,7 @@ class Image
         uint32_t getWidth() const;
         uint32_t getHeight() const;
         uint8_t* getGrayDataPtr() const;
+        float* getDepthPtr() const;
         cv::Mat getRGBData() const;
         bool isInImage(float u, float v, int border=0) const;
 
@@ -55,9 +56,8 @@ class Image
      
 
         uint8_t* ptr_gray_data_;
+        float* ptr_depth_data_;
 
-        cv::Mat depth_;
-        cv::Mat deep_learning_depth_;
 
         Eigen::Vector3f t_;
         Eigen::Quaternionf q_;

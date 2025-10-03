@@ -16,10 +16,6 @@ vector
 filesystem
 -
 
-/root/multi_view_stereo/src/data.cc
-data.h
-/root/multi_view_stereo/src/data.h
-
 /root/multi_view_stereo/src/data.h
 Eigen/Core
 -
@@ -67,12 +63,26 @@ data.h
 /root/multi_view_stereo/src/data.h
 utils.h
 /root/multi_view_stereo/src/utils.h
+visualizer.h
+/root/multi_view_stereo/src/visualizer.h
 
 /root/multi_view_stereo/src/utils.h
 opencv2/opencv.hpp
 -
 Eigen/Core
 -
+
+/root/multi_view_stereo/src/visualizer.cc
+visualizer.h
+/root/multi_view_stereo/src/visualizer.h
+
+/root/multi_view_stereo/src/visualizer.h
+opencv2/opencv.hpp
+-
+data.h
+/root/multi_view_stereo/src/data.h
+configs.h
+/root/multi_view_stereo/src/configs.h
 
 /usr/include/eigen3/Eigen/Cholesky
 Core

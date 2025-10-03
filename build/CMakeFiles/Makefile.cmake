@@ -11,6 +11,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.16.0/CMakeCCompiler.cmake"
   "CMakeFiles/3.16.0/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.16.0/CMakeSystem.cmake"
+  "../test/CMakeLists.txt"
   "/usr/lib/cmake/eigen3/Eigen3Config.cmake"
   "/usr/lib/cmake/eigen3/Eigen3ConfigVersion.cmake"
   "/usr/lib/cmake/eigen3/Eigen3Targets.cmake"
@@ -129,10 +130,12 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "CMakeFiles/3.16.0/CMakeCCompiler.cmake"
   "CMakeFiles/3.16.0/CMakeCXXCompiler.cmake"
   "CMakeFiles/CMakeDirectoryInformation.cmake"
+  "test/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/run_visualize_trajectories.dir/DependInfo.cmake"
   "CMakeFiles/run_multi_view_stereo.dir/DependInfo.cmake"
+  "test/CMakeFiles/run_pixel_operation_comparison.dir/DependInfo.cmake"
+  "test/CMakeFiles/run_visualize_trajectories.dir/DependInfo.cmake"
   )

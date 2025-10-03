@@ -6,9 +6,9 @@ system:
   maximum_traj: 16
   ref_image_idx: 0
   start_match_uv: [0, 0]
-  tar_image_start_idx: 1
-  min_depth: 1.0
-  max_depth: 100
+  tar_image_start_idx: 14
+  min_depth: 0.5
+  max_depth: 10
   half_window_size: 2 # we only support odd size of window, like 3x3, 5x5, 7x7, 9x9 ...
   save_figure_path: /root/multi_view_stereo/figs
   debug_plot: 0

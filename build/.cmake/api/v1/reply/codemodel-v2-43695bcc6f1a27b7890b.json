@@ -1,0 +1,95 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.3"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.3"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "test",
+					"targetIndexes" : 
+					[
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Release",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1
+					],
+					"name" : "multi_view_stereo",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "run_multi_view_stereo::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-run_multi_view_stereo-Release-91a79968fb1dc4f6d307.json",
+					"name" : "run_multi_view_stereo",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "run_pixel_operation_comparison::@36f028580bb02cc8272a",
+					"jsonFile" : "target-run_pixel_operation_comparison-Release-bb52f029a5007ea23cc9.json",
+					"name" : "run_pixel_operation_comparison",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "run_visualize_trajectories::@36f028580bb02cc8272a",
+					"jsonFile" : "target-run_visualize_trajectories-Release-9eb15be59e33179ae2fd.json",
+					"name" : "run_visualize_trajectories",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/root/multi_view_stereo/build",
+		"source" : "/root/multi_view_stereo"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 0
+	}
+}

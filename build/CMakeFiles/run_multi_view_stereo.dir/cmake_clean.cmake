@@ -4,6 +4,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/run_multi_view_stereo.dir/src/main.cc.o"
   "CMakeFiles/run_multi_view_stereo.dir/src/multi_view_stereo.cc.o"
   "CMakeFiles/run_multi_view_stereo.dir/src/utils.cc.o"
+  "CMakeFiles/run_multi_view_stereo.dir/src/visualizer.cc.o"
   "run_multi_view_stereo"
   "run_multi_view_stereo.pdb"
 )

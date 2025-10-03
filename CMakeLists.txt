@@ -50,6 +50,7 @@ set(LIBRARY_SOURCES
     src/data.cc
     src/multi_view_stereo.cc
     src/utils.cc
+    src/visualizer.cc
 )
 
 add_executable(
@@ -68,19 +69,6 @@ target_link_libraries(run_multi_view_stereo
     ${LIBRARY_THIRDPARTY}
 )
 
-add_executable(
-    run_visualize_trajectories
-    test/visualize_trajectories.cc
-    ${LIBRARY_SOURCES}
-)
 
-target_include_directories(run_visualize_trajectories
-    PUBLIC
-    ${DIRS_HEADER_THIRDPARTY}
-)
 
-target_link_libraries(run_visualize_trajectories
-    PUBLIC
-    ${LIBRARY_THIRDPARTY}
-)
-
+add_subdirectory(test)

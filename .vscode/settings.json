@@ -66,6 +66,7 @@
         "core": "cpp",
         "codecvt": "cpp",
         "strstream": "cpp",
-        "cfenv": "cpp"
+        "cfenv": "cpp",
+        "charconv": "cpp"
     }
 }

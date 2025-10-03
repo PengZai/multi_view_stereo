@@ -83,6 +83,8 @@ Image::Image()
 
 Image::~Image(){
     delete[] ptr_gray_data_;
+    delete[] ptr_depth_data_;
+
 }
 
 const Eigen::Vector3f & Image::getTranslation() const
@@ -160,6 +162,7 @@ void Image::loadData()
     }
 
     cv::Mat cv_gray_data;
+    cv_rgb_data_ = cv::imread(path_, cv::IMREAD_COLOR);
     if (!cv_rgb_data_.empty()) {
         // Successfully read as RGB
         cv::cvtColor(cv_rgb_data_, cv_gray_data, cv::COLOR_BGR2GRAY);
@@ -175,13 +178,16 @@ void Image::loadData()
     width_ = cv_gray_data.cols;
     height_ = cv_gray_data.rows;
     
-    ptr_gray_data_ = new uint8_t[width_ * height_];
+    ptr_gray_data_ = new uint8_t[width_ * height_]();
+    ptr_depth_data_ = new float[width_ * height_]();
 
-    for (int i = 0; i < height_; i++) {
-        for (int j = 0; j < width_; j++) {
-            ptr_gray_data_[i * width_ + j] = cv_gray_data.at<uint8_t>(i, j);
-        }
-    }
+    memcpy(ptr_gray_data_, cv_gray_data.data, width_ * height_);
+
+    // for (int i = 0; i < height_; i++) {
+    //     for (int j = 0; j < width_; j++) {
+    //         ptr_gray_data_[i * width_ + j] = cv_gray_data.at<uint8_t>(i, j);
+    //     }
+    // }
 
 
  
@@ -201,6 +207,11 @@ uint32_t Image::getHeight() const
 uint8_t* Image::getGrayDataPtr() const
 {
     return ptr_gray_data_;
+}
+
+float* Image::getDepthPtr() const
+{
+    return ptr_depth_data_;
 }
 
 cv::Mat Image::getRGBData() const
