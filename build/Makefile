@@ -124,6 +124,19 @@ run_multi_view_stereo/fast:
 .PHONY : run_multi_view_stereo/fast
 
 #=============================================================================
+# Target rules for targets named run_visualize_colorized_gtmap
+
+# Build rule for target.
+run_visualize_colorized_gtmap: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 run_visualize_colorized_gtmap
+.PHONY : run_visualize_colorized_gtmap
+
+# fast build rule for target.
+run_visualize_colorized_gtmap/fast:
+	$(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/build
+.PHONY : run_visualize_colorized_gtmap/fast
+
+#=============================================================================
 # Target rules for targets named run_pixel_operation_comparison
 
 # Build rule for target.
@@ -176,32 +189,194 @@ src/configs.cc.s:
 	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/configs.cc.s
 .PHONY : src/configs.cc.s
 
-src/data.o: src/data.cc.o
+src/datasets/botanic_gardent_dataset.o: src/datasets/botanic_gardent_dataset.cc.o
 
-.PHONY : src/data.o
+.PHONY : src/datasets/botanic_gardent_dataset.o
 
 # target to build an object file
-src/data.cc.o:
-	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/data.cc.o
-.PHONY : src/data.cc.o
+src/datasets/botanic_gardent_dataset.cc.o:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/botanic_gardent_dataset.cc.o
+.PHONY : src/datasets/botanic_gardent_dataset.cc.o
 
-src/data.i: src/data.cc.i
+src/datasets/botanic_gardent_dataset.i: src/datasets/botanic_gardent_dataset.cc.i
 
-.PHONY : src/data.i
+.PHONY : src/datasets/botanic_gardent_dataset.i
 
 # target to preprocess a source file
-src/data.cc.i:
-	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/data.cc.i
-.PHONY : src/data.cc.i
+src/datasets/botanic_gardent_dataset.cc.i:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/botanic_gardent_dataset.cc.i
+.PHONY : src/datasets/botanic_gardent_dataset.cc.i
 
-src/data.s: src/data.cc.s
+src/datasets/botanic_gardent_dataset.s: src/datasets/botanic_gardent_dataset.cc.s
 
-.PHONY : src/data.s
+.PHONY : src/datasets/botanic_gardent_dataset.s
 
 # target to generate assembly for a file
-src/data.cc.s:
-	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/data.cc.s
-.PHONY : src/data.cc.s
+src/datasets/botanic_gardent_dataset.cc.s:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/botanic_gardent_dataset.cc.s
+.PHONY : src/datasets/botanic_gardent_dataset.cc.s
+
+src/datasets/dataset.o: src/datasets/dataset.cc.o
+
+.PHONY : src/datasets/dataset.o
+
+# target to build an object file
+src/datasets/dataset.cc.o:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.o
+.PHONY : src/datasets/dataset.cc.o
+
+src/datasets/dataset.i: src/datasets/dataset.cc.i
+
+.PHONY : src/datasets/dataset.i
+
+# target to preprocess a source file
+src/datasets/dataset.cc.i:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.i
+.PHONY : src/datasets/dataset.cc.i
+
+src/datasets/dataset.s: src/datasets/dataset.cc.s
+
+.PHONY : src/datasets/dataset.s
+
+# target to generate assembly for a file
+src/datasets/dataset.cc.s:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.s
+.PHONY : src/datasets/dataset.cc.s
+
+src/datasets/fast_livo2_dataset.o: src/datasets/fast_livo2_dataset.cc.o
+
+.PHONY : src/datasets/fast_livo2_dataset.o
+
+# target to build an object file
+src/datasets/fast_livo2_dataset.cc.o:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/fast_livo2_dataset.cc.o
+.PHONY : src/datasets/fast_livo2_dataset.cc.o
+
+src/datasets/fast_livo2_dataset.i: src/datasets/fast_livo2_dataset.cc.i
+
+.PHONY : src/datasets/fast_livo2_dataset.i
+
+# target to preprocess a source file
+src/datasets/fast_livo2_dataset.cc.i:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/fast_livo2_dataset.cc.i
+.PHONY : src/datasets/fast_livo2_dataset.cc.i
+
+src/datasets/fast_livo2_dataset.s: src/datasets/fast_livo2_dataset.cc.s
+
+.PHONY : src/datasets/fast_livo2_dataset.s
+
+# target to generate assembly for a file
+src/datasets/fast_livo2_dataset.cc.s:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/fast_livo2_dataset.cc.s
+.PHONY : src/datasets/fast_livo2_dataset.cc.s
+
+src/datasets/kitti_dataset.o: src/datasets/kitti_dataset.cc.o
+
+.PHONY : src/datasets/kitti_dataset.o
+
+# target to build an object file
+src/datasets/kitti_dataset.cc.o:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/kitti_dataset.cc.o
+.PHONY : src/datasets/kitti_dataset.cc.o
+
+src/datasets/kitti_dataset.i: src/datasets/kitti_dataset.cc.i
+
+.PHONY : src/datasets/kitti_dataset.i
+
+# target to preprocess a source file
+src/datasets/kitti_dataset.cc.i:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/kitti_dataset.cc.i
+.PHONY : src/datasets/kitti_dataset.cc.i
+
+src/datasets/kitti_dataset.s: src/datasets/kitti_dataset.cc.s
+
+.PHONY : src/datasets/kitti_dataset.s
+
+# target to generate assembly for a file
+src/datasets/kitti_dataset.cc.s:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/kitti_dataset.cc.s
+.PHONY : src/datasets/kitti_dataset.cc.s
+
+src/datasets/remode_dataset.o: src/datasets/remode_dataset.cc.o
+
+.PHONY : src/datasets/remode_dataset.o
+
+# target to build an object file
+src/datasets/remode_dataset.cc.o:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/remode_dataset.cc.o
+.PHONY : src/datasets/remode_dataset.cc.o
+
+src/datasets/remode_dataset.i: src/datasets/remode_dataset.cc.i
+
+.PHONY : src/datasets/remode_dataset.i
+
+# target to preprocess a source file
+src/datasets/remode_dataset.cc.i:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/remode_dataset.cc.i
+.PHONY : src/datasets/remode_dataset.cc.i
+
+src/datasets/remode_dataset.s: src/datasets/remode_dataset.cc.s
+
+.PHONY : src/datasets/remode_dataset.s
+
+# target to generate assembly for a file
+src/datasets/remode_dataset.cc.s:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/remode_dataset.cc.s
+.PHONY : src/datasets/remode_dataset.cc.s
+
+src/datasets/tartan_air_dataset.o: src/datasets/tartan_air_dataset.cc.o
+
+.PHONY : src/datasets/tartan_air_dataset.o
+
+# target to build an object file
+src/datasets/tartan_air_dataset.cc.o:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/tartan_air_dataset.cc.o
+.PHONY : src/datasets/tartan_air_dataset.cc.o
+
+src/datasets/tartan_air_dataset.i: src/datasets/tartan_air_dataset.cc.i
+
+.PHONY : src/datasets/tartan_air_dataset.i
+
+# target to preprocess a source file
+src/datasets/tartan_air_dataset.cc.i:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/tartan_air_dataset.cc.i
+.PHONY : src/datasets/tartan_air_dataset.cc.i
+
+src/datasets/tartan_air_dataset.s: src/datasets/tartan_air_dataset.cc.s
+
+.PHONY : src/datasets/tartan_air_dataset.s
+
+# target to generate assembly for a file
+src/datasets/tartan_air_dataset.cc.s:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/tartan_air_dataset.cc.s
+.PHONY : src/datasets/tartan_air_dataset.cc.s
+
+src/datasets/virtual_kitti_dataset.o: src/datasets/virtual_kitti_dataset.cc.o
+
+.PHONY : src/datasets/virtual_kitti_dataset.o
+
+# target to build an object file
+src/datasets/virtual_kitti_dataset.cc.o:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/virtual_kitti_dataset.cc.o
+.PHONY : src/datasets/virtual_kitti_dataset.cc.o
+
+src/datasets/virtual_kitti_dataset.i: src/datasets/virtual_kitti_dataset.cc.i
+
+.PHONY : src/datasets/virtual_kitti_dataset.i
+
+# target to preprocess a source file
+src/datasets/virtual_kitti_dataset.cc.i:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/virtual_kitti_dataset.cc.i
+.PHONY : src/datasets/virtual_kitti_dataset.cc.i
+
+src/datasets/virtual_kitti_dataset.s: src/datasets/virtual_kitti_dataset.cc.s
+
+.PHONY : src/datasets/virtual_kitti_dataset.s
+
+# target to generate assembly for a file
+src/datasets/virtual_kitti_dataset.cc.s:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/virtual_kitti_dataset.cc.s
+.PHONY : src/datasets/virtual_kitti_dataset.cc.s
 
 src/main.o: src/main.cc.o
 
@@ -256,6 +431,33 @@ src/multi_view_stereo.s: src/multi_view_stereo.cc.s
 src/multi_view_stereo.cc.s:
 	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/multi_view_stereo.cc.s
 .PHONY : src/multi_view_stereo.cc.s
+
+src/undistort.o: src/undistort.cc.o
+
+.PHONY : src/undistort.o
+
+# target to build an object file
+src/undistort.cc.o:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/undistort.cc.o
+.PHONY : src/undistort.cc.o
+
+src/undistort.i: src/undistort.cc.i
+
+.PHONY : src/undistort.i
+
+# target to preprocess a source file
+src/undistort.cc.i:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/undistort.cc.i
+.PHONY : src/undistort.cc.i
+
+src/undistort.s: src/undistort.cc.s
+
+.PHONY : src/undistort.s
+
+# target to generate assembly for a file
+src/undistort.cc.s:
+	$(MAKE) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/undistort.cc.s
+.PHONY : src/undistort.cc.s
 
 src/utils.o: src/utils.cc.o
 
@@ -320,20 +522,42 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... run_multi_view_stereo"
+	@echo "... run_visualize_colorized_gtmap"
 	@echo "... run_pixel_operation_comparison"
 	@echo "... run_visualize_trajectories"
 	@echo "... src/configs.o"
 	@echo "... src/configs.i"
 	@echo "... src/configs.s"
-	@echo "... src/data.o"
-	@echo "... src/data.i"
-	@echo "... src/data.s"
+	@echo "... src/datasets/botanic_gardent_dataset.o"
+	@echo "... src/datasets/botanic_gardent_dataset.i"
+	@echo "... src/datasets/botanic_gardent_dataset.s"
+	@echo "... src/datasets/dataset.o"
+	@echo "... src/datasets/dataset.i"
+	@echo "... src/datasets/dataset.s"
+	@echo "... src/datasets/fast_livo2_dataset.o"
+	@echo "... src/datasets/fast_livo2_dataset.i"
+	@echo "... src/datasets/fast_livo2_dataset.s"
+	@echo "... src/datasets/kitti_dataset.o"
+	@echo "... src/datasets/kitti_dataset.i"
+	@echo "... src/datasets/kitti_dataset.s"
+	@echo "... src/datasets/remode_dataset.o"
+	@echo "... src/datasets/remode_dataset.i"
+	@echo "... src/datasets/remode_dataset.s"
+	@echo "... src/datasets/tartan_air_dataset.o"
+	@echo "... src/datasets/tartan_air_dataset.i"
+	@echo "... src/datasets/tartan_air_dataset.s"
+	@echo "... src/datasets/virtual_kitti_dataset.o"
+	@echo "... src/datasets/virtual_kitti_dataset.i"
+	@echo "... src/datasets/virtual_kitti_dataset.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
 	@echo "... src/multi_view_stereo.o"
 	@echo "... src/multi_view_stereo.i"
 	@echo "... src/multi_view_stereo.s"
+	@echo "... src/undistort.o"
+	@echo "... src/undistort.i"
+	@echo "... src/undistort.s"
 	@echo "... src/utils.o"
 	@echo "... src/utils.i"
 	@echo "... src/utils.s"

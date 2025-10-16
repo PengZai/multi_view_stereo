@@ -9,7 +9,7 @@
         "request": "launch",
         "program": "${workspaceFolder}/build/run_multi_view_stereo",
         "args": [
-            "../configs/BotanicGarden.yaml"
+            "../configs/Remode.yaml"
         ],
         "stopAtEntry": false,
         "cwd": "${fileDirname}",
@@ -23,7 +23,21 @@
         "request": "launch",
         "program": "${workspaceFolder}/build/test/run_visualize_trajectories",
         "args": [
-            "../configs/BotanicGarden.yaml"
+            "../configs/Remode.yaml"
+        ],
+        "stopAtEntry": false,
+        "cwd": "${fileDirname}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb"
+    },
+    {
+        "name": "run_visualize_colorized_gtmap",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/test/run_visualize_colorized_gtmap",
+        "args": [
+            "../configs/Remode.yaml"
         ],
         "stopAtEntry": false,
         "cwd": "${fileDirname}",

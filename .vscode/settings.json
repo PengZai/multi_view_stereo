@@ -51,7 +51,7 @@
         "istream": "cpp",
         "limits": "cpp",
         "mutex": "cpp",
-        "new": "cpp",
+        "": "cpp",
         "ostream": "cpp",
         "ranges": "cpp",
         "sstream": "cpp",
@@ -67,6 +67,7 @@
         "codecvt": "cpp",
         "strstream": "cpp",
         "cfenv": "cpp",
-        "charconv": "cpp"
+        "charconv": "cpp",
+        "new": "cpp"
     }
 }

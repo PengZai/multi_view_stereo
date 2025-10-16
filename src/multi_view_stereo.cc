@@ -5,11 +5,12 @@ namespace MVS
 
 
 MultiViewStereo::MultiViewStereo(Config* const config)
+:ref_image_(nullptr)
 {
     config_ = config;
     half_ws_ = config_->half_window_size_;
-    max_inv_depth_ = 1/config->min_depth_;
-    min_inv_depth_ = 1/config->max_depth_;
+    // max_inv_depth_ = 1/config->min_depth_;
+    // min_inv_depth_ = 1/config->max_depth_;
     visualizer_ = new Visualizer(config);
 
 
@@ -35,29 +36,72 @@ void MultiViewStereo::setReferenceImage(Image* const image)
 }
  
 
-void MultiViewStereo::run()
-{
-    Image* ref_image = dataset_->images_[config_->ref_image_idx_];
-    setReferenceImage(ref_image);
 
-    for(size_t i=config_->tar_image_start_idx_;i < dataset_->images_.size(); i++)
+void MultiViewStereo::run()
+{   
+
+    std::vector<Image*> images = dataset_->getImages();
+
+    for(size_t ref_image_idx=0; ref_image_idx < images.size(); ref_image_idx++){
+        Image* ref_image = images[ref_image_idx];
+        int ref_pose_id = ref_image->getPoseId();
+        int ref_camera_id = ref_image->getCameraId();
+
+        if(ref_pose_id == config_->ref_pose_idx_ && ref_camera_id == config_->ref_camera_idx_)
+        {
+            setReferenceImage(ref_image);
+            break;
+        }
+    }
+
+    if(ref_image_ == nullptr){
+        std::cout << "ref_image is not existed for ref_pose_id:" << config_->ref_pose_idx_ << " and ref_camera_id:" << config_->ref_camera_idx_ << std::endl;
+        return;
+    }
+    ref_image_->loadData();
+
+
+    Image* tar_image = nullptr;
+    for(size_t tar_image_idx=0; tar_image_idx < images.size(); tar_image_idx++)
     {
-        Image* image = dataset_->images_[i];
-        if(ref_image_->getId() == image->getId()){
+        tar_image = images[tar_image_idx];
+        bool isSuccess = tar_image->loadData();        
+        if(isSuccess == false){
+            continue;
+        }
+        int tar_pose_id = tar_image->getPoseId();
+        int tar_camera_id = tar_image->getCameraId();
+
+        if(ref_image_->getId() == tar_image->getId()){
             continue;
         }
 
+        if(tar_pose_id < config_->tar_pose_start_idx_ || tar_camera_id < config_->tar_camera_start_idx_)
+        {
+            continue;
+        }
+
+        printf("match start for ref %d and tar %ld\n", ref_image_->getId(), tar_image_idx);
+
         auto start = std::chrono::steady_clock::now();        
-        match(ref_image_, image, config_->debug_plot_);
+        match(ref_image_, tar_image, config_->debug_plot_);
+
+
         auto end = std::chrono::steady_clock::now();
         auto tt = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-        printf("match Done! Timing : %lf s for ref %d and tar %d\n", tt.count() / 1000.0, config_->ref_image_idx_, config_->tar_image_start_idx_);
+        printf("match Done! Timing : %lf s for ref %d and tar %ld\n", tt.count() / 1000.0, ref_image_->getId(), tar_image_idx);
 
-        visualizer_->showDepth(ref_image_);
-        cv::waitKey(0);
+
 
         break;
     }
+
+    ref_image_->loadDepthFromMinMaxInvDepth();
+    visualizer_->showDepth(ref_image_);
+    visualizer_->showUndistortedGrayImage(ref_image_, "RefUndistortedGray");
+    visualizer_->showUndistortedGrayImage(tar_image, "TarUndistortedGray");
+
+    cv::waitKey(0);
 
 
 }
@@ -78,9 +122,11 @@ void MultiViewStereo::match(Image* const ref_image, Image* const tar_image, bool
     Eigen::Matrix3f KRKi = K_tar * R_tar_ref * K_ref.inverse();
     Eigen::Vector3f Kt = K_tar * t_tar_ref;
 
-    cv::Mat ref_rgb_data = ref_image->getRGBData();
+    const cv::Mat ref_rgb_data = ref_image->getRGBData();
 
-    uint8_t* ref_ptr_gray_data = ref_image->getGrayDataPtr();
+    float* ref_ptr_gray_data = ref_image->getGrayDataPtr();
+    float* ref_ptr_min_inv_depth_data_ = ref_image->getMinInvDepthDataPtr();
+    float* ref_ptr_max_inv_depth_data_ = ref_image->getMaxInvDepthDataPtr();
     float* ref_ptr_depth_data = ref_image->getDepthPtr();
 
     int width = ref_image->getWidth();
@@ -113,9 +159,12 @@ void MultiViewStereo::match(Image* const ref_image, Image* const tar_image, bool
             }
         
             // auto start = std::chrono::steady_clock::now();        
+            int current_coord = v*width + u;
             Eigen::Vector3f KRKi_uv_homo = KRKi * Eigen::Vector3f(u,v,1);
-            Eigen::Vector3f pt_min = KRKi_uv_homo + max_inv_depth_ * Kt;
-            Eigen::Vector3f pt_max = KRKi_uv_homo + min_inv_depth_ * Kt;
+            Eigen::Vector3f pt_min = KRKi_uv_homo + (1.0/config_->max_depth_) * Kt;
+            Eigen::Vector3f pt_max = KRKi_uv_homo + (1.0/config_->min_depth_) * Kt;
+            // Eigen::Vector3f pt_min = KRKi_uv_homo + ref_ptr_min_inv_depth_data_[current_coord] * Kt;
+            // Eigen::Vector3f pt_max = KRKi_uv_homo + ref_ptr_max_inv_depth_data_[current_coord] * Kt;
             Eigen::Vector2f uv_min = Eigen::Vector2f(pt_min[0]/pt_min[2], pt_min[1]/pt_min[2]);
             Eigen::Vector2f uv_max = Eigen::Vector2f(pt_max[0]/pt_max[2], pt_max[1]/pt_max[2]);
             Eigen::Vector2f epipolar_vector = Eigen::Vector2f(uv_max[0] - uv_min[0], uv_max[1] - uv_min[1]);
@@ -145,27 +194,71 @@ void MultiViewStereo::match(Image* const ref_image, Image* const tar_image, bool
 
             // dx*dx > dy*dy
             float inv_depth = 0;
+            float const_error_in_pixel = 1;
             if(isValid == true){
-                if(unit_epipolar_vector[0] * unit_epipolar_vector[0] >= unit_epipolar_vector[1] * unit_epipolar_vector[1])
-                {   
-                    // inv_depth = (Kt[0] - uv_best_match[0]*Kt[2])/(uv_best_match[0] * KRKi_uv_homo[2] - KRKi_uv_homo[0]);
-                    inv_depth = (KRKi_uv_homo[2]*uv_best_match[0] - KRKi_uv_homo[0])/(Kt[0] - Kt[2]*uv_best_match[0]);
+                // if(unit_epipolar_vector[0] * unit_epipolar_vector[0] >= unit_epipolar_vector[1] * unit_epipolar_vector[1])
+                // {   
+                //     inv_depth = (KRKi_uv_homo[2]*uv_best_match[0] - KRKi_uv_homo[0])/(Kt[0] - Kt[2]*uv_best_match[0]);
 
-
-
-                }
-                else
-                {
-                    // inv_depth = (Kt[1] - uv_best_match[1]*Kt[2])/(uv_best_match[1] * KRKi_uv_homo[2] - KRKi_uv_homo[1]);
-                    inv_depth = (KRKi_uv_homo[2]*uv_best_match[1] - KRKi_uv_homo[1])/(Kt[1] - Kt[2]*uv_best_match[1]);
-
-                }
-                if(inv_depth >= min_inv_depth_ && inv_depth <= max_inv_depth_){
-                    ref_ptr_depth_data[v*width+u] = 1.0/inv_depth;
-                }
-                // if(inv_depth >= config_->min_depth_ && inv_depth <= config_->max_depth_){
-                //     ref_ptr_depth_data[v*width+u] = inv_depth;
                 // }
+                // else
+                // {
+                //     inv_depth = (KRKi_uv_homo[2]*uv_best_match[1] - KRKi_uv_homo[1])/(Kt[1] - Kt[2]*uv_best_match[1]);
+
+                // }
+
+                // A = (a0, a1)^T, a0 = (Kt[0] - Kt[2]*uv_best_match[0]), a1 = (Kt[1] - Kt[2]*uv_best_match[1])
+                // b = (b0, b1)^T, b0 = (KRKi_uv_homo[2]*uv_best_match[0] - KRKi_uv_homo[0]), b1 = (KRKi_uv_homo[2]*uv_best_match[1] - KRKi_uv_homo[1])
+                // least square solution: inv_d = (A^T * A)^(-1) * A^T * b
+                // inv_d = (a0*b0 + a1*b1) / (a0*a0 + a1*a1)
+                // float a0 = (Kt[0] - Kt[2]*(uv_best_match[0]));
+                // float a1 = (Kt[1] - Kt[2]*(uv_best_match[1]));
+                // float b0 = (KRKi_uv_homo[2]*(uv_best_match[0]) - KRKi_uv_homo[0]);
+                // float b1 = (KRKi_uv_homo[2]*(uv_best_match[1]) - KRKi_uv_homo[1]);
+                // float inv_depth = (a0*b0 + a1*b1) / (a0*a0 + a1*a1);
+                // float depth = 1.0/inv_depth;
+                // if(depth >= config_->min_depth_ && depth <= config_->max_depth_)
+                // {
+                //     ref_ptr_depth_data[current_coord] = depth;
+                // }
+                // else{
+                //     ref_ptr_depth_data[current_coord] = 0.0;
+                // }
+                // if(debug_plot){
+                //     std::cout << "depth : " << depth << " at uv_best_match (" << uv_best_match[0] << "," << uv_best_match[1] << ")" << std::endl;
+                // }
+
+                float a0_minus = (Kt[0] - Kt[2]*(uv_best_match[0]-const_error_in_pixel*unit_epipolar_vector[0]));
+                float a1_minus = (Kt[1] - Kt[2]*(uv_best_match[1]-const_error_in_pixel*unit_epipolar_vector[1]));
+                float b0_minus = (KRKi_uv_homo[2]*(uv_best_match[0]-const_error_in_pixel*unit_epipolar_vector[0]) - KRKi_uv_homo[0]);
+                float b1_minus = (KRKi_uv_homo[2]*(uv_best_match[1]-const_error_in_pixel*unit_epipolar_vector[1]) - KRKi_uv_homo[1]);
+
+                float inv_min_depth = (a0_minus*b0_minus + a1_minus*b1_minus) / (a0_minus*a0_minus + a1_minus*a1_minus);
+
+
+                float a0_plus = (Kt[0] - Kt[2]*(uv_best_match[0]+const_error_in_pixel*unit_epipolar_vector[0]));
+                float a1_plus = (Kt[1] - Kt[2]*(uv_best_match[1]+const_error_in_pixel*unit_epipolar_vector[1]));
+                float b0_plus = (KRKi_uv_homo[2]*(uv_best_match[0]+const_error_in_pixel*unit_epipolar_vector[0]) - KRKi_uv_homo[0]);
+                float b1_plus = (KRKi_uv_homo[2]*(uv_best_match[1]+const_error_in_pixel*unit_epipolar_vector[1]) - KRKi_uv_homo[1]);
+                
+                float inv_max_depth = (a0_plus*b0_plus + a1_plus*b1_plus) / (a0_plus*a0_plus + a1_plus*a1_plus);
+                
+                if(inv_max_depth <= 0 || inv_max_depth <= 0)
+                {
+                    inv_max_depth = 1.0/config_->min_depth_;
+                    inv_min_depth = 1.0/config_->max_depth_;
+
+                }
+
+                if(inv_min_depth > inv_max_depth) std::swap<float>(inv_min_depth, inv_max_depth);
+
+                ref_ptr_min_inv_depth_data_[current_coord] = inv_min_depth;
+                ref_ptr_max_inv_depth_data_[current_coord] = inv_max_depth;
+                if(debug_plot){
+                    std::cout << "min_depth : " << 1.0/inv_max_depth << " and max_depth : " << 1.0/inv_min_depth << " at uv_best_match (" << uv_best_match[0] << "," << uv_best_match[1] << ")" << std::endl;
+                }
+                
+ 
             }
             
 
@@ -180,11 +273,12 @@ void MultiViewStereo::match(Image* const ref_image, Image* const tar_image, bool
 
 }
 
-bool MultiViewStereo::epipolarSearch(const uint8_t* const ref_ptr_gray_data, uint32_t ref_u, uint32_t ref_v, const Image* const tar_image, 
+bool MultiViewStereo::epipolarSearch(const float* const ref_ptr_gray_data, uint32_t ref_u, uint32_t ref_v, const Image* const tar_image, 
      const Eigen::Vector2f &tar_uv_min, const Eigen::Vector2f& unit_epipolar_vector, float epipolar_length, Eigen::Vector2f& tar_uv_best_match, bool debug_plot)
 {
 
-    uint8_t* tar_ptr_gray_data = tar_image->getGrayDataPtr();
+    float* tar_ptr_gray_data = tar_image->getGrayDataPtr();
+    float* tar_ptr_gradient_gray_data_ = tar_image->getGradientGrayDataPtr();
     uint32_t width = tar_image->getWidth();
     uint32_t height = tar_image->getHeight();    
 
@@ -194,6 +288,7 @@ bool MultiViewStereo::epipolarSearch(const uint8_t* const ref_ptr_gray_data, uin
     int best_s_idx_temp = 0;
 
     Eigen::Vector2f uv_best_tmp(-1, -1);
+    float best_s_tmp = 0;
 
     // for debug_plot
     std::vector<float> costs;
@@ -219,6 +314,7 @@ bool MultiViewStereo::epipolarSearch(const uint8_t* const ref_ptr_gray_data, uin
             {
                 min_cost = cost;
                 uv_best_tmp = tar_uv_current;
+                best_s_tmp = s;
 
                 if(debug_plot == true){
                     best_s_idx_temp = steps.size()-1;
@@ -228,6 +324,46 @@ bool MultiViewStereo::epipolarSearch(const uint8_t* const ref_ptr_gray_data, uin
         
 
         s+=1.0;
+
+    }
+
+
+    // do subpixel epipolar search using GN optimization
+
+    // L(s) = \sum ||r(s)||^2
+    // residual = \sum ||I_{tar}(u_min+s*dx, v_min+s*dx) - I_{ref}(u_ref, v_ref)||^2
+    // Jacobian J = \partial J/ \partial s = \partial I_{tar} / \partial u * \partial u / \parital s + \partial I_{tar} / \partial v * \partial v / \parital s, chain rule
+    // J = \grad I_{tar}_u * dx (unit_epipolar_vector[0]) + \Grad I_{tar}_v * dy (unit_epipolar_vector[1])
+    // Hessian H = J^T J = J^2
+    // b = -J^T * r(s)
+    // \delta s = b/H, H\delta s = b
+
+    size_t maximum_gn_step = 3;
+
+    for(size_t i=0; i<maximum_gn_step; i++)
+    {
+        float Hessian = 0;
+        float b = 0;
+        float delta_s = 0;
+        for(int wv =-half_ws_; wv <= half_ws_; wv++)
+        {
+            for(int wu =-half_ws_; wu <= half_ws_; wu++)
+            {
+                Eigen::Vector2f current_uv = uv_best_tmp + Eigen::Vector2f(wv, wu);
+                float gray, gx, gy;
+                gray = getBilinearInterpolated(tar_ptr_gray_data, width, height, current_uv[0], current_uv[1]);
+                getBilinearInterpolatedGradient(tar_ptr_gradient_gray_data_, width, height, current_uv[0], current_uv[1], gx, gy);
+                float residual = gray - ref_ptr_gray_data[(ref_v + wv)*width + ref_u + wu];
+                float Jacobi =  gx*unit_epipolar_vector[0] + gy*unit_epipolar_vector[1];
+                Hessian+= Jacobi*Jacobi;
+                b+= Jacobi*residual;
+            }
+
+        }
+
+        delta_s = -b/Hessian;
+        best_s_tmp += delta_s;
+        uv_best_tmp = tar_uv_min + best_s_tmp * unit_epipolar_vector;
 
     }
 
@@ -254,20 +390,20 @@ bool MultiViewStereo::epipolarSearch(const uint8_t* const ref_ptr_gray_data, uin
             matplot::text(steps[best_s_idx], costs[best_s_idx], "best");
             matplot::save(config_->save_figure_path_ + "/cost_vs_step.png");
 
-            cv::Mat vis_tar_data = tar_image->getRGBData().clone();
-
+            const cv::Mat cv_tar_rgb_data = tar_image->getRGBData();
+            cv::Mat vis_cv_tar_rgb_data = cv_tar_rgb_data.clone();
 
 
             std::cout << "uv_best_tmp : " << tar_uv_best_match[0] << " , " << tar_uv_best_match[1] << " starting from (" 
                 << cv_uv_start.x << "," << cv_uv_start.y  << ") end at (" << cv_uv_end.x << "," << cv_uv_end.y << ")" << std::endl;
-            cv::circle(vis_tar_data, cv_uv_best, 3, cv::Scalar(255,0,255), 2); // pink
-            cv::circle(vis_tar_data, cv_uv_start, 2, cv::Scalar(0,0,255), 2); // red
-            cv::putText(vis_tar_data, "S",cv_uv_start, cv::FONT_HERSHEY_SIMPLEX, 0.6, cv::Scalar(0,0,255), 1.8);
-            cv::line(vis_tar_data, cv_uv_start, cv_uv_end, cv::Scalar(0,255,0), 1); // green
-            cv::circle(vis_tar_data, cv_uv_end, 2, cv::Scalar(255,0,0), 2); // blue
-            cv::putText(vis_tar_data, "E",cv_uv_end, cv::FONT_HERSHEY_SIMPLEX, 0.6, cv::Scalar(255,0,0), 1.8);
-            cv::imwrite(config_->save_figure_path_ + "/vis_tar_data.png", vis_tar_data);
-            cv::imshow("vis_tar_data", vis_tar_data);
+            cv::circle(vis_cv_tar_rgb_data, cv_uv_best, 3, cv::Scalar(255,0,255), 2); // pink
+            cv::circle(vis_cv_tar_rgb_data, cv_uv_start, 2, cv::Scalar(0,0,255), 2); // red
+            cv::putText(vis_cv_tar_rgb_data, "S",cv_uv_start, cv::FONT_HERSHEY_SIMPLEX, 0.6, cv::Scalar(0,0,255), 1.8);
+            cv::line(vis_cv_tar_rgb_data, cv_uv_start, cv_uv_end, cv::Scalar(0,255,0), 1); // green
+            cv::circle(vis_cv_tar_rgb_data, cv_uv_end, 2, cv::Scalar(255,0,0), 2); // blue
+            cv::putText(vis_cv_tar_rgb_data, "E",cv_uv_end, cv::FONT_HERSHEY_SIMPLEX, 0.6, cv::Scalar(255,0,0), 1.8);
+            cv::imwrite(config_->save_figure_path_ + "/vis_tar_data.png", vis_cv_tar_rgb_data);
+            cv::imshow("vis_tar_data", vis_cv_tar_rgb_data);
             cv::waitKey(0);
 
         }
@@ -288,7 +424,7 @@ bool MultiViewStereo::epipolarSearch(const uint8_t* const ref_ptr_gray_data, uin
 }
 
 
-float MultiViewStereo::SAD(const uint8_t* ref_ptr, uint32_t ref_u, uint32_t ref_v, const uint8_t* tar_ptr, uint32_t tar_u, uint32_t tar_v, uint32_t width, uint32_t height, int half_ws)
+float MultiViewStereo::SAD(const float* ref_ptr, uint32_t ref_u, uint32_t ref_v, const float* tar_ptr, uint32_t tar_u, uint32_t tar_v, uint32_t width, uint32_t height, int half_ws)
 {
 
     float cost = 0;

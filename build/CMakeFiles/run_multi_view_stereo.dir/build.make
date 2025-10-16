@@ -83,22 +83,9 @@ CMakeFiles/run_multi_view_stereo.dir/src/configs.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/run_multi_view_stereo.dir/src/configs.cc.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/multi_view_stereo/src/configs.cc -o CMakeFiles/run_multi_view_stereo.dir/src/configs.cc.s
 
-CMakeFiles/run_multi_view_stereo.dir/src/data.cc.o: CMakeFiles/run_multi_view_stereo.dir/flags.make
-CMakeFiles/run_multi_view_stereo.dir/src/data.cc.o: ../src/data.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/run_multi_view_stereo.dir/src/data.cc.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/run_multi_view_stereo.dir/src/data.cc.o -c /root/multi_view_stereo/src/data.cc
-
-CMakeFiles/run_multi_view_stereo.dir/src/data.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/run_multi_view_stereo.dir/src/data.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/multi_view_stereo/src/data.cc > CMakeFiles/run_multi_view_stereo.dir/src/data.cc.i
-
-CMakeFiles/run_multi_view_stereo.dir/src/data.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/run_multi_view_stereo.dir/src/data.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/multi_view_stereo/src/data.cc -o CMakeFiles/run_multi_view_stereo.dir/src/data.cc.s
-
 CMakeFiles/run_multi_view_stereo.dir/src/multi_view_stereo.cc.o: CMakeFiles/run_multi_view_stereo.dir/flags.make
 CMakeFiles/run_multi_view_stereo.dir/src/multi_view_stereo.cc.o: ../src/multi_view_stereo.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/run_multi_view_stereo.dir/src/multi_view_stereo.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/run_multi_view_stereo.dir/src/multi_view_stereo.cc.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/run_multi_view_stereo.dir/src/multi_view_stereo.cc.o -c /root/multi_view_stereo/src/multi_view_stereo.cc
 
 CMakeFiles/run_multi_view_stereo.dir/src/multi_view_stereo.cc.i: cmake_force
@@ -111,7 +98,7 @@ CMakeFiles/run_multi_view_stereo.dir/src/multi_view_stereo.cc.s: cmake_force
 
 CMakeFiles/run_multi_view_stereo.dir/src/utils.cc.o: CMakeFiles/run_multi_view_stereo.dir/flags.make
 CMakeFiles/run_multi_view_stereo.dir/src/utils.cc.o: ../src/utils.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/run_multi_view_stereo.dir/src/utils.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/run_multi_view_stereo.dir/src/utils.cc.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/run_multi_view_stereo.dir/src/utils.cc.o -c /root/multi_view_stereo/src/utils.cc
 
 CMakeFiles/run_multi_view_stereo.dir/src/utils.cc.i: cmake_force
@@ -121,6 +108,19 @@ CMakeFiles/run_multi_view_stereo.dir/src/utils.cc.i: cmake_force
 CMakeFiles/run_multi_view_stereo.dir/src/utils.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/run_multi_view_stereo.dir/src/utils.cc.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/multi_view_stereo/src/utils.cc -o CMakeFiles/run_multi_view_stereo.dir/src/utils.cc.s
+
+CMakeFiles/run_multi_view_stereo.dir/src/undistort.cc.o: CMakeFiles/run_multi_view_stereo.dir/flags.make
+CMakeFiles/run_multi_view_stereo.dir/src/undistort.cc.o: ../src/undistort.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/run_multi_view_stereo.dir/src/undistort.cc.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/run_multi_view_stereo.dir/src/undistort.cc.o -c /root/multi_view_stereo/src/undistort.cc
+
+CMakeFiles/run_multi_view_stereo.dir/src/undistort.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/run_multi_view_stereo.dir/src/undistort.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/multi_view_stereo/src/undistort.cc > CMakeFiles/run_multi_view_stereo.dir/src/undistort.cc.i
+
+CMakeFiles/run_multi_view_stereo.dir/src/undistort.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/run_multi_view_stereo.dir/src/undistort.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/multi_view_stereo/src/undistort.cc -o CMakeFiles/run_multi_view_stereo.dir/src/undistort.cc.s
 
 CMakeFiles/run_multi_view_stereo.dir/src/visualizer.cc.o: CMakeFiles/run_multi_view_stereo.dir/flags.make
 CMakeFiles/run_multi_view_stereo.dir/src/visualizer.cc.o: ../src/visualizer.cc
@@ -135,24 +135,129 @@ CMakeFiles/run_multi_view_stereo.dir/src/visualizer.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/run_multi_view_stereo.dir/src/visualizer.cc.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/multi_view_stereo/src/visualizer.cc -o CMakeFiles/run_multi_view_stereo.dir/src/visualizer.cc.s
 
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/botanic_gardent_dataset.cc.o: CMakeFiles/run_multi_view_stereo.dir/flags.make
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/botanic_gardent_dataset.cc.o: ../src/datasets/botanic_gardent_dataset.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/run_multi_view_stereo.dir/src/datasets/botanic_gardent_dataset.cc.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/run_multi_view_stereo.dir/src/datasets/botanic_gardent_dataset.cc.o -c /root/multi_view_stereo/src/datasets/botanic_gardent_dataset.cc
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/botanic_gardent_dataset.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/run_multi_view_stereo.dir/src/datasets/botanic_gardent_dataset.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/multi_view_stereo/src/datasets/botanic_gardent_dataset.cc > CMakeFiles/run_multi_view_stereo.dir/src/datasets/botanic_gardent_dataset.cc.i
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/botanic_gardent_dataset.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/run_multi_view_stereo.dir/src/datasets/botanic_gardent_dataset.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/multi_view_stereo/src/datasets/botanic_gardent_dataset.cc -o CMakeFiles/run_multi_view_stereo.dir/src/datasets/botanic_gardent_dataset.cc.s
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/fast_livo2_dataset.cc.o: CMakeFiles/run_multi_view_stereo.dir/flags.make
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/fast_livo2_dataset.cc.o: ../src/datasets/fast_livo2_dataset.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/run_multi_view_stereo.dir/src/datasets/fast_livo2_dataset.cc.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/run_multi_view_stereo.dir/src/datasets/fast_livo2_dataset.cc.o -c /root/multi_view_stereo/src/datasets/fast_livo2_dataset.cc
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/fast_livo2_dataset.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/run_multi_view_stereo.dir/src/datasets/fast_livo2_dataset.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/multi_view_stereo/src/datasets/fast_livo2_dataset.cc > CMakeFiles/run_multi_view_stereo.dir/src/datasets/fast_livo2_dataset.cc.i
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/fast_livo2_dataset.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/run_multi_view_stereo.dir/src/datasets/fast_livo2_dataset.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/multi_view_stereo/src/datasets/fast_livo2_dataset.cc -o CMakeFiles/run_multi_view_stereo.dir/src/datasets/fast_livo2_dataset.cc.s
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/remode_dataset.cc.o: CMakeFiles/run_multi_view_stereo.dir/flags.make
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/remode_dataset.cc.o: ../src/datasets/remode_dataset.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/run_multi_view_stereo.dir/src/datasets/remode_dataset.cc.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/run_multi_view_stereo.dir/src/datasets/remode_dataset.cc.o -c /root/multi_view_stereo/src/datasets/remode_dataset.cc
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/remode_dataset.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/run_multi_view_stereo.dir/src/datasets/remode_dataset.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/multi_view_stereo/src/datasets/remode_dataset.cc > CMakeFiles/run_multi_view_stereo.dir/src/datasets/remode_dataset.cc.i
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/remode_dataset.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/run_multi_view_stereo.dir/src/datasets/remode_dataset.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/multi_view_stereo/src/datasets/remode_dataset.cc -o CMakeFiles/run_multi_view_stereo.dir/src/datasets/remode_dataset.cc.s
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/tartan_air_dataset.cc.o: CMakeFiles/run_multi_view_stereo.dir/flags.make
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/tartan_air_dataset.cc.o: ../src/datasets/tartan_air_dataset.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/run_multi_view_stereo.dir/src/datasets/tartan_air_dataset.cc.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/run_multi_view_stereo.dir/src/datasets/tartan_air_dataset.cc.o -c /root/multi_view_stereo/src/datasets/tartan_air_dataset.cc
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/tartan_air_dataset.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/run_multi_view_stereo.dir/src/datasets/tartan_air_dataset.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/multi_view_stereo/src/datasets/tartan_air_dataset.cc > CMakeFiles/run_multi_view_stereo.dir/src/datasets/tartan_air_dataset.cc.i
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/tartan_air_dataset.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/run_multi_view_stereo.dir/src/datasets/tartan_air_dataset.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/multi_view_stereo/src/datasets/tartan_air_dataset.cc -o CMakeFiles/run_multi_view_stereo.dir/src/datasets/tartan_air_dataset.cc.s
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/kitti_dataset.cc.o: CMakeFiles/run_multi_view_stereo.dir/flags.make
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/kitti_dataset.cc.o: ../src/datasets/kitti_dataset.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/run_multi_view_stereo.dir/src/datasets/kitti_dataset.cc.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/run_multi_view_stereo.dir/src/datasets/kitti_dataset.cc.o -c /root/multi_view_stereo/src/datasets/kitti_dataset.cc
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/kitti_dataset.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/run_multi_view_stereo.dir/src/datasets/kitti_dataset.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/multi_view_stereo/src/datasets/kitti_dataset.cc > CMakeFiles/run_multi_view_stereo.dir/src/datasets/kitti_dataset.cc.i
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/kitti_dataset.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/run_multi_view_stereo.dir/src/datasets/kitti_dataset.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/multi_view_stereo/src/datasets/kitti_dataset.cc -o CMakeFiles/run_multi_view_stereo.dir/src/datasets/kitti_dataset.cc.s
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/virtual_kitti_dataset.cc.o: CMakeFiles/run_multi_view_stereo.dir/flags.make
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/virtual_kitti_dataset.cc.o: ../src/datasets/virtual_kitti_dataset.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/run_multi_view_stereo.dir/src/datasets/virtual_kitti_dataset.cc.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/run_multi_view_stereo.dir/src/datasets/virtual_kitti_dataset.cc.o -c /root/multi_view_stereo/src/datasets/virtual_kitti_dataset.cc
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/virtual_kitti_dataset.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/run_multi_view_stereo.dir/src/datasets/virtual_kitti_dataset.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/multi_view_stereo/src/datasets/virtual_kitti_dataset.cc > CMakeFiles/run_multi_view_stereo.dir/src/datasets/virtual_kitti_dataset.cc.i
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/virtual_kitti_dataset.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/run_multi_view_stereo.dir/src/datasets/virtual_kitti_dataset.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/multi_view_stereo/src/datasets/virtual_kitti_dataset.cc -o CMakeFiles/run_multi_view_stereo.dir/src/datasets/virtual_kitti_dataset.cc.s
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.o: CMakeFiles/run_multi_view_stereo.dir/flags.make
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.o: ../src/datasets/dataset.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.o -c /root/multi_view_stereo/src/datasets/dataset.cc
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/multi_view_stereo/src/datasets/dataset.cc > CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.i
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/multi_view_stereo/src/datasets/dataset.cc -o CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.s
+
 # Object files for target run_multi_view_stereo
 run_multi_view_stereo_OBJECTS = \
 "CMakeFiles/run_multi_view_stereo.dir/src/main.cc.o" \
 "CMakeFiles/run_multi_view_stereo.dir/src/configs.cc.o" \
-"CMakeFiles/run_multi_view_stereo.dir/src/data.cc.o" \
 "CMakeFiles/run_multi_view_stereo.dir/src/multi_view_stereo.cc.o" \
 "CMakeFiles/run_multi_view_stereo.dir/src/utils.cc.o" \
-"CMakeFiles/run_multi_view_stereo.dir/src/visualizer.cc.o"
+"CMakeFiles/run_multi_view_stereo.dir/src/undistort.cc.o" \
+"CMakeFiles/run_multi_view_stereo.dir/src/visualizer.cc.o" \
+"CMakeFiles/run_multi_view_stereo.dir/src/datasets/botanic_gardent_dataset.cc.o" \
+"CMakeFiles/run_multi_view_stereo.dir/src/datasets/fast_livo2_dataset.cc.o" \
+"CMakeFiles/run_multi_view_stereo.dir/src/datasets/remode_dataset.cc.o" \
+"CMakeFiles/run_multi_view_stereo.dir/src/datasets/tartan_air_dataset.cc.o" \
+"CMakeFiles/run_multi_view_stereo.dir/src/datasets/kitti_dataset.cc.o" \
+"CMakeFiles/run_multi_view_stereo.dir/src/datasets/virtual_kitti_dataset.cc.o" \
+"CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.o"
 
 # External object files for target run_multi_view_stereo
 run_multi_view_stereo_EXTERNAL_OBJECTS =
 
 run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/src/main.cc.o
 run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/src/configs.cc.o
-run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/src/data.cc.o
 run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/src/multi_view_stereo.cc.o
 run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/src/utils.cc.o
+run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/src/undistort.cc.o
 run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/src/visualizer.cc.o
+run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/src/datasets/botanic_gardent_dataset.cc.o
+run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/src/datasets/fast_livo2_dataset.cc.o
+run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/src/datasets/remode_dataset.cc.o
+run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/src/datasets/tartan_air_dataset.cc.o
+run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/src/datasets/kitti_dataset.cc.o
+run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/src/datasets/virtual_kitti_dataset.cc.o
+run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.o
 run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/build.make
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libopencv_stitching.so.4.2.0
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libopencv_aruco.so.4.2.0
@@ -185,6 +290,31 @@ run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libopencv_xobjdetect.so.4.2.0
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libopencv_xphoto.so.4.2.0
 run_multi_view_stereo: /usr/local/lib/libmatplot.a
 run_multi_view_stereo: /usr/local/lib/libpangolin.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpcl_apps.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpcl_outofcore.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpcl_people.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libboost_system.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libboost_date_time.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libboost_iostreams.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libboost_regex.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libqhull.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkChartsCore-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkInfovisCore-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libfreetype.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libz.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libjpeg.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpng.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libtiff.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libexpat.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkIOGeometry-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkIOLegacy-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkIOPLY-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkRenderingLOD-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkViewsContext2D-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkViewsCore-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkRenderingContextOpenGL2-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libflann_cpp.so
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libopencv_highgui.so.4.2.0
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libopencv_datasets.so.4.2.0
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libopencv_plot.so.4.2.0
@@ -207,39 +337,92 @@ run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libopencv_core.so.4.2.0
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libOpenGL.so
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libGLX.so
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libGLU.so
-run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libGLEW.so
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libEGL.so
-run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libSM.so
-run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libICE.so
-run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libX11.so
-run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libXext.so
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libOpenGL.so
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libGLX.so
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libGLU.so
-run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libGLEW.so
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libEGL.so
-run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libSM.so
-run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libICE.so
-run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libX11.so
-run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libXext.so
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libdc1394.so
 run_multi_view_stereo: /usr/lib/libOpenNI.so
 run_multi_view_stereo: /usr/lib/libOpenNI2.so
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libIlmImf.so
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libzstd.so
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/liblz4.so
-run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpng.so
-run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libz.so
-run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libjpeg.so
-run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libtiff.so
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/liblapack.so
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libf77blas.so
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libatlas.so
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libf77blas.so
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libatlas.so
 run_multi_view_stereo: /usr/local/lib/Matplot++/libnodesoup.a
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpcl_surface.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpcl_keypoints.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpcl_tracking.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpcl_recognition.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpcl_registration.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpcl_stereo.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpcl_segmentation.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpcl_features.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpcl_filters.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpcl_sample_consensus.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpcl_ml.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpcl_visualization.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpcl_search.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpcl_kdtree.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpcl_io.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpcl_octree.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpcl_common.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libjpeg.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpng.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libtiff.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkInteractionWidgets-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkFiltersModeling-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkInteractionStyle-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkFiltersExtraction-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkFiltersStatistics-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkImagingFourier-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkalglib-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkFiltersHybrid-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkImagingGeneral-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkImagingSources-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkImagingHybrid-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkRenderingAnnotation-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkImagingColor-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkRenderingVolume-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkIOXML-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkIOXMLParser-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkIOCore-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkRenderingContext2D-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkRenderingFreeType-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libfreetype.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkRenderingOpenGL2-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkImagingCore-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkRenderingCore-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkCommonColor-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkFiltersGeometry-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkFiltersSources-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkFiltersGeneral-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkCommonComputationalGeometry-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkFiltersCore-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkIOImage-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkCommonExecutionModel-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkCommonDataModel-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkCommonTransforms-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkCommonMisc-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkCommonMath-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkCommonSystem-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkCommonCore-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtksys-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkDICOMParser-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libvtkmetaio-7.1.so.7.1p.1
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libz.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libGLEW.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libSM.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libICE.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libX11.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libXext.so
+run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libXt.so
 run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable run_multi_view_stereo"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking CXX executable run_multi_view_stereo"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/run_multi_view_stereo.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

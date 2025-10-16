@@ -111,6 +111,21 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
+test/CMakeFiles/run_visualize_colorized_gtmap.dir/rule:
+	cd /root/multi_view_stereo/build && $(MAKE) -f CMakeFiles/Makefile2 test/CMakeFiles/run_visualize_colorized_gtmap.dir/rule
+.PHONY : test/CMakeFiles/run_visualize_colorized_gtmap.dir/rule
+
+# Convenience name for target.
+run_visualize_colorized_gtmap: test/CMakeFiles/run_visualize_colorized_gtmap.dir/rule
+
+.PHONY : run_visualize_colorized_gtmap
+
+# fast build rule for target.
+run_visualize_colorized_gtmap/fast:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/build
+.PHONY : run_visualize_colorized_gtmap/fast
+
+# Convenience name for target.
 test/CMakeFiles/run_pixel_operation_comparison.dir/rule:
 	cd /root/multi_view_stereo/build && $(MAKE) -f CMakeFiles/Makefile2 test/CMakeFiles/run_pixel_operation_comparison.dir/rule
 .PHONY : test/CMakeFiles/run_pixel_operation_comparison.dir/rule
@@ -146,6 +161,7 @@ __/src/configs.o: __/src/configs.cc.o
 
 # target to build an object file
 __/src/configs.cc.o:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/configs.cc.o
 	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/configs.cc.o
 .PHONY : __/src/configs.cc.o
 
@@ -155,6 +171,7 @@ __/src/configs.i: __/src/configs.cc.i
 
 # target to preprocess a source file
 __/src/configs.cc.i:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/configs.cc.i
 	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/configs.cc.i
 .PHONY : __/src/configs.cc.i
 
@@ -164,35 +181,249 @@ __/src/configs.s: __/src/configs.cc.s
 
 # target to generate assembly for a file
 __/src/configs.cc.s:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/configs.cc.s
 	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/configs.cc.s
 .PHONY : __/src/configs.cc.s
 
-__/src/data.o: __/src/data.cc.o
+__/src/datasets/botanic_gardent_dataset.o: __/src/datasets/botanic_gardent_dataset.cc.o
 
-.PHONY : __/src/data.o
+.PHONY : __/src/datasets/botanic_gardent_dataset.o
 
 # target to build an object file
-__/src/data.cc.o:
-	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/data.cc.o
-.PHONY : __/src/data.cc.o
+__/src/datasets/botanic_gardent_dataset.cc.o:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/botanic_gardent_dataset.cc.o
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/botanic_gardent_dataset.cc.o
+.PHONY : __/src/datasets/botanic_gardent_dataset.cc.o
 
-__/src/data.i: __/src/data.cc.i
+__/src/datasets/botanic_gardent_dataset.i: __/src/datasets/botanic_gardent_dataset.cc.i
 
-.PHONY : __/src/data.i
+.PHONY : __/src/datasets/botanic_gardent_dataset.i
 
 # target to preprocess a source file
-__/src/data.cc.i:
-	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/data.cc.i
-.PHONY : __/src/data.cc.i
+__/src/datasets/botanic_gardent_dataset.cc.i:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/botanic_gardent_dataset.cc.i
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/botanic_gardent_dataset.cc.i
+.PHONY : __/src/datasets/botanic_gardent_dataset.cc.i
 
-__/src/data.s: __/src/data.cc.s
+__/src/datasets/botanic_gardent_dataset.s: __/src/datasets/botanic_gardent_dataset.cc.s
 
-.PHONY : __/src/data.s
+.PHONY : __/src/datasets/botanic_gardent_dataset.s
 
 # target to generate assembly for a file
-__/src/data.cc.s:
-	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/data.cc.s
-.PHONY : __/src/data.cc.s
+__/src/datasets/botanic_gardent_dataset.cc.s:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/botanic_gardent_dataset.cc.s
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/botanic_gardent_dataset.cc.s
+.PHONY : __/src/datasets/botanic_gardent_dataset.cc.s
+
+__/src/datasets/dataset.o: __/src/datasets/dataset.cc.o
+
+.PHONY : __/src/datasets/dataset.o
+
+# target to build an object file
+__/src/datasets/dataset.cc.o:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/dataset.cc.o
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/dataset.cc.o
+.PHONY : __/src/datasets/dataset.cc.o
+
+__/src/datasets/dataset.i: __/src/datasets/dataset.cc.i
+
+.PHONY : __/src/datasets/dataset.i
+
+# target to preprocess a source file
+__/src/datasets/dataset.cc.i:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/dataset.cc.i
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/dataset.cc.i
+.PHONY : __/src/datasets/dataset.cc.i
+
+__/src/datasets/dataset.s: __/src/datasets/dataset.cc.s
+
+.PHONY : __/src/datasets/dataset.s
+
+# target to generate assembly for a file
+__/src/datasets/dataset.cc.s:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/dataset.cc.s
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/dataset.cc.s
+.PHONY : __/src/datasets/dataset.cc.s
+
+__/src/datasets/fast_livo2_dataset.o: __/src/datasets/fast_livo2_dataset.cc.o
+
+.PHONY : __/src/datasets/fast_livo2_dataset.o
+
+# target to build an object file
+__/src/datasets/fast_livo2_dataset.cc.o:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/fast_livo2_dataset.cc.o
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/fast_livo2_dataset.cc.o
+.PHONY : __/src/datasets/fast_livo2_dataset.cc.o
+
+__/src/datasets/fast_livo2_dataset.i: __/src/datasets/fast_livo2_dataset.cc.i
+
+.PHONY : __/src/datasets/fast_livo2_dataset.i
+
+# target to preprocess a source file
+__/src/datasets/fast_livo2_dataset.cc.i:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/fast_livo2_dataset.cc.i
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/fast_livo2_dataset.cc.i
+.PHONY : __/src/datasets/fast_livo2_dataset.cc.i
+
+__/src/datasets/fast_livo2_dataset.s: __/src/datasets/fast_livo2_dataset.cc.s
+
+.PHONY : __/src/datasets/fast_livo2_dataset.s
+
+# target to generate assembly for a file
+__/src/datasets/fast_livo2_dataset.cc.s:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/fast_livo2_dataset.cc.s
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/fast_livo2_dataset.cc.s
+.PHONY : __/src/datasets/fast_livo2_dataset.cc.s
+
+__/src/datasets/kitti_dataset.o: __/src/datasets/kitti_dataset.cc.o
+
+.PHONY : __/src/datasets/kitti_dataset.o
+
+# target to build an object file
+__/src/datasets/kitti_dataset.cc.o:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/kitti_dataset.cc.o
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/kitti_dataset.cc.o
+.PHONY : __/src/datasets/kitti_dataset.cc.o
+
+__/src/datasets/kitti_dataset.i: __/src/datasets/kitti_dataset.cc.i
+
+.PHONY : __/src/datasets/kitti_dataset.i
+
+# target to preprocess a source file
+__/src/datasets/kitti_dataset.cc.i:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/kitti_dataset.cc.i
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/kitti_dataset.cc.i
+.PHONY : __/src/datasets/kitti_dataset.cc.i
+
+__/src/datasets/kitti_dataset.s: __/src/datasets/kitti_dataset.cc.s
+
+.PHONY : __/src/datasets/kitti_dataset.s
+
+# target to generate assembly for a file
+__/src/datasets/kitti_dataset.cc.s:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/kitti_dataset.cc.s
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/kitti_dataset.cc.s
+.PHONY : __/src/datasets/kitti_dataset.cc.s
+
+__/src/datasets/remode_dataset.o: __/src/datasets/remode_dataset.cc.o
+
+.PHONY : __/src/datasets/remode_dataset.o
+
+# target to build an object file
+__/src/datasets/remode_dataset.cc.o:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/remode_dataset.cc.o
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/remode_dataset.cc.o
+.PHONY : __/src/datasets/remode_dataset.cc.o
+
+__/src/datasets/remode_dataset.i: __/src/datasets/remode_dataset.cc.i
+
+.PHONY : __/src/datasets/remode_dataset.i
+
+# target to preprocess a source file
+__/src/datasets/remode_dataset.cc.i:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/remode_dataset.cc.i
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/remode_dataset.cc.i
+.PHONY : __/src/datasets/remode_dataset.cc.i
+
+__/src/datasets/remode_dataset.s: __/src/datasets/remode_dataset.cc.s
+
+.PHONY : __/src/datasets/remode_dataset.s
+
+# target to generate assembly for a file
+__/src/datasets/remode_dataset.cc.s:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/remode_dataset.cc.s
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/remode_dataset.cc.s
+.PHONY : __/src/datasets/remode_dataset.cc.s
+
+__/src/datasets/tartan_air_dataset.o: __/src/datasets/tartan_air_dataset.cc.o
+
+.PHONY : __/src/datasets/tartan_air_dataset.o
+
+# target to build an object file
+__/src/datasets/tartan_air_dataset.cc.o:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/tartan_air_dataset.cc.o
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tartan_air_dataset.cc.o
+.PHONY : __/src/datasets/tartan_air_dataset.cc.o
+
+__/src/datasets/tartan_air_dataset.i: __/src/datasets/tartan_air_dataset.cc.i
+
+.PHONY : __/src/datasets/tartan_air_dataset.i
+
+# target to preprocess a source file
+__/src/datasets/tartan_air_dataset.cc.i:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/tartan_air_dataset.cc.i
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tartan_air_dataset.cc.i
+.PHONY : __/src/datasets/tartan_air_dataset.cc.i
+
+__/src/datasets/tartan_air_dataset.s: __/src/datasets/tartan_air_dataset.cc.s
+
+.PHONY : __/src/datasets/tartan_air_dataset.s
+
+# target to generate assembly for a file
+__/src/datasets/tartan_air_dataset.cc.s:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/tartan_air_dataset.cc.s
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tartan_air_dataset.cc.s
+.PHONY : __/src/datasets/tartan_air_dataset.cc.s
+
+__/src/datasets/virtual_kitti_dataset.o: __/src/datasets/virtual_kitti_dataset.cc.o
+
+.PHONY : __/src/datasets/virtual_kitti_dataset.o
+
+# target to build an object file
+__/src/datasets/virtual_kitti_dataset.cc.o:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/virtual_kitti_dataset.cc.o
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/virtual_kitti_dataset.cc.o
+.PHONY : __/src/datasets/virtual_kitti_dataset.cc.o
+
+__/src/datasets/virtual_kitti_dataset.i: __/src/datasets/virtual_kitti_dataset.cc.i
+
+.PHONY : __/src/datasets/virtual_kitti_dataset.i
+
+# target to preprocess a source file
+__/src/datasets/virtual_kitti_dataset.cc.i:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/virtual_kitti_dataset.cc.i
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/virtual_kitti_dataset.cc.i
+.PHONY : __/src/datasets/virtual_kitti_dataset.cc.i
+
+__/src/datasets/virtual_kitti_dataset.s: __/src/datasets/virtual_kitti_dataset.cc.s
+
+.PHONY : __/src/datasets/virtual_kitti_dataset.s
+
+# target to generate assembly for a file
+__/src/datasets/virtual_kitti_dataset.cc.s:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/virtual_kitti_dataset.cc.s
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/virtual_kitti_dataset.cc.s
+.PHONY : __/src/datasets/virtual_kitti_dataset.cc.s
+
+__/src/undistort.o: __/src/undistort.cc.o
+
+.PHONY : __/src/undistort.o
+
+# target to build an object file
+__/src/undistort.cc.o:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/undistort.cc.o
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/undistort.cc.o
+.PHONY : __/src/undistort.cc.o
+
+__/src/undistort.i: __/src/undistort.cc.i
+
+.PHONY : __/src/undistort.i
+
+# target to preprocess a source file
+__/src/undistort.cc.i:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/undistort.cc.i
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/undistort.cc.i
+.PHONY : __/src/undistort.cc.i
+
+__/src/undistort.s: __/src/undistort.cc.s
+
+.PHONY : __/src/undistort.s
+
+# target to generate assembly for a file
+__/src/undistort.cc.s:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/undistort.cc.s
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/undistort.cc.s
+.PHONY : __/src/undistort.cc.s
 
 __/src/utils.o: __/src/utils.cc.o
 
@@ -200,6 +431,7 @@ __/src/utils.o: __/src/utils.cc.o
 
 # target to build an object file
 __/src/utils.cc.o:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/utils.cc.o
 	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/utils.cc.o
 .PHONY : __/src/utils.cc.o
 
@@ -209,6 +441,7 @@ __/src/utils.i: __/src/utils.cc.i
 
 # target to preprocess a source file
 __/src/utils.cc.i:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/utils.cc.i
 	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/utils.cc.i
 .PHONY : __/src/utils.cc.i
 
@@ -218,8 +451,39 @@ __/src/utils.s: __/src/utils.cc.s
 
 # target to generate assembly for a file
 __/src/utils.cc.s:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/utils.cc.s
 	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/utils.cc.s
 .PHONY : __/src/utils.cc.s
+
+__/src/visualizer.o: __/src/visualizer.cc.o
+
+.PHONY : __/src/visualizer.o
+
+# target to build an object file
+__/src/visualizer.cc.o:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/visualizer.cc.o
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/visualizer.cc.o
+.PHONY : __/src/visualizer.cc.o
+
+__/src/visualizer.i: __/src/visualizer.cc.i
+
+.PHONY : __/src/visualizer.i
+
+# target to preprocess a source file
+__/src/visualizer.cc.i:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/visualizer.cc.i
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/visualizer.cc.i
+.PHONY : __/src/visualizer.cc.i
+
+__/src/visualizer.s: __/src/visualizer.cc.s
+
+.PHONY : __/src/visualizer.s
+
+# target to generate assembly for a file
+__/src/visualizer.cc.s:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/visualizer.cc.s
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/visualizer.cc.s
+.PHONY : __/src/visualizer.cc.s
 
 pixel_operation_comparison.o: pixel_operation_comparison.cc.o
 
@@ -247,6 +511,33 @@ pixel_operation_comparison.s: pixel_operation_comparison.cc.s
 pixel_operation_comparison.cc.s:
 	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_pixel_operation_comparison.dir/build.make test/CMakeFiles/run_pixel_operation_comparison.dir/pixel_operation_comparison.cc.s
 .PHONY : pixel_operation_comparison.cc.s
+
+visualize_colorized_gtmap.o: visualize_colorized_gtmap.cc.o
+
+.PHONY : visualize_colorized_gtmap.o
+
+# target to build an object file
+visualize_colorized_gtmap.cc.o:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/visualize_colorized_gtmap.cc.o
+.PHONY : visualize_colorized_gtmap.cc.o
+
+visualize_colorized_gtmap.i: visualize_colorized_gtmap.cc.i
+
+.PHONY : visualize_colorized_gtmap.i
+
+# target to preprocess a source file
+visualize_colorized_gtmap.cc.i:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/visualize_colorized_gtmap.cc.i
+.PHONY : visualize_colorized_gtmap.cc.i
+
+visualize_colorized_gtmap.s: visualize_colorized_gtmap.cc.s
+
+.PHONY : visualize_colorized_gtmap.s
+
+# target to generate assembly for a file
+visualize_colorized_gtmap.cc.s:
+	cd /root/multi_view_stereo/build && $(MAKE) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/visualize_colorized_gtmap.cc.s
+.PHONY : visualize_colorized_gtmap.cc.s
 
 visualize_trajectories.o: visualize_trajectories.cc.o
 
@@ -283,20 +574,48 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... run_visualize_colorized_gtmap"
 	@echo "... run_pixel_operation_comparison"
 	@echo "... run_visualize_trajectories"
 	@echo "... __/src/configs.o"
 	@echo "... __/src/configs.i"
 	@echo "... __/src/configs.s"
-	@echo "... __/src/data.o"
-	@echo "... __/src/data.i"
-	@echo "... __/src/data.s"
+	@echo "... __/src/datasets/botanic_gardent_dataset.o"
+	@echo "... __/src/datasets/botanic_gardent_dataset.i"
+	@echo "... __/src/datasets/botanic_gardent_dataset.s"
+	@echo "... __/src/datasets/dataset.o"
+	@echo "... __/src/datasets/dataset.i"
+	@echo "... __/src/datasets/dataset.s"
+	@echo "... __/src/datasets/fast_livo2_dataset.o"
+	@echo "... __/src/datasets/fast_livo2_dataset.i"
+	@echo "... __/src/datasets/fast_livo2_dataset.s"
+	@echo "... __/src/datasets/kitti_dataset.o"
+	@echo "... __/src/datasets/kitti_dataset.i"
+	@echo "... __/src/datasets/kitti_dataset.s"
+	@echo "... __/src/datasets/remode_dataset.o"
+	@echo "... __/src/datasets/remode_dataset.i"
+	@echo "... __/src/datasets/remode_dataset.s"
+	@echo "... __/src/datasets/tartan_air_dataset.o"
+	@echo "... __/src/datasets/tartan_air_dataset.i"
+	@echo "... __/src/datasets/tartan_air_dataset.s"
+	@echo "... __/src/datasets/virtual_kitti_dataset.o"
+	@echo "... __/src/datasets/virtual_kitti_dataset.i"
+	@echo "... __/src/datasets/virtual_kitti_dataset.s"
+	@echo "... __/src/undistort.o"
+	@echo "... __/src/undistort.i"
+	@echo "... __/src/undistort.s"
 	@echo "... __/src/utils.o"
 	@echo "... __/src/utils.i"
 	@echo "... __/src/utils.s"
+	@echo "... __/src/visualizer.o"
+	@echo "... __/src/visualizer.i"
+	@echo "... __/src/visualizer.s"
 	@echo "... pixel_operation_comparison.o"
 	@echo "... pixel_operation_comparison.i"
 	@echo "... pixel_operation_comparison.s"
+	@echo "... visualize_colorized_gtmap.o"
+	@echo "... visualize_colorized_gtmap.i"
+	@echo "... visualize_colorized_gtmap.s"
 	@echo "... visualize_trajectories.o"
 	@echo "... visualize_trajectories.i"
 	@echo "... visualize_trajectories.s"

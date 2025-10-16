@@ -1,0 +1,48 @@
+%YAML:1.0
+
+system:
+  num_used_camera: 1
+  use_external_trajectory_id: 0
+  is_use_GT_depth: 1
+  use_GT_depth_id: 0
+  maximum_traj: 203
+  ref_pose_idx: 0
+  ref_camera_idx: 0
+  start_match_uv: [145, 370]
+  tar_pose_start_idx: 200
+  tar_camera_start_idx: 0
+  image_sequence_mode: forward_time_direction # option: forward_time_direction, backward_time_direction, full_time_direction, fixed_order_of_traj
+  min_depth: 0.5
+  max_depth: 100
+  half_window_size: 3 # we only support odd size of window, like 3x3, 5x5, 7x7, 9x9 ...
+  save_figure_path: /root/multi_view_stereo/figs
+  debug_plot: 1
+
+external_trajectory0:
+  name: colmap
+  base_coordinate: camera frame
+  trajectory_path: /root/datasets2/remode_test_data/test_data/first_200_frames_traj_over_table_input_sequence.txt
+  T_pose_cam0:
+    - [1.0,0,0,0]
+    - [0,1.0,0,0]
+    - [0,0,1.0,0] 
+    - [0,0,0,1.0]
+
+cam0:
+  name: camera0
+  dir_path: /root/datasets2/remode_test_data/test_data/images
+  resolution: [640, 480] # width x height
+  camera_model: pinhole
+  intrinsics: [481.2, -480.0, 319.5, 239.5] #fx, fy, cu, cv
+  distortion_model: radtan
+  distortion_coeffs: [0,0,0,0] #k1,k2,p1,p2
+
+GT_depth0:
+  name: depthmap
+  path: /root/datasets2/remode_test_data/test_data/depthmaps
+  T_cam0_pose:
+    - [1.0,0,0,0]
+    - [0,1.0,0,0]
+    - [0,0,1.0,0] 
+    - [0,0,0,1.0]
+

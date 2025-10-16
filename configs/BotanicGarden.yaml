@@ -2,32 +2,78 @@
 
 system:
   num_used_camera: 2
-  trajectory_path: /root/datasets2/colmap_datasets/BotanicGarden_1018_00_16/colmap_trajectory/traj.txt
-  maximum_traj: 16
-  ref_image_idx: 0
+  use_external_trajectory_id: 0
+  maximum_traj: 200
+  ref_pose_idx: 0
+  ref_camera_idx: 0
   start_match_uv: [0, 0]
-  tar_image_start_idx: 14
+  tar_pose_start_idx: 0
+  tar_camera_start_idx: 1
+  image_sequence_mode: forward_time_direction # option: forward_time_direction, backward_time_direction, full_time_direction
   min_depth: 0.5
-  max_depth: 10
-  half_window_size: 2 # we only support odd size of window, like 3x3, 5x5, 7x7, 9x9 ...
+  max_depth: 100
+  half_window_size: 5 # we only support odd size of window, like 3x3, 5x5, 7x7, 9x9 ...
   save_figure_path: /root/multi_view_stereo/figs
   debug_plot: 0
 
+external_trajectory0:
+  name: colmap
+  sync_time_tolerance: 0.01
+  base_coordinate: camera frame
+  trajectory_path: /root/datasets2/BotanicGarden/1018-00/colmap_trajectory/traj_1.txt
+  T_pose_cam0:
+   - [1.0, 0, 0, 0]
+   - [0, 1.0, 0, 0]
+   - [0, 0, 1.0, 0] 
+   - [0, 0, 0, 1.0]
+  T_pose_cam1:
+   - [0.999994564612669,-0.00327143011166783,-0.000410475508767800,0.253736175410149]
+   - [0.00326819763481066,0.999965451959397,-0.00764289028177120,-0.000362553856124796]
+   - [0.000435464509051199,0.00764150722461529,0.999970708440001,-0.000621002717451192] 
+   - [0, 0, 0, 1.0]
+
+external_trajectory1:
+  name: liosam
+  sync_time_tolerance: 0.05
+  world_coordinate: IMU frame
+  trajectory_path: /root/datasets2/BotanicGarden/1018-00/lio_sam_save_map/traj.txt
+  T_pose_cam0:
+   - [0.02387435, -0.00736968,  0.99968752,  0.1220238]
+   - [-0.99970775, -0.00378433,  0.0238487,   0.14123334]
+   - [0.00360642, -0.99996516, -0.00745792, -0.17854156] 
+   - [0, 0, 0, 1.0]
+  T_pose_cam1:
+   - [0.024285463,  0.000191591,  0.999704763,  0.127463449]
+   - [-0.999704299, -0.000331485,  0.02428728,  -0.112442119]
+   - [0.000335069, -0.999999401,  0.000183442, -0.177259308] 
+   - [0, 0, 0, 1.0]
+
+
+
+
+
 cam0:
   name: dalsa_rgb0_down
-  dir_path: /root/datasets2/colmap_datasets/BotanicGarden_1018_00_16/images/left_rgb
+  # dir_path: /root/datasets2/colmap_datasets/BotanicGarden_1018_00_16/images/left_rgb
+  dir_path: /root/datasets2/BotanicGarden/1018-00/1018_00_img10hz600p/left_rgb
   resolution: [960, 600] # width x height
   camera_model: pinhole
   intrinsics: [642.9165664800531, 641.9171825800378, 460.1840658156501, 308.5846449100310] #fx, fy, cu, cv
   distortion_model: radtan
-  distortion_coeffs: [-0.060164620903866,0.094005180631043,0,0]
+  distortion_coeffs: [-0.060164620903866,0.094005180631043,0,0] #k1,k2,p1,p2
+  # distortion_coeffs: [0,0,0,0] #k1,k2,p1,p2
+  num_used_GT: 0
+
 
 
 cam1:
   name: dalsa_rgb0_down
-  dir_path: /root/datasets2/colmap_datasets/BotanicGarden_1018_00_16/images/right_rgb
+  # dir_path: /root/datasets2/colmap_datasets/BotanicGarden_1018_00_16/images/right_rgb
+  dir_path: /root/datasets2/BotanicGarden/1018-00/1018_00_img10hz600p/right_rgb
   resolution: [960, 600] # width x height
   camera_model: pinhole
   intrinsics: [644.4385505412966, 643.5879520187435, 455.1775919513420, 304.1616226347153] #fx, fy, cu, cv
   distortion_model: radtan
-  distortion_coeffs: [-0.057705696896734,0.086955444511364,0,0]
+  distortion_coeffs: [-0.057705696896734,0.086955444511364,0,0] #k1,k2,p1,p2
+  # distortion_coeffs: [0,0,0,0] #k1,k2,p1,p2
+  num_used_GT: 0

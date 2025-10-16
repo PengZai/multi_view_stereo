@@ -3,5 +3,6 @@
 /root/multi_view_stereo/build/CMakeFiles/run_multi_view_stereo.dir
 /root/multi_view_stereo/build/test/CMakeFiles/rebuild_cache.dir
 /root/multi_view_stereo/build/test/CMakeFiles/edit_cache.dir
+/root/multi_view_stereo/build/test/CMakeFiles/run_visualize_colorized_gtmap.dir
 /root/multi_view_stereo/build/test/CMakeFiles/run_pixel_operation_comparison.dir
 /root/multi_view_stereo/build/test/CMakeFiles/run_visualize_trajectories.dir

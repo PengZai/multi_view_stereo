@@ -6,10 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/root/multi_view_stereo/src/configs.cc
-configs.h
-/root/multi_view_stereo/src/configs.h
-
 /root/multi_view_stereo/src/configs.h
 opencv2/opencv.hpp
 -
@@ -19,12 +15,34 @@ vector
 -
 filesystem
 -
+numeric
+-
+cmath
+-
+undistort.h
+/root/multi_view_stereo/src/undistort.h
 
-/root/multi_view_stereo/src/data.cc
-data.h
-/root/multi_view_stereo/src/data.h
+/root/multi_view_stereo/src/datasets/botanic_gardent_dataset.h
+dataset.h
+/root/multi_view_stereo/src/datasets/dataset.h
 
-/root/multi_view_stereo/src/data.h
+/root/multi_view_stereo/src/datasets/dataset.cc
+dataset.h
+/root/multi_view_stereo/src/datasets/dataset.h
+botanic_gardent_dataset.h
+/root/multi_view_stereo/src/datasets/botanic_gardent_dataset.h
+fast_livo2_dataset.h
+/root/multi_view_stereo/src/datasets/fast_livo2_dataset.h
+remode_dataset.h
+/root/multi_view_stereo/src/datasets/remode_dataset.h
+tartan_air_dataset.h
+/root/multi_view_stereo/src/datasets/tartan_air_dataset.h
+kitti_dataset.h
+/root/multi_view_stereo/src/datasets/kitti_dataset.h
+virtual_kitti_dataset.h
+/root/multi_view_stereo/src/datasets/virtual_kitti_dataset.h
+
+/root/multi_view_stereo/src/datasets/dataset.h
 Eigen/Core
 -
 Eigen/Geometry
@@ -35,10 +53,34 @@ string
 -
 filesystem
 -
-configs.h
+../configs.h
 /root/multi_view_stereo/src/configs.h
 
-/root/multi_view_stereo/src/utils.cc
+/root/multi_view_stereo/src/datasets/fast_livo2_dataset.h
+dataset.h
+/root/multi_view_stereo/src/datasets/dataset.h
+
+/root/multi_view_stereo/src/datasets/kitti_dataset.h
+dataset.h
+/root/multi_view_stereo/src/datasets/dataset.h
+
+/root/multi_view_stereo/src/datasets/remode_dataset.h
+dataset.h
+/root/multi_view_stereo/src/datasets/dataset.h
+
+/root/multi_view_stereo/src/datasets/tartan_air_dataset.h
+dataset.h
+/root/multi_view_stereo/src/datasets/dataset.h
+
+/root/multi_view_stereo/src/datasets/virtual_kitti_dataset.h
+dataset.h
+/root/multi_view_stereo/src/datasets/dataset.h
+
+/root/multi_view_stereo/src/undistort.h
+configs.h
+/root/multi_view_stereo/src/configs.h
+datasets/dataset.h
+/root/multi_view_stereo/src/datasets/dataset.h
 utils.h
 /root/multi_view_stereo/src/utils.h
 
@@ -47,24 +89,6 @@ opencv2/opencv.hpp
 -
 Eigen/Core
 -
-
-/root/multi_view_stereo/test/visualize_trajectories.cc
-iostream
--
-opencv2/opencv.hpp
--
-string
--
-vector
--
-pangolin/pangolin.h
--
-../src/configs.h
-/root/multi_view_stereo/src/configs.h
-../src/data.h
-/root/multi_view_stereo/src/data.h
-../src/utils.h
-/root/multi_view_stereo/src/utils.h
 
 /usr/include/eigen3/Eigen/Cholesky
 Core
