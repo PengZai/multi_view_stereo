@@ -4,10 +4,11 @@
 #include <Eigen/Geometry>
 #include <opencv2/opencv.hpp>
 #include <string>
-#include <filesystem>
-
+#include <fstream>   
+#include <sstream>   
+#include <stdexcept> 
+#include "../utils.h"
 #include "../configs.h"
-
 
 namespace MVS
 {
@@ -19,7 +20,99 @@ class FastLivo2Dataset;
 class RemodeDataset;
 class TartanAirDataset;
 class KittiDataset;
-class VirtualKittiDataset;
+// class VirtualKittiDataset;
+class Visualizer;
+
+
+class Image;
+
+
+class DebugInfo
+{
+
+    public:
+
+    DebugInfo(){};
+    ~DebugInfo() = default;
+
+    void clean();
+
+    int tar_pose_id_;
+    int tar_camera_id_;
+
+    std::vector<float> costs_;
+    std::vector<float> steps_;
+    std::vector<Eigen::Vector2f> valid_uvs_;
+
+    Eigen::Vector2f uv_min_;
+    Eigen::Vector2f uv_max_;
+    Eigen::Vector2f uv_best_match_;
+    Eigen::Vector2f unit_epipolar_vector_;
+    float epipolar_length_;
+
+    float init_min_depth_;
+    float init_max_depth_;
+    float init_depth_;
+
+
+    float min_depth_;
+    float max_depth_;
+    float depth_;
+
+};
+
+class PixelPoint
+{
+    public:
+
+    enum Status {
+        UNINITIALIZED = 0,
+        UNCERTAINDEPTH = 1,
+        GOOD
+    };
+
+
+    static int NPixelPoint_;
+
+    PixelPoint();
+
+    void setImagePtr(Image* const image);
+    void appendMinMaxInvDepth(float min_inv_depth, float max_inv_depth);
+
+    void setUV(int u, int v);
+
+    void setIntensity(float intensity);
+
+    void setGradient(float gradient_u, float gradient_v);
+
+
+    ~PixelPoint() = default;
+
+    Image* image_;
+    int id_;
+    int camera_id_;
+    int pose_id_;
+    
+    Status status_;
+
+    int u_;
+    int v_;
+
+    float intensity_;
+    float gradient_u_;
+    float gradient_v_;
+    float depth_;
+    
+    std::vector<float> min_inv_depth_vec_;
+    std::vector<float> max_inv_depth_vec_;
+    std::vector<DebugInfo> debug_info_vec_;
+
+
+  
+
+
+
+};
 
 class Image
 {
@@ -45,44 +138,48 @@ class Image
         int getCameraId() const;
         int getPoseId() const;
         int getId() const;
+        const std::string getGTDepthPath() const;
         void setTimestamp(const double timestamp);
         bool loadData();
-        void makeGraident();
+        void calGraident();
 
         std::string getImageName() const;
+        uint32_t getWidthOrg() const;
+        uint32_t getHeightOrg() const;
         uint32_t getWidth() const;
         uint32_t getHeight() const;
         void loadDepthFromMinMaxInvDepth() const;
         uint8_t* getRawGrayDataPtr() const;
-        float* getGrayDataPtr() const;
-        float* getMinInvDepthDataPtr() const;
-        float* getMaxInvDepthDataPtr() const;
-        float* getGradientGrayDataPtr() const;
-        float* getDepthPtr() const;
-        const cv::Mat& getRGBData() const;
+        PixelPoint* getPixelPointMatrixPtr() const;
+        const cv::Mat& getBGRData() const;
+        // const cv::Mat& getMiniBGRData() const;
         const cv::Mat& getGTDepthData() const;
         bool isInImage(float u, float v, int border=0) const;
+        cv::Mat getCVDepth() const;
+
+
+        Config* config_;
 
 
     protected:
         
-        Config* config_;
         std::string name_;
         std::string path_;
         int id_;
         int camera_id_;
         int pose_id_;
         double timestamp_;
+        int wOrg_;
+        int hOrg_;
+        int whOrg_;
         int width_;
         int height_;
-        cv::Mat cv_rgb_data_;
-        uint8_t* ptr_raw_gray_data_;
-        float* ptr_gray_data_;
-        float* ptr_gradient_gray_data_;
+        int wh_;
+        cv::Mat cv_bgr_data_;
 
-        float* ptr_depth_data_;
-        float* ptr_min_inv_depth_data_;
-        float* ptr_max_inv_depth_data_;
+        uint8_t* ptr_raw_gray_data_;
+        PixelPoint* ptr_pixel_point_matrix_;
+
 
         Eigen::Vector3f t_;
         Eigen::Quaternionf q_;
@@ -103,6 +200,8 @@ class Dataset
     virtual ~Dataset();
     std::vector<Image*>& getImages();
     virtual void readTrajectory() = 0;
+    virtual bool loadGTDepth(Image* const image);
+
 
     protected:
 

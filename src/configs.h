@@ -12,8 +12,18 @@
 namespace MVS
 {
 
-class Undistort;
+class DistortModel;
 
+
+class GT_depth
+{
+    public:
+    std::string name_;
+    std::string path_;
+    Eigen::Matrix4f T_cam0_pose_;
+
+
+};
 
 class Camera
 {
@@ -26,17 +36,21 @@ class Camera
 
     Eigen::Matrix3f getIntrinsicsMatrix() const;
     void readDirectoryForImageNames(const std::string path);
-    int getSynchronizedImageByTimeStamp(const double timestamp, const double mini_time_diff);
+    int getSynchronizedImageByTimeStamp(const double timestamp, double &mini_time_diff, const double time_diff_tolerance);
 
     std::string name_;
     std::string dir_path_;
+    std::vector<int> original_resolution_;
     std::vector<int> resolution_;
     std::string camera_model_;
+    std::vector<float> original_intrinsics_;
     std::vector<float> intrinsics_;
     std::string distortion_model_;
     std::vector<float> distortion_coeffs_;
     std::vector<std::string> image_names_;
-    Undistort* undistort_;
+    int use_GT_depth_id_;
+    GT_depth* gt_depth_;
+    DistortModel* undistort_;
    
 
 };
@@ -46,22 +60,14 @@ class Trajectory
     public:
 
     std::string name_;
-    double sync_time_tolerance_;
+    double sync_time_diff_tolerance_;
     std::string world_coordinate_;
     std::string trajectory_path_;
     std::vector<Eigen::Matrix4f> T_pose_camidx_;
 };
 
 
-class GT_depth
-{
-    public:
-    std::string name_;
-    std::string path_;
-    Eigen::Matrix4f T_cam0_pose_;
 
-
-};
 
 
 class Config
@@ -79,7 +85,6 @@ class Config
     std::string data_path_;
     int use_external_trajectory_id_;
     bool is_use_GT_depth_;
-    int use_GT_depth_id_;
     int maximum_traj_;
     int ref_pose_idx_;
     int ref_camera_idx_;
@@ -94,7 +99,6 @@ class Config
     bool debug_plot_;
     Camera* cameras_;
     Trajectory* trajectory_;
-    GT_depth* gt_depth_;
 
 };
 

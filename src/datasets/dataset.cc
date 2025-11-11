@@ -4,13 +4,15 @@
 #include "remode_dataset.h"
 #include "tartan_air_dataset.h"
 #include "kitti_dataset.h"
-#include "virtual_kitti_dataset.h"
+// #include "virtual_kitti_dataset.h"
+#include "../visualizer.h"
+
 
 namespace MVS
 {
 
 int Image::Nimage_ = 0;
-
+int PixelPoint::NPixelPoint_ = 0;
 
 
 
@@ -18,30 +20,33 @@ Dataset* getDataset(Config* const config)
 {
 
     Dataset* dataset = nullptr;
+
+
     if(config->name_ == "BotanicGarden")
     {
-         dataset = new BotanicGardenDataset(config);
+        dataset = new BotanicGardenDataset(config);
+
     }
     else if(config->name_ == "FASTLIVO2")
     {
-         dataset = new FastLivo2Dataset(config);
+        dataset = new FastLivo2Dataset(config);
     }
     else if(config->name_ == "Remode")
     {
-         dataset = new RemodeDataset(config);
+        dataset = new RemodeDataset(config);
     }
     else if(config->name_ == "TartanAir")
     {
-         dataset = new TartanAirDataset(config);
+        dataset = new TartanAirDataset(config);
     }
     else if(config->name_ == "Kitti")
     {
-         dataset = new KittiDataset(config);
+        dataset = new KittiDataset(config);
     }
-    else if(config->name_ == "VirtualKitti")
-    {
-         dataset = new VirtualKittiDataset(config);
-    }
+    // else if(config->name_ == "VirtualKitti")
+    // {
+    //     dataset = new VirtualKittiDataset(config);
+    // }
     
     dataset->readTrajectory();
 
@@ -49,6 +54,17 @@ Dataset* getDataset(Config* const config)
 
 }
 
+bool Dataset::loadGTDepth(Image* const image)
+{
+
+    cv::Mat cv_gt_depth_data;
+    const std::string path = image->getGTDepthPath();
+    cv_gt_depth_data = cv::imread(path, cv::IMREAD_UNCHANGED);
+    image->setGTDepth(cv_gt_depth_data);   
+
+    return true;
+
+}
 
 
 Dataset::Dataset(Config* const config)
@@ -74,12 +90,79 @@ std::vector<Image*>& Dataset::getImages()
 }
 
 
+
+void DebugInfo::clean()
+{
+    tar_pose_id_ = -1;
+    tar_camera_id_ = -1;
+
+    costs_.clear();
+    steps_.clear();
+    valid_uvs_.clear();
+
+    uv_min_ = Eigen::Vector2f::Zero();
+    uv_max_ = Eigen::Vector2f::Zero();
+    uv_best_match_ = Eigen::Vector2f::Zero();
+    unit_epipolar_vector_ = Eigen::Vector2f::Zero();
+    epipolar_length_ = -1;
+
+    init_min_depth_ = -1;
+    init_max_depth_ = -1;
+    init_depth_ = -1;
+
+    min_depth_ = -1;
+    max_depth_ = -1;
+    depth_ = -1;
+}
+
+PixelPoint::PixelPoint():
+    depth_(0),
+    status_(Status::UNINITIALIZED)
+{
+
+    id_ = NPixelPoint_;
+    NPixelPoint_++ ;
+
+}
+
+
+void PixelPoint::setImagePtr(Image* const image)
+{
+    image_ = image;
+    camera_id_ = image->getCameraId();
+    pose_id_ = image->getPoseId();
+}
+
+void PixelPoint::appendMinMaxInvDepth(float min_inv_depth, float max_inv_depth)
+{
+    
+    min_inv_depth_vec_.push_back(min_inv_depth);
+    max_inv_depth_vec_.push_back(max_inv_depth);
+    debug_info_vec_.push_back(DebugInfo());
+}
+
+
+
+void PixelPoint::setUV(int u, int v)
+{
+    u_ = u;
+    v_ = v;
+}
+
+void PixelPoint::setIntensity(float intensity)
+{
+    intensity_ = intensity;
+}
+
+void PixelPoint::setGradient(float gradient_u, float gradient_v)
+{
+    gradient_u_ = gradient_u;
+    gradient_v_ = gradient_v;
+}
+
 Image::Image(Config* const config)
 :ptr_raw_gray_data_(nullptr),
-ptr_gray_data_(nullptr),
-ptr_depth_data_(nullptr),
-ptr_min_inv_depth_data_(nullptr),
-ptr_max_inv_depth_data_(nullptr),
+ptr_pixel_point_matrix_(nullptr),
 GT_depth_path_(""),
 config_(config)
 {   
@@ -90,11 +173,7 @@ config_(config)
 
 Image::~Image(){
     delete[] ptr_raw_gray_data_;
-    delete[] ptr_gray_data_;
-    delete[] ptr_depth_data_;
-    delete[] ptr_min_inv_depth_data_;
-    delete[] ptr_max_inv_depth_data_;
-    delete[] ptr_gradient_gray_data_;
+    delete[] ptr_pixel_point_matrix_;
 
 }
 
@@ -186,6 +265,11 @@ int Image::getPoseId() const
     return pose_id_;
 }
 
+const std::string Image::getGTDepthPath() const
+{
+    return GT_depth_path_;
+}
+
 void Image::setTimestamp(const double timestamp)
 {
     timestamp_ = timestamp;
@@ -204,34 +288,51 @@ bool Image::loadData()
         return true;
     }
 
-    cv_rgb_data_ = cv::imread(path_, cv::IMREAD_COLOR);
-    if (!cv_rgb_data_.empty()) {
+    cv_bgr_data_ = cv::imread(path_, cv::IMREAD_COLOR);
+
+    if (!cv_bgr_data_.empty()) {
         // Successfully read as RGB
-        cv::cvtColor(cv_rgb_data_, cv_raw_gray_data, cv::COLOR_BGR2GRAY);
+        cv::cvtColor(cv_bgr_data_, cv_raw_gray_data, cv::COLOR_BGR2GRAY);
     } else {
-        // Failed to read RGB, try grayscale
-        cv_raw_gray_data = cv::imread(path_, cv::IMREAD_GRAYSCALE);
-        if (cv_raw_gray_data.empty()) {
-            std::cout << "Error: Failed to load image from " << path_ << std::endl;
-            return false;
-        }
+        
+        std::cout << "Failed to read " << path_ << ". end the program" << std::endl;
     }
 
-    width_ = cv_raw_gray_data.cols;
-    height_ = cv_raw_gray_data.rows;
-    
+    // cv::resize(cv_bgr_data_, cv_mini_bgr_data_, cv::Size(160, 120), 0, 0, cv::INTER_LINEAR);
+
+    wOrg_ = cv_raw_gray_data.cols;
+    hOrg_ = cv_raw_gray_data.rows;
+    whOrg_ = wOrg_ * hOrg_;
 
 
-    ptr_raw_gray_data_ = new uint8_t[width_ * height_]();
-    memcpy(ptr_raw_gray_data_, cv_raw_gray_data.data, width_ * height_);
+    ptr_raw_gray_data_ = new uint8_t[whOrg_]();
+    memcpy(ptr_raw_gray_data_, cv_raw_gray_data.data, wOrg_ * hOrg_);
+
+    width_ = config_->cameras_[this->camera_id_].resolution_[0];
+    height_ = config_->cameras_[this->camera_id_].resolution_[1];
+    wh_ = width_*height_;
+    ptr_pixel_point_matrix_ = new PixelPoint[wh_]();
+    config_->cameras_[camera_id_].undistort_->undistort(this);
 
 
-    ptr_gray_data_ = new float[width_ * height_]();
-    config_->cameras_[camera_id_].undistort_->run(this);
 
-    ptr_depth_data_ = new float[width_ * height_]();
-    ptr_min_inv_depth_data_ = new float[width_ * height_]();
-    ptr_max_inv_depth_data_ = new float[width_ * height_]();
+    // Visualizer::showUndistortedGrayImage(this, "undistorted");
+    // cv::waitKey(0);
+
+    // ptr_gray_rgb_data_ = new uint8_t[3*wh_]();
+    // for(int i=0;i<wh_;i++)
+    // {
+    //     ptr_gray_rgb_data_[3*i] = ptr_gray_data_[i];
+    //     ptr_gray_rgb_data_[3*i+1] = ptr_gray_data_[i];
+    //     ptr_gray_rgb_data_[3*i+2] = ptr_gray_data_[i];
+    // };
+
+
+    // ptr_depth_data_ = new float[wh_]();
+    // ptr_min_inv_depth_data_ = new float[wh_]();
+    // ptr_max_inv_depth_data_ = new float[wh_]();
+    // ptr_min_depth_data_ = new float[wh_]();
+    // ptr_max_depth_data_ = new float[wh_]();
     
     // cv::Mat depth(height_, width_, CV_32F, (void*)ptr_depth_data_);
     // cv::Mat depth_normalized;
@@ -239,18 +340,19 @@ bool Image::loadData()
     // cv::imshow("depth", depth);
     // cv::waitKey(0);
 
-    std::fill(ptr_min_inv_depth_data_, ptr_min_inv_depth_data_ + width_ * height_, 1.0/config_->max_depth_);
-    std::fill(ptr_max_inv_depth_data_, ptr_max_inv_depth_data_ + width_ * height_, 1.0/config_->min_depth_);
+    // just set it infinity far away
+    // std::fill(ptr_min_inv_depth_data_, ptr_min_inv_depth_data_ + wh_, 1e-8);
+    // std::fill(ptr_max_inv_depth_data_, ptr_max_inv_depth_data_ + wh_, 1.0/config_->min_depth_);
 
-    ptr_gradient_gray_data_ = new float[2 * width_ * height_]();
+    // ptr_gradient_gray_data_ = new float[2 * wh_]();
 
-    makeGraident();
+    calGraident();
 
     return true;
 
 }
 
-void Image::makeGraident()
+void Image::calGraident()
 {
 
     // make gradient
@@ -258,18 +360,30 @@ void Image::makeGraident()
     {
         for (int x = 1; x < width_ - 1; ++x)
         {
-            int idx = y * width_ + x;
+            int cidx = y * width_ + x;
 
-            float gx = 0.5f * (ptr_gray_data_[(y) * width_ + (x + 1)] -
-                            ptr_gray_data_[(y) * width_ + (x - 1)]);
+            float Gu = 0.5f * (ptr_pixel_point_matrix_[(y) * width_ + (x + 1)].intensity_ -
+                            ptr_pixel_point_matrix_[(y) * width_ + (x - 1)].intensity_);
 
-            float gy = 0.5f * (ptr_gray_data_[(y + 1) * width_ + (x)] -
-                            ptr_gray_data_[(y - 1) * width_ + (x)]);
+            float Gv = 0.5f * (ptr_pixel_point_matrix_[(y + 1) * width_ + (x)].intensity_ -
+                            ptr_pixel_point_matrix_[(y - 1) * width_ + (x)].intensity_);
 
-            ptr_gradient_gray_data_[2 * idx + 0] = gx; // y*width_*2 + x*2 + 0
-            ptr_gradient_gray_data_[2 * idx + 1] = gy; // y*width_*2 + x*2 + 1
+            ptr_pixel_point_matrix_[cidx].setGradient(Gu, Gv);
+
         }
     }
+
+}
+
+
+uint32_t Image::getWidthOrg() const
+{
+    return wOrg_;
+}
+
+uint32_t Image::getHeightOrg() const
+{
+    return hOrg_;
 
 }
 
@@ -289,35 +403,23 @@ uint8_t* Image::getRawGrayDataPtr() const
     return ptr_raw_gray_data_;
 }
 
-float* Image::getGrayDataPtr() const
+
+PixelPoint* Image::getPixelPointMatrixPtr() const
 {
-    return ptr_gray_data_;
+    return ptr_pixel_point_matrix_;
 }
 
-float* Image::getMinInvDepthDataPtr() const
+
+
+const cv::Mat& Image::getBGRData() const
 {
-    return ptr_min_inv_depth_data_;
+    return cv_bgr_data_;
 }
 
-float* Image::getMaxInvDepthDataPtr() const
-{
-    return ptr_max_inv_depth_data_;
-}
-
-float* Image::getGradientGrayDataPtr() const
-{
-    return ptr_gradient_gray_data_;
-}
-
-float* Image::getDepthPtr() const
-{
-    return ptr_depth_data_;
-}
-
-const cv::Mat& Image::getRGBData() const
-{
-    return cv_rgb_data_;
-}
+// const cv::Mat& Image::getMiniBGRData() const
+// {
+//     return cv_mini_bgr_data_;
+// }
 
 const cv::Mat& Image::getGTDepthData() const
 {
@@ -337,18 +439,13 @@ void Image::loadDepthFromMinMaxInvDepth() const
             // if(v>200&&u>300){
             //     int test = 1;
             // }
-
-            float min_depth = 1.0/ptr_max_inv_depth_data_[current_coord];
-            float max_depth = 1.0/ptr_min_inv_depth_data_[current_coord];
+            PixelPoint& pixel_point = ptr_pixel_point_matrix_[current_coord];
+            float min_depth = 1.0/pixel_point.max_inv_depth_vec_[0];
+            float max_depth = 1.0/pixel_point.min_inv_depth_vec_[0];
             float diff = abs(max_depth-min_depth);
             float depth = (min_depth+max_depth)/2.0;
             if(depth >= config_->min_depth_ && depth <= config_->max_depth_){
-                if(diff < 10){
-                    ptr_depth_data_[current_coord] = depth;
-                }
-                else{
-                    ptr_depth_data_[current_coord] = 0.0;
-                }
+                pixel_point.depth_ = depth;
             }
 
         }
@@ -356,9 +453,27 @@ void Image::loadDepthFromMinMaxInvDepth() const
 
 }
 
+cv::Mat Image::getCVDepth() const
+{
+
+    cv::Mat depth(height_, width_, CV_32F);
+
+    for (int v = 0; v < height_; ++v) {
+        float* row = depth.ptr<float>(v);
+        for (int u = 0; u < width_; ++u) {
+            const int i = v * width_ + u;
+            const PixelPoint& p = ptr_pixel_point_matrix_[i];
+            row[u] = p.depth_;                
+        }
+    }
+
+    return depth;
+}
+
+
 bool Image::isInImage(float u, float v, int border) const
 {
-    if(ptr_gray_data_!= nullptr)
+    if(ptr_pixel_point_matrix_!= nullptr)
     {
         // int int_u = round(u);
         // int int_v = round(v);

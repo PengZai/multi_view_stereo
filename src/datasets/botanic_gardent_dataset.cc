@@ -15,6 +15,7 @@ void BotanicGardenDataset::readTrajectory()
 {
 
     std::string path = config_->trajectory_->trajectory_path_;
+    std::cout << "trajectory path : " <<  path << std::endl;
 
     std::ifstream file(path);
     if (!file.is_open()) {
@@ -26,6 +27,7 @@ void BotanicGardenDataset::readTrajectory()
     int Ntraj = 0;
     while (std::getline(file, line)) 
     {
+        std::cout << "reading " << Nline << " line in trajectory file " << path << std::endl;
         // skip comments
         if (line.empty() || line[0] == '#'){
             Nline++;
@@ -54,7 +56,8 @@ void BotanicGardenDataset::readTrajectory()
             Image *image = new Image(config_);
             Eigen::Matrix4f T_world_camid = T_world_pose * config_->trajectory_->T_pose_camidx_[cam_id];
 
-            int image_idx = cameras_[cam_id].getSynchronizedImageByTimeStamp(timestamp, config_->trajectory_->sync_time_tolerance_);
+            double min_diff = std::numeric_limits<double>::max();
+            int image_idx = cameras_[cam_id].getSynchronizedImageByTimeStamp(timestamp, min_diff, config_->trajectory_->sync_time_diff_tolerance_);
             if(image_idx == -1){
                 continue;
             }
@@ -66,6 +69,12 @@ void BotanicGardenDataset::readTrajectory()
             image->setTimestamp(timestamp);
             image->setCameraId(cam_id);
             image->setPoseId(Ntraj);
+
+            if(config_->is_use_GT_depth_ == true){
+                std::string gt_depth_path = config_->cameras_[cam_id].gt_depth_->path_ + "/" + image->getImageName() + ".tiff";
+                image->setGTDepthPath(gt_depth_path);   
+            }
+
             images_.push_back(image);
 
         }
@@ -79,6 +88,8 @@ void BotanicGardenDataset::readTrajectory()
     }
 
 }
+
+
 
     
     

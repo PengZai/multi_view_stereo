@@ -1,10 +1,24 @@
 #pragma once
 #include <opencv2/opencv.hpp>
 #include <Eigen/Core>
+// #include <regex>
+
+
+
 
 namespace MVS
 {
 
+
+
+// struct NpyArray {
+//     std::vector<size_t> shape;
+//     std::vector<unsigned char> raw_data;
+//     std::string dtype; // e.g. "float32" or "uint16"
+// };
+
+
+// NpyArray loadNpy(const std::string& path);
 
 float getBilinearInterpolated(const cv::Mat& img, float u, float v);
 float getBilinearInterpolated(

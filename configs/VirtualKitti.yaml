@@ -20,7 +20,7 @@ system:
 
 external_trajectory0:
   name: GT
-  sync_time_tolerance: 0.01
+  sync_time_diff_tolerancelerance: 0.01
   world_coordinate: Camera Frame
   trajectory_path: /root/datasets2/virtualKITTI1/vkitti_1.3.1_extrinsicsgt/0001_clone.txt
   T_pose_cam0:

@@ -2,40 +2,26 @@
 
 system:
   num_used_camera: 2
-  use_external_trajectory_id: 1
+  use_external_trajectory_id: 0
+  is_use_GT_depth: 1
   maximum_traj: 271
   ref_pose_idx: 0
   ref_camera_idx: 0
   # start_match_uv: [300, 300]
   start_match_uv: [0, 0]
-  tar_pose_start_idx: 12
-  tar_camera_start_idx: 1
+  tar_pose_start_idx: 0
+  tar_camera_start_idx: 0
   image_sequence_mode: forward_time_direction # option: forward_time_direction, backward_time_direction, full_time_direction
   min_depth: 0.5
-  max_depth: 20
+  max_depth: 100
   half_window_size: 3 # we only support odd size of window, like 3x3, 5x5, 7x7, 9x9 ...
   save_figure_path: /root/multi_view_stereo/figs
   debug_plot: 0
 
-external_trajectory0:
-  name: colmap
-  sync_time_tolerance: 0.01
-  base_coordinate: camera frame
-  trajectory_path: /root/datasets2/BotanicGarden/1018-00/colmap_trajectory/traj_1.txt
-  T_pose_cam0:
-   - [1.0, 0, 0, 0]
-   - [0, 1.0, 0, 0]
-   - [0, 0, 1.0, 0] 
-   - [0, 0, 0, 1.0]
-  T_pose_cam1:
-   - [1.0, 0, 0,  0.53715065326792355]
-   - [0, 1.0, 0,  0]
-   - [0, 0, 1.0,  0]
-   - [0, 0, 0,    1.0]
 
-external_trajectory1:
+external_trajectory0:
   name: RTK/IMU
-  sync_time_tolerance: 0.05
+  sync_time_diff_tolerance: 0.05
   world_coordinate: Lidar frame
   trajectory_path: /root/datasets2/kitti/kitti_odometry/data_odometry_poses/dataset/poses/04.txt
   T_pose_cam0:
@@ -49,7 +35,21 @@ external_trajectory1:
    - [0, 0, 1.0,  0]
    - [0, 0, 0,    1.0]
 
-
+# external_trajectory1:
+#   name: colmap
+#   sync_time_diff_tolerance: 0.01
+#   base_coordinate: camera frame
+#   trajectory_path: /root/datasets2/kitti/kitti_odometry/data_odometry_gray/dataset/sequences/04/colmap_trajectory/traj_1.txt
+#   T_pose_cam0:
+#    - [1.0, 0, 0, 0]
+#    - [0, 1.0, 0, 0]
+#    - [0, 0, 1.0, 0] 
+#    - [0, 0, 0, 1.0]
+#   T_pose_cam1:
+#    - [1.0, 0, 0,  0.53715065326792355]
+#    - [0, 1.0, 0,  0]
+#    - [0, 0, 1.0,  0]
+#    - [0, 0, 0,    1.0]
 
 
 
@@ -57,12 +57,21 @@ cam0:
   name: Point Grey Flea 2 (FL2-14S3M-C)
   # dir_path: /root/datasets2/colmap_datasets/BotanicGarden_1018_00_16/images/left_rgb
   dir_path: /root/datasets2/kitti/kitti_odometry/data_odometry_gray/dataset/sequences/04/image_0
-  resolution: [1226, 370] # width x height
+  original_resolution: [1226, 370] # width x height
+  resolution: [640, 480] # width x height, don't larger than original resolution
   camera_model: pinhole
-  intrinsics: [7.070912000000e+02, 7.070912000000e+02, 6.018873000000e+02, 1.831104000000e+02] #fx, fy, cx, cy
+  original_intrinsics: [7.070912000000e+02, 7.070912000000e+02, 6.018873000000e+02, 1.831104000000e+02] #fx, fy, cx, cy
   distortion_model: radtan
   distortion_coeffs: [0,0,0,0] #k1,k2,p1,p2
-  num_used_GT: 0
+  use_GT_depth_id: 0
+  GT_depth0:
+    name: depthmap
+    path: /root/datasets2/kitti/kitti_odometry/data_odometry_gray/dataset/sequences/04/colmap_dense_depth/image_0/depth
+    T_cam_pose:
+      - [1.0,0,0,0]
+      - [0,1.0,0,0]
+      - [0,0,1.0,0] 
+      - [0,0,0,1.0]
 
 
 
@@ -70,9 +79,20 @@ cam1:
   name: Point Grey Flea 2 (FL2-14S3M-C)
   # dir_path: /root/datasets2/colmap_datasets/BotanicGarden_1018_00_16/images/right_rgb
   dir_path: /root/datasets2/kitti/kitti_odometry/data_odometry_gray/dataset/sequences/04/image_1
-  resolution: [1226, 370] # width x height
+  original_resolution: [1226, 370] # width x height
+  resolution: [640, 480] # width x height, don't larger than original resolution
   camera_model: pinhole
-  intrinsics: [7.070912000000e+02, 7.070912000000e+02, 6.018873000000e+02, 1.831104000000e+02] #fx, fy, cx, cy
+  original_intrinsics: [7.070912000000e+02, 7.070912000000e+02, 6.018873000000e+02, 1.831104000000e+02] #fx, fy, cx, cy
   distortion_model: radtan
   distortion_coeffs: [0,0,0,0] #k1,k2,p1,p2
-  num_used_GT: 0
+  use_GT_depth_id: 0
+  GT_depth0:
+    name: depthmap
+    path: /root/datasets2/kitti/kitti_odometry/data_odometry_gray/dataset/sequences/04/colmap_dense_depth/image_1/depth
+    T_cam_pose:
+      - [1.0,0,0,0]
+      - [0,1.0,0,0]
+      - [0,0,1.0,0] 
+      - [0,0,0,1.0]
+
+

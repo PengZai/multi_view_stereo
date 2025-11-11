@@ -7,7 +7,7 @@
 #include "../src/configs.h"
 #include "../src/datasets/dataset.h"
 #include "../src/utils.h"
-#include "../src/visualizer.h"
+#include "../src/pangolin_visualizer.h"
 
 
 
@@ -17,10 +17,10 @@ int main(int argc, char** argv)
 
     MVS::Config *config = new MVS::Config(config_path);
     MVS::Dataset *dataset = getDataset(config);
-    MVS::Visualizer* visualizer = new MVS::Visualizer(config);
+    MVS::PangolinVisualizer* visualizer = new MVS::PangolinVisualizer(config);
 
     pangolin::View& d_cam = visualizer->getPangolinViewer();
-    pangolin::OpenGlRenderState& s_cam = visualizer->getPangolineRenderState(); 
+    pangolin::OpenGlRenderState& s_cam = visualizer->getPangolinRenderState(); 
         
     std::vector<MVS::Image*> images = dataset->getImages();
     MVS::Image* first_image = nullptr;
@@ -53,26 +53,33 @@ int main(int argc, char** argv)
     while (!pangolin::ShouldQuit()) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         d_cam.Activate(s_cam);
-        glClearColor(1.0f,1.0f,1.0f,1.0f);
+        // glClearColor(1.0f,1.0f,1.0f,1.0f);
 
-        for(size_t i=first_image->getId();i < images.size(); i++)
+        for(size_t i=0;i < images.size(); i++)
         {   
 
             MVS::Image* image = images[i];
+            int image_pose_id =  image->getPoseId();
+            int cam_id = image->getCameraId();
+
             bool isSuccess = image->loadData();        
             if(isSuccess == false){
                 continue;
             }
             Eigen::Matrix4f T_world_camera = image->getTransformationMatrix();
-            Eigen::Vector3i color = Eigen::Vector3i(0,255,0);
-            if(i == first_image->getId()){
-                color = Eigen::Vector3i(255,0,0);
-            }
-            else if(i == images.size() - 1){
-                color = Eigen::Vector3i(0,0,255);
-            }
+            if(image_pose_id == first_image->getPoseId() && cam_id == first_image->getCameraId()){
+                Eigen::Vector4i color_rgba = Eigen::Vector4i(0,255,0,255);
+                visualizer->drawFrame(T_world_camera, color_rgba, true, std::to_string(image->getPoseId()));
 
-            visualizer->drawFrame( T_first_camera_world * T_world_camera, color, true, std::to_string(image->getId()));
+            }
+            else if(i==images.size()-1){
+                Eigen::Vector4i color_rgba = Eigen::Vector4i(255,0,0,255);
+                visualizer->drawFrame(T_world_camera, color_rgba, true, std::to_string(image->getPoseId()));
+            }
+            else{
+                Eigen::Vector4i color_rgba = Eigen::Vector4i(0,0,255,25);
+                visualizer->drawFrame(T_world_camera, color_rgba, false, std::to_string(image->getPoseId()));
+            }
             // drawFrame(T_world_camera, color, true, std::to_string(image->getId()));
 
         }

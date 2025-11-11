@@ -2,12 +2,13 @@
 
 system:
   num_used_camera: 1
-  use_external_trajectory_id: 1
-  maximum_traj: 907
-  ref_pose_idx: 381
+  use_external_trajectory_id: 0
+  is_use_GT_depth: 1
+  maximum_traj: 400
+  ref_pose_idx: 181
   ref_camera_idx: 0
   start_match_uv: [0, 0]
-  tar_pose_start_idx: 387
+  tar_pose_start_idx: 211
   tar_camera_start_idx: 0
   image_sequence_mode: forward_time_direction # option: forward_time_direction, backward_time_direction, full_time_direction
   min_depth: 0.5
@@ -16,32 +17,28 @@ system:
   save_figure_path: /root/multi_view_stereo/figs
   debug_plot: 0
 
-# external_trajectory0:
-#   name: colmap
-#   sync_time_tolerance: 0.01
-#   base_coordinate: camera frame
-#   trajectory_path: /root/datasets2/BotanicGarden/1018-00/colmap_trajectory/traj_1.txt
-#   T_pose_cam0:
-#    - [1.0, 0, 0, 0]
-#    - [0, 1.0, 0, 0]
-#    - [0, 0, 1.0, 0] 
-#    - [0, 0, 0, 1.0]
-#   T_pose_cam1:
-#    - [0.999994564612669,-0.00327143011166783,-0.000410475508767800,0.253736175410149]
-#    - [0.00326819763481066,0.999965451959397,-0.00764289028177120,-0.000362553856124796]
-#    - [0.000435464509051199,0.00764150722461529,0.999970708440001,-0.000621002717451192] 
-#    - [0, 0, 0, 1.0]
-
-external_trajectory1:
-  name: fastlivo2
-  sync_time_tolerance: 0.05
-  world_coordinate: IMU frame
-  trajectory_path: /root/datasets2/fast_livo2_datasets/HKU_Landmark/fastlivo2_trajectory/HKU_Landmark.txt
+external_trajectory0:
+  name: colmap
+  sync_time_diff_tolerance: 0.01
+  base_coordinate: camera frame
+  trajectory_path: /root/datasets2/fast_livo2_datasets/HKU_Landmark/colmap_trajectory/traj_1.txt
   T_pose_cam0:
-   - [0.00610193,-0.00615449,0.999962,0.067369938]
-   - [-0.999863,0.0153796,0.00619598,0.041241771]
-   - [-0.0154172,-0.999863,-0.0060598,0.076421665] 
+   - [1.0, 0, 0, 0]
+   - [0, 1.0, 0, 0]
+   - [0, 0, 1.0, 0]
    - [0, 0, 0, 1.0]
+
+
+# external_trajectory1:
+#   name: fastlivo2
+#   sync_time_diff_tolerance: 0.05
+#   world_coordinate: IMU frame
+#   trajectory_path: /root/datasets2/fast_livo2_datasets/HKU_Landmark/fastlivo2_trajectory/HKU_Landmark.txt
+#   T_pose_cam0:
+#    - [0.00610193,-0.00615449,0.999962,0.067369938]
+#    - [-0.999863,0.0153796,0.00619598,0.041241771]
+#    - [-0.0154172,-0.999863,-0.0060598,0.076421665] 
+#    - [0, 0, 0, 1.0]
 
 
 
@@ -52,12 +49,21 @@ cam0:
   name: camera0
   # dir_path: /root/datasets2/colmap_datasets/BotanicGarden_1018_00_16/images/left_rgb
   dir_path: /root/datasets2/fast_livo2_datasets/HKU_Landmark/left_camera
-  resolution: [1280, 1024] # width x height
+  original_resolution: [1280, 1024] # width x height
+  resolution: [1280, 1024] # width x height, don't larger than original resolution
   camera_model: pinhole
-  intrinsics: [1176.2874292149932, 1176.21585445307, 592.1187382755453, 509.0864309628322] #fx, fy, cu, cv
+  original_intrinsics: [1176.2874292149932, 1176.21585445307, 592.1187382755453, 509.0864309628322] #fx, fy, cu, cv
   distortion_model: radtan
   distortion_coeffs: [-0.13218037625958456,0.15360732717073536,0.00036918417348059815,-0.00031715324469463964] #k1,k2,p1,p2
-  num_used_GT: 0
+  use_GT_depth_id: 0
+  GT_depth0:
+    name: depthmap
+    path: /root/datasets2/fast_livo2_datasets/HKU_Landmark/colmap_dense_depth/depth
+    T_cam_pose:
+      - [1.0,0,0,0]
+      - [0,1.0,0,0]
+      - [0,0,1.0,0] 
+      - [0,0,0,1.0]
 
 
 

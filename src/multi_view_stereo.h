@@ -8,7 +8,7 @@
 #include "configs.h"
 #include "datasets/dataset.h"
 #include "utils.h"
-#include "visualizer.h"
+#include "iridescence_visualizer.h"
 
 
 namespace MVS
@@ -22,13 +22,14 @@ public:
     MultiViewStereo(Config* const config);
     ~MultiViewStereo();
     void setDataset(Dataset* const dataset);
+    void setVisualizer(Visualizer* const visualizer);
     void setReferenceImage(Image* const image);
     void run();
     void match(Image* const ref_image, Image* const tar_image, bool debug_plot = false);
-    bool epipolarSearch(const float* const ref_ptr_gray_data, uint32_t ref_u, uint32_t ref_v, const Image* const tar_image, 
+    bool epipolarSearch(PixelPoint* const ref_ptr_pixel_point_matrix, uint32_t ref_u, uint32_t ref_v, uint32_t min_max_idx, const Image* const tar_image, 
     const Eigen::Vector2f &tar_uv_min, const Eigen::Vector2f& unit_epipolar_vector, float epipolar_length, Eigen::Vector2f& tar_uv_best_match, bool debug_plot = false);
 
-    float SAD(const float* ref_ptr, uint32_t ref_u, uint32_t ref_v, const float* tar_ptr, uint32_t tar_u, uint32_t tar_v, uint32_t width, uint32_t height, int half_ws);
+    float SAD(const PixelPoint* ptr_ref_pixel_point_matrix, uint32_t ref_u, uint32_t ref_v, const PixelPoint* ptr_tar_pixel_point_matrix, uint32_t tar_u, uint32_t tar_v, uint32_t width, uint32_t height, int half_ws);
     float ZSAD(const cv::Mat p1, const cv::Mat p2);
     float NCC(const cv::Mat& p1, const cv::Mat& p2);
     float Census(const cv::Mat& p1, const cv::Mat& p2);

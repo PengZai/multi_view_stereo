@@ -26,12 +26,14 @@ void RemodeDataset::readTrajectory()
     int Ntraj = 0;
     while (std::getline(file, line)) 
     {
+
+        std::cout << "we are reading " << Nline << " line" << std::endl;
         // skip comments
         if (line.empty() || line[0] == '#'){
             Nline++;
             continue;
         }
-        std::istringstream iss(line);
+        std::istringstream iss(line);        
         Image *image = new Image(config_);
         std::string image_name;
         float x, y, z, qx, qy, qz, qw;
@@ -56,11 +58,10 @@ void RemodeDataset::readTrajectory()
         image->setCameraId(0);
         image->setPoseId(Ntraj);
         if(config_->is_use_GT_depth_ == true){
-            cv::Mat cv_gt_depth_data;
-            if(config_->is_use_GT_depth_){
-                bool is_success = loadGTDepth(config_->gt_depth_->path_ + "/" + image_name + ".depth", cv_gt_depth_data, config_->cameras_[0].resolution_[0], config_->cameras_[0].resolution_[1]);
-            }
-            image->setGTDepth(cv_gt_depth_data);
+
+            std::string gt_depth_path = config_->cameras_[0].gt_depth_->path_ + "/" + image->getImageName() + ".depth";
+            image->setGTDepthPath(gt_depth_path);
+            
         }
        
 
@@ -78,22 +79,30 @@ void RemodeDataset::readTrajectory()
 }
 
 
-bool RemodeDataset::loadGTDepth(const std::string& path, cv::Mat &cv_gt_depth_data, const int width, const int height)
+bool RemodeDataset::loadGTDepth(Image* const image)
 {
+
+
+    std::string path = image->getGTDepthPath();
+    int height = image->getHeight();
+    int width = image->getWidth();
 
     std::ifstream depthmap_file_str(path);
     if (depthmap_file_str.is_open())
     {
-        cv_gt_depth_data.create(height, width, CV_32FC1);
+        cv::Mat cv_gt_depth_data(height, width, CV_32FC1);
         float z;
         for(size_t r=0; r<height; ++r)
         {
-        for(size_t c=0; c<width; ++c)
-        {
-            depthmap_file_str >> z;
-            cv_gt_depth_data.at<float>(r, c) = z / 100.0f;
+            for(size_t c=0; c<width; ++c)
+            {
+                depthmap_file_str >> z;
+                cv_gt_depth_data.at<float>(r, c) = z / 100.0f;
+            }
         }
-        }
+
+        image->setGTDepth(cv_gt_depth_data);
+
         depthmap_file_str.close();
         return true;
     }

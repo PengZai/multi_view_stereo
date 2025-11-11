@@ -24,8 +24,7 @@ void parse(const cv::FileNode& node, Eigen::Matrix4f &parsed_values){
 
 Config::Config(const std::string& config_path):
 cameras_(nullptr),
-trajectory_(nullptr),
-gt_depth_(nullptr)
+trajectory_(nullptr)
 {
 
     cv::FileStorage* fs = new cv::FileStorage(config_path, cv::FileStorage::READ);
@@ -42,7 +41,6 @@ gt_depth_(nullptr)
     (*fs)["system"]["num_used_camera"] >> num_used_camera_;
     (*fs)["system"]["use_external_trajectory_id"] >> use_external_trajectory_id_;
     (*fs)["system"]["is_use_GT_depth"] >> is_use_GT_depth_;
-    (*fs)["system"]["use_GT_depth_id"] >> use_GT_depth_id_;
     (*fs)["system"]["maximum_traj"] >> maximum_traj_;
     (*fs)["system"]["ref_pose_idx"] >> ref_pose_idx_;
     (*fs)["system"]["ref_camera_idx"] >> ref_camera_idx_;
@@ -55,6 +53,7 @@ gt_depth_(nullptr)
     (*fs)["system"]["half_window_size"] >> half_window_size_;
     (*fs)["system"]["save_figure_path"] >> save_figure_path_;
     (*fs)["system"]["debug_plot"] >> debug_plot_;
+    (*fs)["system"]["is_use_GT_depth"] >> is_use_GT_depth_;
 
 
 
@@ -71,27 +70,57 @@ gt_depth_(nullptr)
         std::string camKey = "cam"+std::to_string(i);
         (*fs)[camKey]["name"]  >> cameras_[i].name_;
         (*fs)[camKey]["dir_path"]  >> cameras_[i].dir_path_;
+        (*fs)[camKey]["original_resolution"]  >> cameras_[i].original_resolution_;
         (*fs)[camKey]["resolution"]  >> cameras_[i].resolution_;
         (*fs)[camKey]["camera_model"]  >> cameras_[i].camera_model_;
-        (*fs)[camKey]["intrinsics"]  >> cameras_[i].intrinsics_;
+        (*fs)[camKey]["original_intrinsics"]  >> cameras_[i].original_intrinsics_;
         (*fs)[camKey]["distortion_model"]  >> cameras_[i].distortion_model_;
         (*fs)[camKey]["distortion_coeffs"]  >> cameras_[i].distortion_coeffs_;
+        (*fs)[camKey]["use_GT_depth_id"] >> cameras_[i].use_GT_depth_id_;
 
         cameras_[i].readDirectoryForImageNames(cameras_[i].dir_path_);
 
-        cameras_[i].undistort_ = new Undistort();
-        float sum_distortion_coeffs = std::accumulate(cameras_[i].distortion_coeffs_.begin(), cameras_[i].distortion_coeffs_.end(), 0.0f);
+        if(is_use_GT_depth_ == true)
+        {
+            cameras_[i].gt_depth_ = new GT_depth();
+            std::string use_GT_depth_key = "GT_depth"+std::to_string(cameras_[i].use_GT_depth_id_);
+            (*fs)[camKey][use_GT_depth_key]["name"] >> cameras_[i].gt_depth_->name_;
+            (*fs)[camKey][use_GT_depth_key]["path"] >> cameras_[i].gt_depth_->path_;
+            parse((*fs)[camKey][use_GT_depth_key]["T_cam_pose"], cameras_[i].gt_depth_->T_cam0_pose_);
 
-        if(sum_distortion_coeffs == 0){
-            cameras_[i].undistort_->createRemapWithUndistortedModel(cameras_[i].resolution_[0], cameras_[i].resolution_[1]);
         }
-        else if(cameras_[i].camera_model_ == "pinhole" && cameras_[i].distortion_model_ == "radtan")
+
+
+
+        if(cameras_[i].camera_model_ == "pinhole" && cameras_[i].distortion_model_ == "radtan")
         {
-            cameras_[i].undistort_->createRemapWithPinholeAndRadtan(cameras_[i].resolution_[0], cameras_[i].resolution_[1], cameras_[i].intrinsics_, cameras_[i].distortion_coeffs_);
+
+            cameras_[i].undistort_ = new RadtanDistortModel(cameras_[i].resolution_[0], 
+                                                            cameras_[i].resolution_[1],
+                                                            cameras_[i].original_resolution_[0],
+                                                            cameras_[i].original_resolution_[1],
+                                                            cameras_[i].original_intrinsics_,
+                                                            cameras_[i].distortion_coeffs_);
+        
         }
-        else if(cameras_[i].camera_model_ == "pinhole" && cameras_[i].distortion_model_ == "FOV")
+        else if(cameras_[i].camera_model_ == "pinhole" && cameras_[i].distortion_model_ == "equidistant")
         {
-            cameras_[i].undistort_->createRemapWithPinholeAndFOV(cameras_[i].resolution_[0], cameras_[i].resolution_[1], cameras_[i].intrinsics_, cameras_[i].distortion_coeffs_);
+            // cameras_[i].undistort_ = new EquidistantDistortModel();
+        }
+
+
+        float sum_distortion_coeffs = 0;
+        for(int k=0; k < cameras_[i].distortion_coeffs_.size(); k++)
+        {
+            sum_distortion_coeffs+=std::abs(cameras_[i].distortion_coeffs_[k]);
+        }
+
+        if(sum_distortion_coeffs > 0){
+            cameras_[i].undistort_->makeOptimalKCrop(cameras_[i].intrinsics_);
+        }
+        else{
+            cameras_[i].undistort_->makeResizeK(cameras_[i].original_intrinsics_, cameras_[i].intrinsics_);
+
         }
 
     }
@@ -103,31 +132,17 @@ gt_depth_(nullptr)
     (*fs)[external_trajectory_key]["name"] >> trajectory_->name_;
     (*fs)[external_trajectory_key]["world_coordinate"] >> trajectory_->world_coordinate_;
     (*fs)[external_trajectory_key]["trajectory_path"] >> trajectory_->trajectory_path_;
-    (*fs)[external_trajectory_key]["sync_time_tolerance"] >> trajectory_->sync_time_tolerance_;
+    (*fs)[external_trajectory_key]["sync_time_diff_tolerance"] >> trajectory_->sync_time_diff_tolerance_;
 
 
     for(size_t idx=0;idx<num_used_camera_;idx++){
-            Eigen::Matrix4f T_pose_camidx;
-            parse((*fs)[external_trajectory_key]["T_pose_cam"+std::to_string(idx)], T_pose_camidx);
-            trajectory_->T_pose_camidx_.push_back(T_pose_camidx);
+        Eigen::Matrix4f T_pose_camidx;
+        parse((*fs)[external_trajectory_key]["T_pose_cam"+std::to_string(idx)], T_pose_camidx);
+        trajectory_->T_pose_camidx_.push_back(T_pose_camidx);
     }
 
 
-    (*fs)["system"]["is_use_GT_depth"] >> is_use_GT_depth_;
-    (*fs)["system"]["use_GT_depth_id"] >> use_GT_depth_id_;
-    
-    if(is_use_GT_depth_ == true)
-    {
-        gt_depth_ = new GT_depth();
-        std::string use_GT_depth_key = "GT_depth"+std::to_string(use_GT_depth_id_);
-        (*fs)[use_GT_depth_key]["name"] >> gt_depth_->name_;
-        (*fs)[use_GT_depth_key]["path"] >> gt_depth_->path_;
-        parse((*fs)[use_GT_depth_key]["T_cam0_pose"], gt_depth_->T_cam0_pose_);
-
-    }
-
-
-    
+ 
 }
 
 
@@ -138,16 +153,24 @@ Config::~Config(){
 
 
 
-Camera::Camera(){
+Camera::Camera():
+gt_depth_(nullptr),
+undistort_(nullptr),
+original_intrinsics_(4, 0.0f),
+intrinsics_(4, 0.0f),
+distortion_coeffs_(4, 0.0f)
+{
 
   
 
 }
 
 
-Camera::~Camera(){
+Camera::~Camera()
+{
 
-
+    delete gt_depth_;
+    delete undistort_;
 
 
 }
@@ -185,10 +208,9 @@ void Camera::readDirectoryForImageNames(const std::string path)
 }
 
 
-int Camera::getSynchronizedImageByTimeStamp(const double timestamp, const double mini_time_diff)
+int Camera::getSynchronizedImageByTimeStamp(const double timestamp, double &mini_time_diff, const double time_diff_tolerance)
 {
     int best_idx = -1;
-    long double min_diff = std::numeric_limits<double>::max();
 
     for(size_t i=0;i<image_names_.size();i++)
     {
@@ -197,15 +219,15 @@ int Camera::getSynchronizedImageByTimeStamp(const double timestamp, const double
         long double t = std::stod(name); // convert string to double
         t = t * 1e-9;
         // 2. Compare difference
-        long double diff = std::abs(t - timestamp);
-        if (diff < min_diff)
+        double diff = std::abs(t - timestamp);
+        if (diff < mini_time_diff)
         {
-            min_diff = diff;
+            mini_time_diff = diff;
             best_idx = i;
         }
     }
 
-    if(min_diff < mini_time_diff)
+    if(mini_time_diff < time_diff_tolerance)
     {
         return best_idx;
     }

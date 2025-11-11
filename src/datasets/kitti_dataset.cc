@@ -32,7 +32,6 @@ void KittiDataset::readTrajectory()
             continue;
         }
         std::istringstream iss(line);
-        
         float T00, T01, T02, T03, T10, T11, T12, T13, T20, T21, T22, T23;
         if (!(iss >> T00 >> T01 >> T02 >> T03 >> T10 >> T11 >> T12 >> T13 >> T20 >> T21 >> T22 >> T23)) {
             std::cout << " skip malformed lines at " << Nline << std::endl;
@@ -62,6 +61,11 @@ void KittiDataset::readTrajectory()
             image->setPath(cameras_[cam_id].dir_path_ + "/" + image_name +".png");
             image->setCameraId(cam_id);
             image->setPoseId(Ntraj);
+            if(config_->is_use_GT_depth_ == true){
+                std::string gt_depth_path = config_->cameras_[cam_id].gt_depth_->path_ + "/" + image->getImageName() + ".tiff";
+                image->setGTDepthPath(gt_depth_path);    
+            }
+
             images_.push_back(image);
 
         }

@@ -13,7 +13,7 @@ class RemodeDataset : public MVS::Dataset
     RemodeDataset(Config* const config);
 
     void readTrajectory() override;
-    bool loadGTDepth(const std::string& path, cv::Mat &cv_gt_depth_data, const int width, const int height);
+    bool loadGTDepth(Image* const image) override;
 
 };
 

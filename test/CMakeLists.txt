@@ -1,13 +1,15 @@
 
 
 
+
+
 set(LIBRARY_DATASET_FOR_TEST_SOURCES
     ../src/datasets/botanic_gardent_dataset.cc
     ../src/datasets/fast_livo2_dataset.cc
     ../src/datasets/remode_dataset.cc
     ../src/datasets/tartan_air_dataset.cc
     ../src/datasets/kitti_dataset.cc
-    ../src/datasets/virtual_kitti_dataset.cc
+    # ../src/datasets/virtual_kitti_dataset.cc
     ../src/datasets/dataset.cc
 )
 
@@ -18,6 +20,7 @@ add_executable(
     ../src/undistort.cc
     ../src/utils.cc
     ../src/visualizer.cc
+    ../src/pangolin_visualizer.cc
     ${LIBRARY_DATASET_FOR_TEST_SOURCES}
 )
 
@@ -39,12 +42,14 @@ add_executable(
     ../src/undistort.cc
     ../src/utils.cc
     ../src/visualizer.cc
+    ../src/pangolin_visualizer.cc
     ${LIBRARY_DATASET_FOR_TEST_SOURCES}
 )
 
 target_include_directories(run_visualize_colorized_gtmap
     PUBLIC
     ${DIRS_HEADER_THIRDPARTY}
+
 )
 
 target_link_libraries(run_visualize_colorized_gtmap
@@ -67,3 +72,33 @@ target_link_libraries(run_pixel_operation_comparison
     ${LIBRARY_THIRDPARTY}
 )
 
+add_executable(
+    Iridescence_example
+    Iridescence_example.cc
+    ../src/iridescence_visualizer.cc
+    ../src/configs.cc
+    ../src/undistort.cc
+    ../src/utils.cc
+    ../src/visualizer.cc
+    ${LIBRARY_DATASET_FOR_TEST_SOURCES}
+
+)
+
+
+target_link_libraries(Iridescence_example PUBLIC ${LIBRARY_THIRDPARTY})
+
+
+add_executable(
+    Iridescence_texture
+    Iridescence_texture.cc
+    ../src/iridescence_visualizer.cc
+    ../src/configs.cc
+    ../src/undistort.cc
+    ../src/utils.cc
+    ../src/visualizer.cc
+    ${LIBRARY_DATASET_FOR_TEST_SOURCES}
+
+)
+
+
+target_link_libraries(Iridescence_texture PUBLIC ${LIBRARY_THIRDPARTY})

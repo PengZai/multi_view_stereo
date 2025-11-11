@@ -16,6 +16,7 @@ class TartanAirDataset : public Dataset
     TartanAirDataset(Config* const config);
     
     void readTrajectory() override;
+    // bool loadGTDepth(Image* const image) override;
 
 
 };

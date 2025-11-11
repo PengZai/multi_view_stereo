@@ -5,6 +5,88 @@
 namespace MVS
 {
 
+
+// --- Basic .npy parser ---
+// NpyArray loadNpy(const std::string& path) {
+//     std::ifstream f(path, std::ios::binary);
+//     if (!f.is_open())
+//         throw std::runtime_error("Cannot open file: " + path);
+
+//     // Read magic string
+//     char magic[6];
+//     f.read(magic, 6);
+//     if (std::string(magic, 6) != "\x93NUMPY")
+//         throw std::runtime_error("Not a valid .npy file");
+
+//     // Read version
+//     unsigned char major, minor;
+//     f.read(reinterpret_cast<char*>(&major), 1);
+//     f.read(reinterpret_cast<char*>(&minor), 1);
+
+//     // Read header length
+//     uint16_t header_len16 = 0;
+//     uint32_t header_len32 = 0;
+//     size_t header_len = 0;
+//     if (major == 1) {
+//         f.read(reinterpret_cast<char*>(&header_len16), 2);
+//         header_len = header_len16;
+//     } else {
+//         f.read(reinterpret_cast<char*>(&header_len32), 4);
+//         header_len = header_len32;
+//     }
+
+//     // Read header
+//     std::string header(header_len, ' ');
+//     f.read(&header[0], header_len);
+
+//     // Extract shape
+//     std::regex shape_re("\\(([^\\)]*)\\)");
+//     std::smatch match;
+//     std::vector<size_t> shape;
+//     if (std::regex_search(header, match, shape_re)) {
+//         std::stringstream ss(match[1]);
+//         std::string item;
+//         while (std::getline(ss, item, ',')) {
+//             size_t dim = std::stoul(item);
+//             if (dim > 0) shape.push_back(dim);
+//         }
+//     }
+
+//     // Extract dtype
+//     std::regex dtype_re("'descr': *'([^']+)'");
+//     std::smatch dtype_match;
+//     std::string dtype;
+//     if (std::regex_search(header, dtype_match, dtype_re))
+//         dtype = dtype_match[1];
+//     else
+//         throw std::runtime_error("Cannot find dtype in header");
+
+//     // Remove endian indicator (<f4, <u2, etc.)
+//     if (dtype.size() > 2 && (dtype[0] == '<' || dtype[0] == '>'))
+//         dtype = dtype.substr(1);
+
+//     // Compute number of elements
+//     size_t numel = 1;
+//     for (auto s : shape) numel *= s;
+
+//     size_t type_size = 0;
+//     if (dtype == "float32" || dtype == "f4")
+//         type_size = 4;
+//     else if (dtype == "uint16" || dtype == "u2")
+//         type_size = 2;
+//     else
+//         throw std::runtime_error("Unsupported dtype: " + dtype);
+
+//     std::vector<unsigned char> buffer(numel * type_size);
+//     f.read(reinterpret_cast<char*>(buffer.data()), buffer.size());
+
+//     NpyArray arr;
+//     arr.shape = shape;
+//     arr.raw_data = std::move(buffer);
+//     arr.dtype = dtype;
+//     return arr;
+// }
+
 float getBilinearInterpolated(const cv::Mat& img, float u, float v) 
 {
     int x = floor(u);

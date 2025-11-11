@@ -3,13 +3,39 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [{
+    "configurations": [
+        {
+            "name": "Iridescence_texture",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/test/Iridescence_texture",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+        },
+        {
+            "name": "Iridescence_example",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/test/Iridescence_example",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+        },
+
+    {
         "name": "run_multi_view_stereo",
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder}/build/run_multi_view_stereo",
         "args": [
-            "../configs/Remode.yaml"
+            "../configs/TartanAir.yaml"
         ],
         "stopAtEntry": false,
         "cwd": "${fileDirname}",
@@ -23,7 +49,7 @@
         "request": "launch",
         "program": "${workspaceFolder}/build/test/run_visualize_trajectories",
         "args": [
-            "../configs/Remode.yaml"
+            "../configs/FASTLIVO2.yaml"
         ],
         "stopAtEntry": false,
         "cwd": "${fileDirname}",
@@ -37,7 +63,7 @@
         "request": "launch",
         "program": "${workspaceFolder}/build/test/run_visualize_colorized_gtmap",
         "args": [
-            "../configs/Remode.yaml"
+            "../configs/TartanAir.yaml"
         ],
         "stopAtEntry": false,
         "cwd": "${fileDirname}",

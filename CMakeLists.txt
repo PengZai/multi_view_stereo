@@ -8,11 +8,14 @@ find_package(Eigen3 REQUIRED)
 find_package(Matplot++ REQUIRED)
 find_package(Pangolin 0.6 REQUIRED)
 find_package(PCL REQUIRED)
+find_package(Iridescence REQUIRED)
+
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF) # Setting CMAKE_CXX_EXTENSIONS to OFF ensures strict compliance with the selected C++ standard.
 
+set(CMAKE_INTERPROCEDURAL_OPTIMIZATION OFF)
 
 option(ENABLE_CMAKE_DEBUG "Enable detailed debug messages" OFF)
 
@@ -36,6 +39,7 @@ list(APPEND LIBRARY_THIRDPARTY
     Matplot++::matplot
     ${Pangolin_LIBRARIES}
     ${PCL_LIBRARIES}
+    Iridescence::iridescence
 )
 
 
@@ -48,7 +52,6 @@ list(APPEND DIRS_HEADER_THIRDPARTY
 
 
 list(APPEND DIRS_HEADER_LIBRARY
-
     src
     src/datasets
 )
@@ -62,7 +65,7 @@ set(LIBRARY_DATASET_SOURCES
     src/datasets/remode_dataset.cc
     src/datasets/tartan_air_dataset.cc
     src/datasets/kitti_dataset.cc
-    src/datasets/virtual_kitti_dataset.cc
+    # src/datasets/virtual_kitti_dataset.cc
     src/datasets/dataset.cc
 )
 
@@ -72,6 +75,8 @@ set(LIBRARY_SOURCES
     src/utils.cc
     src/undistort.cc
     src/visualizer.cc
+    src/pangolin_visualizer.cc
+    src/iridescence_visualizer.cc
     
 )
 

@@ -17,9 +17,14 @@ int main(int argv, char ** argc)
     MVS::Config* config = new MVS::Config(config_path);
 
     MVS::Dataset* dataset = getDataset(config);
+    MVS::Visualizer* visualizer = new MVS::IridescenceVisualizer(config);
+    visualizer->setDataset(dataset);
 
     MVS::MultiViewStereo multi_view_stereo(config);
     multi_view_stereo.setDataset(dataset);
+    multi_view_stereo.setVisualizer(visualizer);
+
+
     multi_view_stereo.run();
 
 

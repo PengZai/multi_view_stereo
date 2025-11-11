@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/run_pixel_operation_comparison.dir/pixel_operation_comparison.cc.o"
+  "CMakeFiles/run_pixel_operation_comparison.dir/pixel_operation_comparison.cc.o.d"
   "run_pixel_operation_comparison"
   "run_pixel_operation_comparison.pdb"
 )

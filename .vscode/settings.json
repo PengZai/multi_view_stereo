@@ -68,6 +68,27 @@
         "strstream": "cpp",
         "cfenv": "cpp",
         "charconv": "cpp",
-        "new": "cpp"
+        "new": "cpp",
+        "regex": "cpp",
+        "shared_mutex": "cpp",
+        "unordered_set": "cpp",
+        "__locale": "cpp",
+        "format": "cpp",
+        "numbers": "cpp",
+        "span": "cpp",
+        "__bit_reference": "cpp",
+        "__threading_support": "cpp",
+        "__verbose_abort": "cpp",
+        "ios": "cpp",
+        "locale": "cpp",
+        "print": "cpp",
+        "queue": "cpp",
+        "stack": "cpp",
+        "forward_list": "cpp",
+        "__hash_table": "cpp",
+        "__split_buffer": "cpp",
+        "__tree": "cpp",
+        "any": "cpp",
+        "__node_handle": "cpp"
     }
 }
