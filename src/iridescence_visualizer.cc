@@ -156,7 +156,8 @@ void CameraModel::setColor(const Eigen::Vector4f& color)
 IridescenceVisualizer::IridescenceVisualizer(Config* const config):
 Visualizer(config),
 viewer_(nullptr),
-depth_uncertainty_viewer_(nullptr)
+depth_uncertainty_viewer_(nullptr),
+ptr_picked_ref_ptr_pixel_point_(nullptr)
 {
 
     float width = config_->cameras_[0].resolution_[0];
@@ -192,6 +193,9 @@ depth_uncertainty_viewer_(nullptr)
     0.0f, 0.0f, 0.0f, 1.0f;
 
 
+    float samples[100];
+
+
     viewer_->register_ui_callback("ui_callback", [&]() {
     // In the callback, you can call ImGui commands to create your UI.
 
@@ -206,6 +210,54 @@ depth_uncertainty_viewer_(nullptr)
             isProcessNextTarImage_  = true;
 
         }
+
+  
+        for (int n = 0; n < 100; n++)
+        {
+            samples[n] = sinf(n * 0.2f + ImGui::GetTime() * 1.5f);
+        }
+
+
+
+        ImGui::Begin("Cost Curve");
+
+        for(int min_max_idx=0;  min_max_idx < ptr_picked_ref_ptr_pixel_point_->debug_info_vec_.size(); min_max_idx++ )
+        {  
+
+            DebugInfo& debug_info =  ptr_picked_ref_ptr_pixel_point_->debug_info_vec_[min_max_idx];
+            if(debug_info.costs_.size() == 0)
+            {
+                continue;
+            }
+            std::string manual_match_label = "manual match " + std::to_string(min_max_idx);
+            
+            if(ImGui::SliderInt(manual_match_label.data(), &debug_info.manual_step_idx_, 0, debug_info.steps_.size()-1, "%d s"))
+            {
+                // if we adjust slider
+
+                DebugPlot();
+            }
+
+            if (ImPlot::BeginPlot("Line Plots")) {
+
+        
+
+                ImPlot::SetupAxes("step","cost");
+                std::string cost_label = "cost " + std::to_string(min_max_idx);
+                ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);
+                ImPlot::PlotLine(cost_label.data(), debug_info.steps_.data(), debug_info.costs_.data(), debug_info.costs_.size());
+                std::string best_match_label = "best match " + std::to_string(min_max_idx);
+                ImPlot::PlotInfLines(best_match_label.data(), debug_info.steps_.data() + debug_info.best_step_idx_, 1);
+                ImPlot::PlotInfLines(manual_match_label.data(), debug_info.steps_.data() + debug_info.manual_step_idx_, 1);
+
+                ImPlot::EndPlot();
+            }
+        }
+
+        ImGui::End();
+
+        // ImPlot::PlotLines("My Line Plot", samples, 100);
+
 
         auto& io = ImGui::GetIO();
         // If right clicked the GL canvas
@@ -303,7 +355,7 @@ void IridescenceVisualizer::DebugPlot()
         int ref_u = picked_uncertainty_point_position_[0];
         int ref_v = picked_uncertainty_point_position_[1];
 
-        PixelPoint& picked_ref_ptr_pixel_point = ref_ptr_pixel_point_matrix[int(ref_v)* ref_image_->getWidth() + int(ref_u)];
+        ptr_picked_ref_ptr_pixel_point_ = ref_ptr_pixel_point_matrix + int(ref_v)* ref_image_->getWidth() + int(ref_u);
         
 
         const cv::Mat& ref_cv_bgr_data = ref_image_->getBGRData();
@@ -312,25 +364,22 @@ void IridescenceVisualizer::DebugPlot()
         cv::Mat vis_cv_ref_rgb_data = ref_cv_bgr_data.clone();
         cv::Mat vis_cv_tar_rgb_data = tar_cv_bgr_data.clone();
 
-        for(int min_max_idx=0;  min_max_idx < picked_ref_ptr_pixel_point.debug_info_vec_.size(); min_max_idx++ )
+        for(int min_max_idx=0;  min_max_idx < ptr_picked_ref_ptr_pixel_point_->debug_info_vec_.size(); min_max_idx++ )
         {  
 
-            DebugInfo& debug_info =  picked_ref_ptr_pixel_point.debug_info_vec_[min_max_idx];
-            std::cout << "debug_info.costs " << debug_info.costs_.size() << std::endl;
+            DebugInfo& debug_info =  ptr_picked_ref_ptr_pixel_point_->debug_info_vec_[min_max_idx];
+            // std::cout << "debug_info.costs " << debug_info.costs_.size() << std::endl;
             if(debug_info.costs_.size() == 0)
             {
                 continue;
             }
-            viewer_->update_plot_line("curves", "costs" + std::to_string(min_max_idx), debug_info.steps_, debug_info.costs_);  // When only Y values are given, X values become index IDs
 
-
-            cv::circle(vis_cv_ref_rgb_data, cv::Point2i(ref_u,ref_v), 3, cv::Scalar(0,0,255), 2);
-            cv::putText(vis_cv_ref_rgb_data, "("+std::to_string(ref_u)+","+std::to_string(ref_v)+")",cv::Point2i(ref_u,ref_v), cv::FONT_HERSHEY_SIMPLEX, 0.4, cv::Scalar(255,0,255), 1.8);
-
+            cv::Point2i cv_uv_manual(round(debug_info.valid_uvs_[debug_info.manual_step_idx_][0]),round(debug_info.valid_uvs_[debug_info.manual_step_idx_][1]));
             cv::Point2i cv_uv_best(round(debug_info.uv_best_match_[0]),round(debug_info.uv_best_match_[1]));
             cv::Point2i cv_uv_start(round(debug_info.valid_uvs_.front()[0]),round(debug_info.valid_uvs_.front()[1]));
             cv::Point2i cv_uv_end(round(debug_info.valid_uvs_.back()[0]),round(debug_info.valid_uvs_.back()[1]));
 
+            cv::circle(vis_cv_tar_rgb_data, cv_uv_manual, 3, cv::Scalar(0,255,0), 2); // green
             cv::circle(vis_cv_tar_rgb_data, cv_uv_best, 3, cv::Scalar(255,0,255), 2); // pink
             cv::circle(vis_cv_tar_rgb_data, cv_uv_start, 2, cv::Scalar(0,0,255), 2); // red
             cv::putText(vis_cv_tar_rgb_data, "S",cv_uv_start, cv::FONT_HERSHEY_SIMPLEX, 0.6, cv::Scalar(0,0,255), 1.8);
@@ -338,15 +387,18 @@ void IridescenceVisualizer::DebugPlot()
             cv::circle(vis_cv_tar_rgb_data, cv_uv_end, 2, cv::Scalar(255,0,0), 2); // blue
             cv::putText(vis_cv_tar_rgb_data, "E",cv_uv_end, cv::FONT_HERSHEY_SIMPLEX, 0.6, cv::Scalar(255,0,0), 1.8);
 
-
         }
+
+
+        cv::circle(vis_cv_ref_rgb_data, cv::Point2i(ref_u,ref_v), 3, cv::Scalar(0,0,255), 2);
+        cv::putText(vis_cv_ref_rgb_data, "("+std::to_string(ref_u)+","+std::to_string(ref_v)+")",cv::Point2i(ref_u,ref_v), cv::FONT_HERSHEY_SIMPLEX, 0.4, cv::Scalar(255,0,255), 1.8);
 
 
         std::shared_ptr<glk::Texture> ref_image_texture = glk::create_texture(vis_cv_ref_rgb_data);
         std::shared_ptr<glk::Texture> tar_image_texture = glk::create_texture(vis_cv_tar_rgb_data);
 
-        viewer_->update_image("images/ref_image", ref_image_texture, 0.7);
-        viewer_->update_image("images/tar_image", tar_image_texture, 0.7);
+        viewer_->update_image("images/ref_image", ref_image_texture, 1.0);
+        viewer_->update_image("images/tar_image", tar_image_texture, 1.0);
     }
 }
 

@@ -43,6 +43,8 @@ class DebugInfo
     std::vector<float> costs_;
     std::vector<float> steps_;
     std::vector<Eigen::Vector2f> valid_uvs_;
+    int best_step_idx_;
+    int manual_step_idx_ = 0;
 
     Eigen::Vector2f uv_min_;
     Eigen::Vector2f uv_max_;

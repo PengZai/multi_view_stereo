@@ -94,6 +94,7 @@ class IridescenceVisualizer : public Visualizer
     std::shared_ptr<glk::Mesh> ref_image_canvas_;
 
     Eigen::Vector3f picked_uncertainty_point_position_;
+    PixelPoint* ptr_picked_ref_ptr_pixel_point_;
 
     Image* ref_image_;
     Image* tar_image_;  

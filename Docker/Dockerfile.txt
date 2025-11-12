@@ -85,6 +85,17 @@ WORKDIR /root/iridescence/build
 RUN cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local -DBUILD_EXAMPLES=ON && make -j$(NPROC) && make install
 RUN sed -i '/add_library(Iridescence::Iridescence ALIAS Iridescence::iridescence)/d' /usr/local/lib/cmake/iridescence/iridescence-config.cmake
 
+WORKDIR /root
+RUN git clone --recursive https://github.com/ocornut/imgui.git
+
+
+
+
+WORKDIR /root
+RUN git clone --recursive https://github.com/epezent/implot.git
+RUN cd implot/example && mkdir build
+WORKDIR /root/implot/example/build
+RUN cmake .. && make -j$(NPROC)
 
 
 WORKDIR /root

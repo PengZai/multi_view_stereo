@@ -415,13 +415,15 @@ bool MultiViewStereo::epipolarSearch(PixelPoint* const ref_ptr_pixel_point_matri
         if(debug_plot == true)
         {
             best_s_idx = best_s_idx_temp;
+
             uint32_t ref_coord = ref_v*width + ref_u;
+            
+            ref_ptr_pixel_point_matrix[ref_coord].debug_info_vec_[min_max_idx].best_step_idx_ = best_s_idx;
             ref_ptr_pixel_point_matrix[ref_coord].debug_info_vec_[min_max_idx].uv_best_match_ = tar_uv_best_match;
             ref_ptr_pixel_point_matrix[ref_coord].debug_info_vec_[min_max_idx].costs_ = costs;
             ref_ptr_pixel_point_matrix[ref_coord].debug_info_vec_[min_max_idx].steps_ = steps;
             ref_ptr_pixel_point_matrix[ref_coord].debug_info_vec_[min_max_idx].valid_uvs_ = valid_uvs;
             
-
 
             // cv::Point2i cv_uv_best(round(uv_best_tmp[0]),round(uv_best_tmp[1]));
             // cv::Point2i cv_uv_start(round(valid_uvs.front()[0]),round(valid_uvs.front()[1]));
