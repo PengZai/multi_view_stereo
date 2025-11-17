@@ -99,6 +99,8 @@ void DebugInfo::clean()
     costs_.clear();
     steps_.clear();
     valid_uvs_.clear();
+    valid_inv_depths_.clear();
+    valid_depths_.clear();
 
     uv_min_ = Eigen::Vector2f::Zero();
     uv_max_ = Eigen::Vector2f::Zero();

@@ -43,6 +43,10 @@ class DebugInfo
     std::vector<float> costs_;
     std::vector<float> steps_;
     std::vector<Eigen::Vector2f> valid_uvs_;
+    std::vector<float> valid_depths_;
+    std::vector<float> valid_inv_depths_;
+
+    
     int best_step_idx_;
     int manual_step_idx_ = 0;
 

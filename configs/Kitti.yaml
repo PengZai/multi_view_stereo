@@ -1,7 +1,7 @@
 %YAML:1.0
 
 system:
-  num_used_camera: 2
+  num_used_camera: 1
   use_external_trajectory_id: 0
   is_use_GT_depth: 1
   maximum_traj: 271
@@ -58,7 +58,7 @@ cam0:
   # dir_path: /root/datasets2/colmap_datasets/BotanicGarden_1018_00_16/images/left_rgb
   dir_path: /root/datasets2/kitti/kitti_odometry/data_odometry_gray/dataset/sequences/04/image_0
   original_resolution: [1226, 370] # width x height
-  resolution: [640, 480] # width x height, don't larger than original resolution
+  resolution: [1226, 370] # width x height, don't larger than original resolution
   camera_model: pinhole
   original_intrinsics: [7.070912000000e+02, 7.070912000000e+02, 6.018873000000e+02, 1.831104000000e+02] #fx, fy, cx, cy
   distortion_model: radtan
@@ -80,7 +80,7 @@ cam1:
   # dir_path: /root/datasets2/colmap_datasets/BotanicGarden_1018_00_16/images/right_rgb
   dir_path: /root/datasets2/kitti/kitti_odometry/data_odometry_gray/dataset/sequences/04/image_1
   original_resolution: [1226, 370] # width x height
-  resolution: [640, 480] # width x height, don't larger than original resolution
+  resolution: [1226, 370] # width x height, don't larger than original resolution
   camera_model: pinhole
   original_intrinsics: [7.070912000000e+02, 7.070912000000e+02, 6.018873000000e+02, 1.831104000000e+02] #fx, fy, cx, cy
   distortion_model: radtan

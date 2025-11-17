@@ -5,12 +5,12 @@ system:
   use_external_trajectory_id: 0
   is_use_GT_depth: 1
   maximum_traj: 300
-  # ref_pose_idx: 50
-  ref_pose_idx: 0
+  ref_pose_idx: 50
+  # ref_pose_idx: 8
   ref_camera_idx: 0
   start_match_uv: [0, 0]
-  # tar_pose_start_idx: 50
-  tar_pose_start_idx: 0
+  tar_pose_start_idx: 50
+  # tar_pose_start_idx: 8
   image_sequence_mode: forward_time_direction # option: forward_time_direction, backward_time_direction, full_time_direction, fixed_order_of_traj
   min_depth: 0.3
   max_depth: 100
@@ -21,8 +21,8 @@ system:
 external_trajectory0:
   name: GT_pose
   world_coordinate: NED frame
-  # trajectory_path: /root/datasets2/tartan_air/gascola_sample_P001/P001/pose_left.txt  
-  trajectory_path: /root/datasets2/tartan_air/seasonsforest_winter_sample_P006/P006/pose_left.txt  
+  trajectory_path: /root/datasets2/tartan_air/gascola_sample_P001/P001/pose_left.txt  
+  # trajectory_path: /root/datasets2/tartan_air/seasonsforest_winter_sample_P006/P006/pose_left.txt  
   # trajectory_path: /root/datasets2/tartan_air/seasonsforest_sample_P002/P002/pose_left.txt  
   is_all_cameras_in_same_traj_file: 0
   T_pose_cam0:
@@ -63,8 +63,8 @@ external_trajectory0:
 
 cam0:
   name: camera0
-  # dir_path: /root/datasets2/tartan_air/gascola_sample_P001/P001/image_left
-  dir_path: /root/datasets2/tartan_air/seasonsforest_winter_sample_P006/P006/image_left
+  dir_path: /root/datasets2/tartan_air/gascola_sample_P001/P001/image_left
+  # dir_path: /root/datasets2/tartan_air/seasonsforest_winter_sample_P006/P006/image_left
   # dir_path: /root/datasets2/tartan_air/seasonsforest_sample_P002/P002/image_left
   original_resolution: [640, 480] # width x height
   resolution: [640, 480] # width x height, don't larger than original resolution
@@ -75,8 +75,8 @@ cam0:
   use_GT_depth_id: 0
   GT_depth0:
     name: depthmap
-    # path: /root/datasets2/tartan_air/gascola_sample_P001/P001/depth_left_tiff/depth
-    path: /root/datasets2/tartan_air/seasonsforest_winter_sample_P006/P006/depth_left_tiff/depth
+    path: /root/datasets2/tartan_air/gascola_sample_P001/P001/depth_left_tiff/depth
+    # path: /root/datasets2/tartan_air/seasonsforest_winter_sample_P006/P006/depth_left_tiff/depth
     # path: /root/datasets2/tartan_air/seasonsforest_sample_P002/P002/depth_left_tiff/depth
     T_cam_pose:
       - [1.0,0,0,0]
@@ -86,8 +86,8 @@ cam0:
 
 cam1:
   name: camera1
-  # dir_path: /root/datasets2/tartan_air/gascola_sample_P001/P001/image_right
-  dir_path: /root/datasets2/tartan_air/seasonsforest_winter_sample_P006/P006/image_right
+  dir_path: /root/datasets2/tartan_air/gascola_sample_P001/P001/image_right
+  # dir_path: /root/datasets2/tartan_air/seasonsforest_winter_sample_P006/P006/image_right
   # dir_path: /root/datasets2/tartan_air/seasonsforest_sample_P002/P002/image_right
   original_resolution: [640, 480] # width x height
   resolution: [640, 480] # width x height, don't larger than original resolution
@@ -98,8 +98,8 @@ cam1:
   use_GT_depth_id: 0
   GT_depth0:
     name: depthmap
-    # path: /root/datasets2/tartan_air/gascola_sample_P001/P001/depth_right_tiff/depth
-    path: /root/datasets2/tartan_air/seasonsforest_winter_sample_P006/P006/depth_right_tiff/depth
+    path: /root/datasets2/tartan_air/gascola_sample_P001/P001/depth_right_tiff/depth
+    # path: /root/datasets2/tartan_air/seasonsforest_winter_sample_P006/P006/depth_right_tiff/depth
     # path: /root/datasets2/tartan_air/seasonsforest_sample_P002/P002/depth_right_tiff/depth
     T_cam_pose:
       - [1.0,0,0,0]

@@ -175,12 +175,12 @@ void MultiViewStereo::match(Image* const ref_image, Image* const tar_image, bool
                 Eigen::Vector3f pt_max = KRKi_uv_homo + pixel_point.max_inv_depth_vec_[min_max_idx] * Kt;
                 Eigen::Vector2f uv_min = Eigen::Vector2f(pt_min[0]/pt_min[2], pt_min[1]/pt_min[2]);
                 Eigen::Vector2f uv_max = Eigen::Vector2f(pt_max[0]/pt_max[2], pt_max[1]/pt_max[2]);
-                Eigen::Vector2f epipolar_vector = Eigen::Vector2f(uv_max[0] - uv_min[0], uv_max[1] - uv_min[1]);
-                float epipolar_length = epipolar_vector.norm();
-                Eigen::Vector2f unit_epipolar_vector =  epipolar_vector / epipolar_length;
 
                 if(debug_plot == true)
                 {
+
+                    pixel_point.debug_info_vec_[min_max_idx].clean();
+
                     pixel_point.debug_info_vec_[min_max_idx].tar_pose_id_ = tar_image->getPoseId();
                     pixel_point.debug_info_vec_[min_max_idx].tar_camera_id_ = tar_image->getCameraId();
                     pixel_point.debug_info_vec_[min_max_idx].init_min_depth_ = 1/pixel_point.max_inv_depth_vec_[min_max_idx];
@@ -188,8 +188,7 @@ void MultiViewStereo::match(Image* const ref_image, Image* const tar_image, bool
                     pixel_point.debug_info_vec_[min_max_idx].init_depth_ = (pixel_point.debug_info_vec_[min_max_idx].init_min_depth_ + pixel_point.debug_info_vec_[min_max_idx].init_max_depth_) / 2.0;
                     pixel_point.debug_info_vec_[min_max_idx].uv_min_ = uv_min;
                     pixel_point.debug_info_vec_[min_max_idx].uv_max_ = uv_max;
-                    pixel_point.debug_info_vec_[min_max_idx].unit_epipolar_vector_ = unit_epipolar_vector;
-                    pixel_point.debug_info_vec_[min_max_idx].epipolar_length_ = epipolar_length;
+
                     
                 }
 
@@ -209,7 +208,7 @@ void MultiViewStereo::match(Image* const ref_image, Image* const tar_image, bool
                 // printf("getSubpixelPatch done ! Timing : %lld µs\n", (long long)elapsed_us);
 
                 // auto start = std::chrono::steady_clock::now();        
-                bool isValid = epipolarSearch(ptr_pixel_point_matrix, u, v, min_max_idx, tar_image, uv_min, unit_epipolar_vector, epipolar_length, uv_best_match, debug_plot);
+                bool isValid = epipolarSearch(ptr_pixel_point_matrix, u, v, min_max_idx, tar_image, uv_min, uv_max, uv_best_match, debug_plot);
                 // auto end = std::chrono::steady_clock::now();
                 // auto elapsed_us = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
                 // printf("epipolar search done ! Timing : %lld µs\n", (long long)elapsed_us);
@@ -250,6 +249,10 @@ void MultiViewStereo::match(Image* const ref_image, Image* const tar_image, bool
                     //     std::cout << "depth : " << depth << " at uv_best_match (" << uv_best_match[0] << "," << uv_best_match[1] << ")" << std::endl;
                     // }
 
+                    Eigen::Vector2f epipolar_vector = Eigen::Vector2f(uv_max[0] - uv_min[0], uv_max[1] - uv_min[1]);
+                    float epipolar_length = epipolar_vector.norm();
+                    Eigen::Vector2f unit_epipolar_vector =  epipolar_vector / epipolar_length;
+
                     float a0_minus = (Kt[0] - Kt[2]*(uv_best_match[0]-const_error_in_pixel*unit_epipolar_vector[0]));
                     float a1_minus = (Kt[1] - Kt[2]*(uv_best_match[1]-const_error_in_pixel*unit_epipolar_vector[1]));
                     float b0_minus = (KRKi_uv_homo[2]*(uv_best_match[0]-const_error_in_pixel*unit_epipolar_vector[0]) - KRKi_uv_homo[0]);
@@ -283,9 +286,24 @@ void MultiViewStereo::match(Image* const ref_image, Image* const tar_image, bool
                 
                         float min_depth = 1.0/inv_max_depth;
                         float max_depth = 1.0/inv_min_depth;
+                        
                         pixel_point.debug_info_vec_[min_max_idx].min_depth_ = min_depth;
                         pixel_point.debug_info_vec_[min_max_idx].max_depth_ = max_depth;
                         pixel_point.debug_info_vec_[min_max_idx].depth_ = (min_depth + max_depth)/2.0;
+
+                        for(int i = 0; i < pixel_point.debug_info_vec_[min_max_idx].valid_uvs_.size();i++)
+                        {
+                            
+                            Eigen::Vector2f valid_uv = pixel_point.debug_info_vec_[min_max_idx].valid_uvs_[i];
+
+                            float a0 = Kt[0] - Kt[2]*valid_uv[0];
+                            float a1 = Kt[1] - Kt[2]*valid_uv[1];
+                            float b0 = KRKi_uv_homo[2]*valid_uv[0] - KRKi_uv_homo[0];
+                            float b1 = KRKi_uv_homo[2]*valid_uv[1] - KRKi_uv_homo[1];
+                            float inv_depth = (a0*b0 + a1*b1) / (a0*a0 + a1*a1);
+                            pixel_point.debug_info_vec_[min_max_idx].valid_inv_depths_.push_back(inv_depth);
+                            pixel_point.debug_info_vec_[min_max_idx].valid_depths_.push_back(1.0f/inv_depth);
+                        }
 
                         // std::cout << "min_depth : " << min_depth << " and max_depth : " << max_depth << " at uv_best_match (" << uv_best_match[0] << "," << uv_best_match[1] << ")" << std::endl;
 
@@ -293,6 +311,14 @@ void MultiViewStereo::match(Image* const ref_image, Image* const tar_image, bool
                     }
                     
     
+                }
+                else
+                {
+                    if(debug_plot == true){
+                
+                        pixel_point.debug_info_vec_[min_max_idx].clean();
+   
+                    }
                 }
 
 
@@ -311,14 +337,150 @@ void MultiViewStereo::match(Image* const ref_image, Image* const tar_image, bool
 
 }
 
-bool MultiViewStereo::epipolarSearch(PixelPoint* const ref_ptr_pixel_point_matrix, uint32_t ref_u, uint32_t ref_v, uint32_t min_max_idx, const Image* const tar_image, 
-     const Eigen::Vector2f &tar_uv_min, const Eigen::Vector2f& unit_epipolar_vector, float epipolar_length, Eigen::Vector2f& tar_uv_best_match, bool debug_plot)
+
+void MultiViewStereo::getValidTarUV(Eigen::Vector2f& valid_tar_uv, const Eigen::Vector2f tar_uv, const std::vector<Eigen::Vector2f>& intersections_in_tar_image)
 {
+
+    int min_idx = -1;
+    float min_diff = std::numeric_limits<float>::infinity();
+    for(int i=0;i<(int)intersections_in_tar_image.size();i++){
+        float diff = (tar_uv - intersections_in_tar_image[i]).norm();
+        if(diff < min_diff)
+        {
+            min_diff = diff;
+            min_idx = i;
+        }
+    }
+
+    valid_tar_uv = intersections_in_tar_image[min_idx];
+
+}
+
+ 
+
+bool MultiViewStereo::epipolarSearch(PixelPoint* const ref_ptr_pixel_point_matrix, uint32_t ref_u, uint32_t ref_v, uint32_t min_max_idx, const Image* const tar_image, 
+     Eigen::Vector2f &tar_uv_min, Eigen::Vector2f &tar_uv_max, Eigen::Vector2f& tar_uv_best_match, bool debug_plot)
+{
+
+
+    // if( ref_u == 90 && ref_v == 217)
+    // {
+    //     std::cout << "debug" << std::endl;
+    // }
+    // if(tar_image->isInImage(tar_uv_max[0], tar_uv_max[1], 0) == false)
+    // {
+    //     return false;
+
+    // }
+    uint32_t width = tar_image->getWidth();
+    uint32_t height = tar_image->getHeight();  
+
+
+        
+    // Eigen::Vector2f epipolar_vector = Eigen::Vector2f(tar_uv_max[0] - tar_uv_min[0], tar_uv_max[1] - tar_uv_min[1]);
+    // Eigen::Vector2f unit_epipolar_vector =  epipolar_vector / epipolar_length;
+
+    // if(!(tar_uv_max[0] >=0 && tar_uv_max[1] >= 0 && tar_uv_max[0] < width - 1 && tar_uv_max[1] < height - 1))
+    // {
+    //     std::cout << "out of range " << tar_uv_min[0] << "," << tar_uv_min[1]  << " to " << tar_uv_max[0] << "," << tar_uv_max[1] << " with epi unit " << unit_epipolar_vector[0] << "," << unit_epipolar_vector[1] << std::endl;
+    //     return false;   
+    // }
+
+
+    Eigen::Vector2f epipolar_vector = Eigen::Vector2f(tar_uv_max[0] - tar_uv_min[0], tar_uv_max[1] - tar_uv_min[1]);
+    float epipolar_length = epipolar_vector.norm();
+    Eigen::Vector2f unit_epipolar_vector =  epipolar_vector / epipolar_length;
+
+    if(std::abs(tar_uv_max[0] - tar_uv_min[0]) < 1e-3 || epipolar_length < 1e-3)
+    {
+        return false;
+    }
+
+
+
+    bool tar_uv_min_isInImage = tar_image->isInImage(tar_uv_min[0], tar_uv_min[1], half_ws_);
+    bool tar_uv_max_isInImage = tar_image->isInImage(tar_uv_max[0], tar_uv_max[1], half_ws_);
+
+
+    float k = (tar_uv_max[1] - tar_uv_min[1])/(tar_uv_max[0] - tar_uv_min[0]);
+    float h1 = half_ws_;
+    float h2 = height - half_ws_ - 1;
+    float w1 = half_ws_;
+    float w2 = width - half_ws_ - 1;
+    
+
+    std::vector<Eigen::Vector2f> intersections_in_tar_image;
+
+    Eigen::Vector2f intersect_y_h1 = Eigen::Vector2f((h1 + k*tar_uv_max[0] - tar_uv_max[1])/k, h1);
+    if(intersect_y_h1[0] >= half_ws_ && intersect_y_h1[0] <= width - half_ws_ - 1)
+    {
+        intersections_in_tar_image.emplace_back(intersect_y_h1);
+    }
+    Eigen::Vector2f intersect_y_h2 = Eigen::Vector2f((h2 + k*tar_uv_max[0] - tar_uv_max[1])/k, h2);
+    if(intersect_y_h2[0] >= half_ws_ && intersect_y_h2[0] <= width - half_ws_ - 1)
+    {
+        intersections_in_tar_image.emplace_back(intersect_y_h2);
+    }
+    Eigen::Vector2f intersect_x_w1 = Eigen::Vector2f(w1, k*w1+tar_uv_max[1] - k*tar_uv_max[0]);
+    if(intersect_x_w1[1] >= half_ws_ && intersect_x_w1[1] <= height - half_ws_ - 1)
+    {
+        intersections_in_tar_image.emplace_back(intersect_x_w1);
+    }
+    Eigen::Vector2f intersect_x_w2 = Eigen::Vector2f(w2, k*w2 + tar_uv_max[1] - k*tar_uv_max[0]);
+    if(intersect_x_w2[1] >= half_ws_ && intersect_x_w2[1] <= height - half_ws_ - 1)
+    {
+        intersections_in_tar_image.emplace_back(intersect_x_w2);
+    }
+  
+
+    if(intersections_in_tar_image.size() == 0)
+    {
+        return false;
+    }
+
+    // case one both in image
+    if(tar_uv_min_isInImage == true && tar_uv_max_isInImage == true)
+    {
+        //do nothing
+    }
+    else if(tar_uv_min_isInImage == true && tar_uv_max_isInImage == false){
+
+
+        getValidTarUV(tar_uv_max, tar_uv_max, intersections_in_tar_image);
+
+
+    }
+    else if(tar_uv_min_isInImage == false && tar_uv_max_isInImage == true)
+    {
+
+        getValidTarUV(tar_uv_min, tar_uv_min, intersections_in_tar_image);
+
+    }
+    else if(tar_uv_min_isInImage == false && tar_uv_max_isInImage == false)
+    {
+
+        // tar_uv_min, tar_uv_max were projected in same side.
+        if(tar_uv_min[0] < w1 && tar_uv_max[0] < w1 || tar_uv_min[0] > w2 && tar_uv_max[0] > w2 || tar_uv_min[1] < h1 && tar_uv_max[1] < h1 || tar_uv_min[1] > h2 && tar_uv_max[1] > h2 )
+        {
+            return false;
+        }
+
+        getValidTarUV(tar_uv_min, tar_uv_min, intersections_in_tar_image);
+        getValidTarUV(tar_uv_max, tar_uv_max, intersections_in_tar_image);
+
+    }
+
+
+
+    epipolar_vector = Eigen::Vector2f(tar_uv_max[0] - tar_uv_min[0], tar_uv_max[1] - tar_uv_min[1]);
+    epipolar_length = epipolar_vector.norm();
+    unit_epipolar_vector =  epipolar_vector / epipolar_length;
 
     PixelPoint* tar_ptr_pixel_point_matrix = tar_image->getPixelPointMatrixPtr();
 
-    uint32_t width = tar_image->getWidth();
-    uint32_t height = tar_image->getHeight();    
+
+
+  
 
     float s = 0;
     float min_cost = std::numeric_limits<float>::infinity();
@@ -327,17 +489,21 @@ bool MultiViewStereo::epipolarSearch(PixelPoint* const ref_ptr_pixel_point_matri
 
     Eigen::Vector2f uv_best_tmp(-1, -1);
     float best_s_tmp = 0;
+    
 
     // for debug_plot
-    std::vector<float> costs;
+    std::vector<float> costs;                   
     std::vector<float> steps;
     std::vector<Eigen::Vector2f> valid_uvs;
+    float ws_2 = (2*half_ws_+1)*(2*half_ws_+1);
 
     while(s <= epipolar_length)
     {   
         Eigen::Vector2f tar_uv_current  = tar_uv_min + s * unit_epipolar_vector;
-        if(tar_image->isInImage(tar_uv_current[0], tar_uv_current[1], half_ws_)){
-            float cost = SAD(ref_ptr_pixel_point_matrix, ref_u, ref_v, tar_ptr_pixel_point_matrix, round(tar_uv_current[0]), round(tar_uv_current[1]), width, height, half_ws_);
+        bool isInImage = tar_image->isInImage(tar_uv_current[0], tar_uv_current[1], half_ws_);
+
+        if(isInImage){
+            float cost = SAD(ref_ptr_pixel_point_matrix, ref_u, ref_v, tar_ptr_pixel_point_matrix, round(tar_uv_current[0]), round(tar_uv_current[1]), width, height, half_ws_)/(ws_2);
             
             if(debug_plot == true)
             {
@@ -360,8 +526,9 @@ bool MultiViewStereo::epipolarSearch(PixelPoint* const ref_ptr_pixel_point_matri
             }
         }
         
+    
 
-        s+=1.0;
+        s+=1.0f;
 
     }
 
@@ -408,8 +575,8 @@ bool MultiViewStereo::epipolarSearch(PixelPoint* const ref_ptr_pixel_point_matri
     // }
 
     // std::cout << "epipolar_length : " << epipolar_length << std::endl;
-
-    if(min_cost < std::numeric_limits<float>::infinity()){
+    // min_cost < std::numeric_limits<float>::infinity()
+    if(min_cost < ACCEPTABLE_MINI_COST){
         tar_uv_best_match = uv_best_tmp;
 
         if(debug_plot == true)
@@ -417,7 +584,7 @@ bool MultiViewStereo::epipolarSearch(PixelPoint* const ref_ptr_pixel_point_matri
             best_s_idx = best_s_idx_temp;
 
             uint32_t ref_coord = ref_v*width + ref_u;
-            
+
             ref_ptr_pixel_point_matrix[ref_coord].debug_info_vec_[min_max_idx].best_step_idx_ = best_s_idx;
             ref_ptr_pixel_point_matrix[ref_coord].debug_info_vec_[min_max_idx].uv_best_match_ = tar_uv_best_match;
             ref_ptr_pixel_point_matrix[ref_coord].debug_info_vec_[min_max_idx].costs_ = costs;
