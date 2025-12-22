@@ -91,16 +91,12 @@ std::vector<Image*>& Dataset::getImages()
 
 
 
-void DebugInfo::clean()
+void DebugInfo::clear()
 {
     tar_pose_id_ = -1;
     tar_camera_id_ = -1;
 
-    costs_.clear();
     steps_.clear();
-    valid_uvs_.clear();
-    valid_inv_depths_.clear();
-    valid_depths_.clear();
 
     uv_min_ = Eigen::Vector2f::Zero();
     uv_max_ = Eigen::Vector2f::Zero();
@@ -115,6 +111,24 @@ void DebugInfo::clean()
     min_depth_ = -1;
     max_depth_ = -1;
     depth_ = -1;
+}
+
+
+EpipolarSegment::EpipolarSegment(float min_inv_depth, float max_inv_depth):
+min_inv_depth_(min_inv_depth),
+max_inv_depth_(max_inv_depth)
+{
+
+
+}
+
+
+void EpipolarSegment::clear()
+{
+    costs_.clear();
+    aggregate_costs_.clear();
+    valid_uvs_.clear();
+    inv_depths_.clear();
 }
 
 PixelPoint::PixelPoint():
@@ -135,14 +149,60 @@ void PixelPoint::setImagePtr(Image* const image)
     pose_id_ = image->getPoseId();
 }
 
-void PixelPoint::appendMinMaxInvDepth(float min_inv_depth, float max_inv_depth)
+
+void PixelPoint::getMininumIdxTmpAggregatedCost(int &minimum_epipolar_segment_idx, int &minimum_cost_idx) const
 {
-    
-    min_inv_depth_vec_.push_back(min_inv_depth);
-    max_inv_depth_vec_.push_back(max_inv_depth);
-    debug_info_vec_.push_back(DebugInfo());
+
+    float mini_cost = std::numeric_limits<float>::infinity();
+    for(int epipolar_segment_idx=0; epipolar_segment_idx < (int)epipolar_segment_vec_.size(); epipolar_segment_idx++)
+    {
+
+        const EpipolarSegment& epipolar_segment = epipolar_segment_vec_[epipolar_segment_idx];
+        for(int cost_idx = 0; cost_idx < (int)epipolar_segment.tmp_aggregate_costs_.size(); cost_idx++ )
+        {
+            if(epipolar_segment.tmp_aggregate_costs_[cost_idx] < mini_cost)
+            {
+                mini_cost = epipolar_segment.tmp_aggregate_costs_[cost_idx];
+                minimum_epipolar_segment_idx = epipolar_segment_idx;
+                minimum_cost_idx = cost_idx;
+            } 
+        }
+    }
+
+
 }
 
+
+float PixelPoint::getInterpolatedTmpAggregatedCostByInvDepth(float ref_inv_depth) const
+{
+
+    bool is_exist_interpolated_cost = false;
+    float interpolated_tmp_aggregated_cost = std::numeric_limits<float>::infinity();
+    for(int epipolar_segment_idx = 0; epipolar_segment_idx < (int)epipolar_segment_vec_.size(); epipolar_segment_idx++)
+    {
+        
+        const EpipolarSegment& epipolar_segment = epipolar_segment_vec_[epipolar_segment_idx];
+
+        for(int inv_depth_idx = 1; inv_depth_idx < (int)epipolar_segment.inv_depths_.size(); inv_depth_idx++)
+        {
+            float lower_inv_depth = epipolar_segment.inv_depths_[inv_depth_idx-1];
+            float inv_depth = epipolar_segment.inv_depths_[inv_depth_idx];
+            if(ref_inv_depth <= inv_depth && ref_inv_depth >= lower_inv_depth)
+            {
+                interpolated_tmp_aggregated_cost =  epipolar_segment.tmp_aggregate_costs_[inv_depth_idx-1] + (inv_depth - lower_inv_depth) * (epipolar_segment.tmp_aggregate_costs_[inv_depth_idx] - epipolar_segment.tmp_aggregate_costs_[inv_depth_idx-1])/(inv_depth - lower_inv_depth);
+                is_exist_interpolated_cost = true;
+                break;
+            }
+        }
+
+        if(is_exist_interpolated_cost == true)
+        {
+            break;
+        }
+    }
+
+    return interpolated_tmp_aggregated_cost;
+}
 
 
 void PixelPoint::setUV(int u, int v)
@@ -165,6 +225,7 @@ void PixelPoint::setGradient(float gradient_u, float gradient_v)
 Image::Image(Config* const config)
 :ptr_raw_gray_data_(nullptr),
 ptr_pixel_point_matrix_(nullptr),
+ptr_tar_image_(nullptr),
 GT_depth_path_(""),
 config_(config)
 {   
@@ -275,6 +336,21 @@ const std::string Image::getGTDepthPath() const
 void Image::setTimestamp(const double timestamp)
 {
     timestamp_ = timestamp;
+}
+
+void Image::setTarImagePtr(Image* const ptr_tar_image)
+{
+    ptr_tar_image_ = ptr_tar_image;
+}
+
+void Image::setKRKi(const Eigen::Matrix3f& KRKi)
+{
+    KRKi_ = KRKi;
+}
+
+void Image::setKt(const Eigen::Vector3f& Kt)
+{
+    Kt_ = Kt;
 }
 
 bool Image::loadData()
@@ -418,6 +494,16 @@ const cv::Mat& Image::getBGRData() const
     return cv_bgr_data_;
 }
 
+const Eigen::Matrix3f& Image::getKRKi() const
+{
+    return KRKi_;
+}
+
+const Eigen::Vector3f& Image::getKt() const
+{
+    return Kt_;
+}
+
 // const cv::Mat& Image::getMiniBGRData() const
 // {
 //     return cv_mini_bgr_data_;
@@ -442,8 +528,8 @@ void Image::loadDepthFromMinMaxInvDepth() const
             //     int test = 1;
             // }
             PixelPoint& pixel_point = ptr_pixel_point_matrix_[current_coord];
-            float min_depth = 1.0/pixel_point.max_inv_depth_vec_[0];
-            float max_depth = 1.0/pixel_point.min_inv_depth_vec_[0];
+            float min_depth = 1.0/pixel_point.epipolar_segment_vec_[0].max_inv_depth_;
+            float max_depth = 1.0/pixel_point.epipolar_segment_vec_[0].min_inv_depth_;
             float diff = abs(max_depth-min_depth);
             float depth = (min_depth+max_depth)/2.0;
             if(depth >= config_->min_depth_ && depth <= config_->max_depth_){

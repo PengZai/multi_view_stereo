@@ -72,6 +72,13 @@ cam0:
   original_intrinsics: [320, 320, 320, 240] #fx, fy, cu, cv
   distortion_model: radtan
   distortion_coeffs: [0,0,0,0] #k1,k2,p1,p2
+  use_deeplearning_depth_id: 0
+  DeepLearning_depth0: 
+    name: Midas
+    path: /root/datasets2/tartan_air/gascola_sample_P001/P001/depth_left_tiff/depth  
+  DeepLearning_depth0: 
+    name: DepthAnythingV2
+    path: /media/spiderman/zhipeng_8t1/datasets/tartan_air/gascola_sample_P001/P001/DepthAnythingV2/image_left/normalized_inv_depth
   use_GT_depth_id: 0
   GT_depth0:
     name: depthmap

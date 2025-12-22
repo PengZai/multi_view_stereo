@@ -35,19 +35,17 @@ class DebugInfo
     DebugInfo(){};
     ~DebugInfo() = default;
 
-    void clean();
+    void clear();
 
     int tar_pose_id_;
     int tar_camera_id_;
 
-    std::vector<float> costs_;
     std::vector<float> steps_;
-    std::vector<Eigen::Vector2f> valid_uvs_;
-    std::vector<float> valid_depths_;
-    std::vector<float> valid_inv_depths_;
+
 
     
     int best_step_idx_;
+    std::vector<int> possible_minimum_peak_idxes_;
     int manual_step_idx_ = 0;
 
     Eigen::Vector2f uv_min_;
@@ -67,13 +65,39 @@ class DebugInfo
 
 };
 
+
+class EpipolarSegment
+{
+    public:
+
+
+    EpipolarSegment(float min_inv_depth, float max_inv_depth);
+    ~EpipolarSegment()= default;
+
+
+    float min_inv_depth_;
+    float max_inv_depth_;
+
+    void clear();
+
+    std::vector<float> costs_;
+    std::vector<float> tmp_aggregate_costs_;
+    std::vector<float> aggregate_costs_;
+    std::vector<Eigen::Vector2f> valid_uvs_;
+    std::vector<float> inv_depths_;
+
+    DebugInfo debug_info_;
+
+};
+
 class PixelPoint
 {
     public:
 
     enum Status {
         UNINITIALIZED = 0,
-        UNCERTAINDEPTH = 1,
+        UNCERTAINTY_DEPTH = 1,
+        INVALID,
         GOOD
     };
 
@@ -83,7 +107,6 @@ class PixelPoint
     PixelPoint();
 
     void setImagePtr(Image* const image);
-    void appendMinMaxInvDepth(float min_inv_depth, float max_inv_depth);
 
     void setUV(int u, int v);
 
@@ -91,6 +114,8 @@ class PixelPoint
 
     void setGradient(float gradient_u, float gradient_v);
 
+    void getMininumIdxTmpAggregatedCost(int &minimum_epipolar_segment_idx, int &minimum_cost_idx) const;
+    float getInterpolatedTmpAggregatedCostByInvDepth(float ref_inv_depth) const;
 
     ~PixelPoint() = default;
 
@@ -109,13 +134,8 @@ class PixelPoint
     float gradient_v_;
     float depth_;
     
-    std::vector<float> min_inv_depth_vec_;
-    std::vector<float> max_inv_depth_vec_;
-    std::vector<DebugInfo> debug_info_vec_;
-
-
-  
-
+    Eigen::Vector2f unit_epipolar_vector_;
+    std::vector<EpipolarSegment> epipolar_segment_vec_;  
 
 
 };
@@ -141,11 +161,16 @@ class Image
         void setGTDepth(const cv::Mat& cv_gt_depth_data);
         void setCameraId(const int camera_id);
         void setPoseId(const int camera_id);
+        void setTimestamp(const double timestamp);
+        void setTarImagePtr(Image* const ptr_tar_image);
+        void setKRKi(const Eigen::Matrix3f& KRKi);
+        void setKt(const Eigen::Vector3f& Kt);
+    
+
         int getCameraId() const;
         int getPoseId() const;
         int getId() const;
         const std::string getGTDepthPath() const;
-        void setTimestamp(const double timestamp);
         bool loadData();
         void calGraident();
 
@@ -162,7 +187,8 @@ class Image
         const cv::Mat& getGTDepthData() const;
         bool isInImage(float u, float v, int border=0) const;
         cv::Mat getCVDepth() const;
-
+        const Eigen::Matrix3f& getKRKi() const;
+        const Eigen::Vector3f& getKt() const;
 
         Config* config_;
 
@@ -192,9 +218,11 @@ class Image
 
         std::string GT_depth_path_;
         cv::Mat cv_gt_depth_data_;
-    
 
-    
+        // tar image characteristic
+        Image* ptr_tar_image_;
+        Eigen::Matrix3f KRKi_; // KRKi = K_tar * R_tar_ref * K_ref.inverse();
+        Eigen::Vector3f Kt_; // K_tar * t_tar_ref;
 
 };
 

@@ -77,6 +77,7 @@ set(LIBRARY_SOURCES
     src/visualizer.cc
     src/pangolin_visualizer.cc
     src/iridescence_visualizer.cc
+    src/persistent_homology.cc
     
 )
 

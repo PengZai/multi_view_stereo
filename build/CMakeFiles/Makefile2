@@ -85,6 +85,7 @@ test/all: test/CMakeFiles/run_visualize_colorized_gtmap.dir/all
 test/all: test/CMakeFiles/run_pixel_operation_comparison.dir/all
 test/all: test/CMakeFiles/Iridescence_example.dir/all
 test/all: test/CMakeFiles/Iridescence_texture.dir/all
+test/all: test/CMakeFiles/persistent_homology_peak_picking.dir/all
 .PHONY : test/all
 
 # Recursive "preinstall" directory target.
@@ -97,6 +98,7 @@ test/clean: test/CMakeFiles/run_visualize_colorized_gtmap.dir/clean
 test/clean: test/CMakeFiles/run_pixel_operation_comparison.dir/clean
 test/clean: test/CMakeFiles/Iridescence_example.dir/clean
 test/clean: test/CMakeFiles/Iridescence_texture.dir/clean
+test/clean: test/CMakeFiles/persistent_homology_peak_picking.dir/clean
 .PHONY : test/clean
 
 #=============================================================================
@@ -106,12 +108,12 @@ test/clean: test/CMakeFiles/Iridescence_texture.dir/clean
 CMakeFiles/run_multi_view_stereo.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=27,28,29,30,31,32,33,34,35,36,37,38,39,40,41 "Built target run_multi_view_stereo"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45 "Built target run_multi_view_stereo"
 .PHONY : CMakeFiles/run_multi_view_stereo.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/run_multi_view_stereo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /root/multi_view_stereo/build/CMakeFiles 15
+	$(CMAKE_COMMAND) -E cmake_progress_start /root/multi_view_stereo/build/CMakeFiles 16
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/run_multi_view_stereo.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /root/multi_view_stereo/build/CMakeFiles 0
 .PHONY : CMakeFiles/run_multi_view_stereo.dir/rule
@@ -132,7 +134,7 @@ CMakeFiles/run_multi_view_stereo.dir/clean:
 test/CMakeFiles/run_visualize_trajectories.dir/all:
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=57,58,59,60,61,62,63,64,65,66,67,68,69 "Built target run_visualize_trajectories"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=61,62,63,64,65,66,67,68,69,70,71,72,73 "Built target run_visualize_trajectories"
 .PHONY : test/CMakeFiles/run_visualize_trajectories.dir/all
 
 # Build rule for subdir invocation for target.
@@ -158,7 +160,7 @@ test/CMakeFiles/run_visualize_trajectories.dir/clean:
 test/CMakeFiles/run_visualize_colorized_gtmap.dir/all:
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=44,45,46,47,48,49,50,51,52,53,54,55,56 "Built target run_visualize_colorized_gtmap"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=48,49,50,51,52,53,54,55,56,57,58,59,60 "Built target run_visualize_colorized_gtmap"
 .PHONY : test/CMakeFiles/run_visualize_colorized_gtmap.dir/all
 
 # Build rule for subdir invocation for target.
@@ -184,7 +186,7 @@ test/CMakeFiles/run_visualize_colorized_gtmap.dir/clean:
 test/CMakeFiles/run_pixel_operation_comparison.dir/all:
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_pixel_operation_comparison.dir/build.make test/CMakeFiles/run_pixel_operation_comparison.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_pixel_operation_comparison.dir/build.make test/CMakeFiles/run_pixel_operation_comparison.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=42,43 "Built target run_pixel_operation_comparison"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=46,47 "Built target run_pixel_operation_comparison"
 .PHONY : test/CMakeFiles/run_pixel_operation_comparison.dir/all
 
 # Build rule for subdir invocation for target.
@@ -254,6 +256,32 @@ Iridescence_texture: test/CMakeFiles/Iridescence_texture.dir/rule
 test/CMakeFiles/Iridescence_texture.dir/clean:
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_texture.dir/build.make test/CMakeFiles/Iridescence_texture.dir/clean
 .PHONY : test/CMakeFiles/Iridescence_texture.dir/clean
+
+#=============================================================================
+# Target rules for target test/CMakeFiles/persistent_homology_peak_picking.dir
+
+# All Build rule for target.
+test/CMakeFiles/persistent_homology_peak_picking.dir/all:
+	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/persistent_homology_peak_picking.dir/build.make test/CMakeFiles/persistent_homology_peak_picking.dir/depend
+	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/persistent_homology_peak_picking.dir/build.make test/CMakeFiles/persistent_homology_peak_picking.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=27,28,29 "Built target persistent_homology_peak_picking"
+.PHONY : test/CMakeFiles/persistent_homology_peak_picking.dir/all
+
+# Build rule for subdir invocation for target.
+test/CMakeFiles/persistent_homology_peak_picking.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /root/multi_view_stereo/build/CMakeFiles 3
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/persistent_homology_peak_picking.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /root/multi_view_stereo/build/CMakeFiles 0
+.PHONY : test/CMakeFiles/persistent_homology_peak_picking.dir/rule
+
+# Convenience name for target.
+persistent_homology_peak_picking: test/CMakeFiles/persistent_homology_peak_picking.dir/rule
+.PHONY : persistent_homology_peak_picking
+
+# clean rule for target.
+test/CMakeFiles/persistent_homology_peak_picking.dir/clean:
+	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/persistent_homology_peak_picking.dir/build.make test/CMakeFiles/persistent_homology_peak_picking.dir/clean
+.PHONY : test/CMakeFiles/persistent_homology_peak_picking.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

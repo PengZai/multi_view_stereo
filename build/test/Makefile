@@ -186,6 +186,20 @@ Iridescence_texture/fast:
 	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_texture.dir/build.make test/CMakeFiles/Iridescence_texture.dir/build
 .PHONY : Iridescence_texture/fast
 
+# Convenience name for target.
+test/CMakeFiles/persistent_homology_peak_picking.dir/rule:
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/persistent_homology_peak_picking.dir/rule
+.PHONY : test/CMakeFiles/persistent_homology_peak_picking.dir/rule
+
+# Convenience name for target.
+persistent_homology_peak_picking: test/CMakeFiles/persistent_homology_peak_picking.dir/rule
+.PHONY : persistent_homology_peak_picking
+
+# fast build rule for target.
+persistent_homology_peak_picking/fast:
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/persistent_homology_peak_picking.dir/build.make test/CMakeFiles/persistent_homology_peak_picking.dir/build
+.PHONY : persistent_homology_peak_picking/fast
+
 Iridescence_example.o: Iridescence_example.cc.o
 .PHONY : Iridescence_example.o
 
@@ -519,6 +533,30 @@ __/src/pangolin_visualizer.cc.s:
 	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/pangolin_visualizer.cc.s
 .PHONY : __/src/pangolin_visualizer.cc.s
 
+__/src/persistent_homology.o: __/src/persistent_homology.cc.o
+.PHONY : __/src/persistent_homology.o
+
+# target to build an object file
+__/src/persistent_homology.cc.o:
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/persistent_homology_peak_picking.dir/build.make test/CMakeFiles/persistent_homology_peak_picking.dir/__/src/persistent_homology.cc.o
+.PHONY : __/src/persistent_homology.cc.o
+
+__/src/persistent_homology.i: __/src/persistent_homology.cc.i
+.PHONY : __/src/persistent_homology.i
+
+# target to preprocess a source file
+__/src/persistent_homology.cc.i:
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/persistent_homology_peak_picking.dir/build.make test/CMakeFiles/persistent_homology_peak_picking.dir/__/src/persistent_homology.cc.i
+.PHONY : __/src/persistent_homology.cc.i
+
+__/src/persistent_homology.s: __/src/persistent_homology.cc.s
+.PHONY : __/src/persistent_homology.s
+
+# target to generate assembly for a file
+__/src/persistent_homology.cc.s:
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/persistent_homology_peak_picking.dir/build.make test/CMakeFiles/persistent_homology_peak_picking.dir/__/src/persistent_homology.cc.s
+.PHONY : __/src/persistent_homology.cc.s
+
 __/src/undistort.o: __/src/undistort.cc.o
 .PHONY : __/src/undistort.o
 
@@ -618,6 +656,30 @@ __/src/visualizer.cc.s:
 	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_texture.dir/build.make test/CMakeFiles/Iridescence_texture.dir/__/src/visualizer.cc.s
 .PHONY : __/src/visualizer.cc.s
 
+persistent_homology_peak_picking.o: persistent_homology_peak_picking.cc.o
+.PHONY : persistent_homology_peak_picking.o
+
+# target to build an object file
+persistent_homology_peak_picking.cc.o:
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/persistent_homology_peak_picking.dir/build.make test/CMakeFiles/persistent_homology_peak_picking.dir/persistent_homology_peak_picking.cc.o
+.PHONY : persistent_homology_peak_picking.cc.o
+
+persistent_homology_peak_picking.i: persistent_homology_peak_picking.cc.i
+.PHONY : persistent_homology_peak_picking.i
+
+# target to preprocess a source file
+persistent_homology_peak_picking.cc.i:
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/persistent_homology_peak_picking.dir/build.make test/CMakeFiles/persistent_homology_peak_picking.dir/persistent_homology_peak_picking.cc.i
+.PHONY : persistent_homology_peak_picking.cc.i
+
+persistent_homology_peak_picking.s: persistent_homology_peak_picking.cc.s
+.PHONY : persistent_homology_peak_picking.s
+
+# target to generate assembly for a file
+persistent_homology_peak_picking.cc.s:
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/persistent_homology_peak_picking.dir/build.make test/CMakeFiles/persistent_homology_peak_picking.dir/persistent_homology_peak_picking.cc.s
+.PHONY : persistent_homology_peak_picking.cc.s
+
 pixel_operation_comparison.o: pixel_operation_comparison.cc.o
 .PHONY : pixel_operation_comparison.o
 
@@ -700,6 +762,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... Iridescence_example"
 	@echo "... Iridescence_texture"
+	@echo "... persistent_homology_peak_picking"
 	@echo "... run_pixel_operation_comparison"
 	@echo "... run_visualize_colorized_gtmap"
 	@echo "... run_visualize_trajectories"
@@ -736,6 +799,9 @@ help:
 	@echo "... __/src/pangolin_visualizer.o"
 	@echo "... __/src/pangolin_visualizer.i"
 	@echo "... __/src/pangolin_visualizer.s"
+	@echo "... __/src/persistent_homology.o"
+	@echo "... __/src/persistent_homology.i"
+	@echo "... __/src/persistent_homology.s"
 	@echo "... __/src/undistort.o"
 	@echo "... __/src/undistort.i"
 	@echo "... __/src/undistort.s"
@@ -745,6 +811,9 @@ help:
 	@echo "... __/src/visualizer.o"
 	@echo "... __/src/visualizer.i"
 	@echo "... __/src/visualizer.s"
+	@echo "... persistent_homology_peak_picking.o"
+	@echo "... persistent_homology_peak_picking.i"
+	@echo "... persistent_homology_peak_picking.s"
 	@echo "... pixel_operation_comparison.o"
 	@echo "... pixel_operation_comparison.i"
 	@echo "... pixel_operation_comparison.s"

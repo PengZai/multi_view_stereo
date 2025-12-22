@@ -5,6 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "persistent_homology_peak_picking",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/test/persistent_homology_peak_picking",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+        },
+        {
             "name": "Iridescence_texture",
             "type": "cppdbg",
             "request": "launch",
@@ -35,7 +47,7 @@
         "request": "launch",
         "program": "${workspaceFolder}/build/run_multi_view_stereo",
         "args": [
-            "../configs/Kitti.yaml"
+            "../configs/TartanAir.yaml"
         ],
         "stopAtEntry": false,
         "cwd": "${fileDirname}",

@@ -102,3 +102,13 @@ add_executable(
 
 
 target_link_libraries(Iridescence_texture PUBLIC ${LIBRARY_THIRDPARTY})
+
+
+add_executable(
+    persistent_homology_peak_picking
+    persistent_homology_peak_picking.cc
+    ../src/persistent_homology.cc
+
+)
+
+target_link_libraries(persistent_homology_peak_picking PUBLIC ${LIBRARY_THIRDPARTY})

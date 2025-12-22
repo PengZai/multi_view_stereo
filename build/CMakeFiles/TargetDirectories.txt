@@ -6,5 +6,6 @@
 /root/multi_view_stereo/build/test/CMakeFiles/run_pixel_operation_comparison.dir
 /root/multi_view_stereo/build/test/CMakeFiles/Iridescence_example.dir
 /root/multi_view_stereo/build/test/CMakeFiles/Iridescence_texture.dir
+/root/multi_view_stereo/build/test/CMakeFiles/persistent_homology_peak_picking.dir
 /root/multi_view_stereo/build/test/CMakeFiles/edit_cache.dir
 /root/multi_view_stereo/build/test/CMakeFiles/rebuild_cache.dir

@@ -194,6 +194,19 @@ Iridescence_texture/fast:
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_texture.dir/build.make test/CMakeFiles/Iridescence_texture.dir/build
 .PHONY : Iridescence_texture/fast
 
+#=============================================================================
+# Target rules for targets named persistent_homology_peak_picking
+
+# Build rule for target.
+persistent_homology_peak_picking: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 persistent_homology_peak_picking
+.PHONY : persistent_homology_peak_picking
+
+# fast build rule for target.
+persistent_homology_peak_picking/fast:
+	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/persistent_homology_peak_picking.dir/build.make test/CMakeFiles/persistent_homology_peak_picking.dir/build
+.PHONY : persistent_homology_peak_picking/fast
+
 src/configs.o: src/configs.cc.o
 .PHONY : src/configs.o
 
@@ -458,6 +471,30 @@ src/pangolin_visualizer.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/pangolin_visualizer.cc.s
 .PHONY : src/pangolin_visualizer.cc.s
 
+src/persistent_homology.o: src/persistent_homology.cc.o
+.PHONY : src/persistent_homology.o
+
+# target to build an object file
+src/persistent_homology.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/persistent_homology.cc.o
+.PHONY : src/persistent_homology.cc.o
+
+src/persistent_homology.i: src/persistent_homology.cc.i
+.PHONY : src/persistent_homology.i
+
+# target to preprocess a source file
+src/persistent_homology.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/persistent_homology.cc.i
+.PHONY : src/persistent_homology.cc.i
+
+src/persistent_homology.s: src/persistent_homology.cc.s
+.PHONY : src/persistent_homology.s
+
+# target to generate assembly for a file
+src/persistent_homology.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/persistent_homology.cc.s
+.PHONY : src/persistent_homology.cc.s
+
 src/undistort.o: src/undistort.cc.o
 .PHONY : src/undistort.o
 
@@ -540,6 +577,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... Iridescence_example"
 	@echo "... Iridescence_texture"
+	@echo "... persistent_homology_peak_picking"
 	@echo "... run_multi_view_stereo"
 	@echo "... run_pixel_operation_comparison"
 	@echo "... run_visualize_colorized_gtmap"
@@ -577,6 +615,9 @@ help:
 	@echo "... src/pangolin_visualizer.o"
 	@echo "... src/pangolin_visualizer.i"
 	@echo "... src/pangolin_visualizer.s"
+	@echo "... src/persistent_homology.o"
+	@echo "... src/persistent_homology.i"
+	@echo "... src/persistent_homology.s"
 	@echo "... src/undistort.o"
 	@echo "... src/undistort.i"
 	@echo "... src/undistort.s"

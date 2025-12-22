@@ -10,10 +10,10 @@ system:
   ref_camera_idx: 0
   start_match_uv: [0, 0]
   # tar_pose_start_idx: 80
-  tar_pose_start_idx: 22
+  tar_pose_start_idx: 20
   tar_camera_start_idx: 0
   image_sequence_mode: forward_time_direction # option: forward_time_direction, backward_time_direction, full_time_direction
-  min_depth: 0.5
+  min_depth: 0.3
   max_depth: 100
   half_window_size: 5 # we only support odd size of window, like 3x3, 5x5, 7x7, 9x9 ...
   save_figure_path: /root/multi_view_stereo/figs

@@ -95,6 +95,10 @@ class IridescenceVisualizer : public Visualizer
 
     Eigen::Vector3f picked_uncertainty_point_position_;
     PixelPoint* ptr_picked_ref_ptr_pixel_point_;
+    PixelPoint* ptr_pixel_point_on_the_left_ref_picked_pixel_point_;
+    PixelPoint* ptr_pixel_point_on_the_right_ref_picked_pixel_point_;
+    PixelPoint* ptr_pixel_point_on_the_up_ref_picked_pixel_point_;
+    PixelPoint* ptr_pixel_point_on_the_down_ref_picked_pixel_point_;
 
     Image* ref_image_;
     Image* tar_image_;  

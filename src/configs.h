@@ -93,6 +93,7 @@ class Config
     std::string image_sequence_mode_;
     float min_depth_;
     float max_depth_;
+    float infinite_inv_depth_ = 1e-3;
     std::vector<int> start_match_uv_;
     int half_window_size_;
     std::string save_figure_path_;

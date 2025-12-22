@@ -164,7 +164,7 @@ void Visualizer::showColorizedMinMaxDiffDepth(const float* const min_depth_ptr, 
 void Visualizer::ColorizedCVDepth(const PixelPoint* const ptr_pixel_point_matrix, int width, int height, float min_depth, float max_depth, cv::Mat& colorized_depth)
 {
 
-    float acceptable_maximum_depth = 0.1;
+    float acceptable_maximum_depth = 0;
     int wh = width * height;
     
     for(int i=0;i<wh;i++)
@@ -186,7 +186,7 @@ void Visualizer::ColorizedCVDepth(const PixelPoint* const ptr_pixel_point_matrix
         for(int u=0;u<width;u++){
             
             float d = ptr_pixel_point_matrix[v*width+u].depth_;
-            if(d >= min_depth && d <= max_depth){
+            if(d >= min_depth && d <= max_depth && d <= acceptable_maximum_depth){
 
                 float norm_d = d / acceptable_maximum_depth;
                 uchar red  = static_cast<uchar>((1.0f - norm_d) * 255);
@@ -203,6 +203,33 @@ void Visualizer::ColorizedCVDepth(const PixelPoint* const ptr_pixel_point_matrix
         }
     }
 
+
+    // cv::Mat depth(height, width, CV_32FC1);
+    // cv::Mat depthNormalized;
+    // float minVal = std::numeric_limits<float>::infinity();
+    // float maxVal = 0;
+
+    // for(int v=0;v<height;v++)
+    // {
+    //     for(int u=0;u<width;u++){
+
+    //         float d = ptr_pixel_point_matrix[v*width+u].depth_;
+    //         if( d < minVal){
+    //             minVal = d;
+    //         }
+    //         if(d > maxVal){
+    //             maxVal = d;
+    //         }
+    //         depth.at<float>(v, u) = d;
+
+    //     }
+    // }
+
+    
+    // depth.convertTo(depthNormalized, CV_8UC1, 255.0 / (maxVal - minVal), -minVal);
+
+    // // Apply a colormap (optional)
+    // cv::applyColorMap(depthNormalized, colorized_depth, cv::COLORMAP_JET);
 
 }
 

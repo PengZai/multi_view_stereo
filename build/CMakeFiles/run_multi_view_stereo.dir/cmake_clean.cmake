@@ -21,6 +21,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/run_multi_view_stereo.dir/src/multi_view_stereo.cc.o.d"
   "CMakeFiles/run_multi_view_stereo.dir/src/pangolin_visualizer.cc.o"
   "CMakeFiles/run_multi_view_stereo.dir/src/pangolin_visualizer.cc.o.d"
+  "CMakeFiles/run_multi_view_stereo.dir/src/persistent_homology.cc.o"
+  "CMakeFiles/run_multi_view_stereo.dir/src/persistent_homology.cc.o.d"
   "CMakeFiles/run_multi_view_stereo.dir/src/undistort.cc.o"
   "CMakeFiles/run_multi_view_stereo.dir/src/undistort.cc.o.d"
   "CMakeFiles/run_multi_view_stereo.dir/src/utils.cc.o"
