@@ -93,14 +93,14 @@ std::vector<Image*>& Dataset::getImages()
 
 void DebugInfo::clear()
 {
-    tar_pose_id_ = -1;
-    tar_camera_id_ = -1;
+    // tar_pose_id_ = -1;
+    // tar_camera_id_ = -1;
 
     steps_.clear();
 
     uv_min_ = Eigen::Vector2f::Zero();
     uv_max_ = Eigen::Vector2f::Zero();
-    uv_best_match_ = Eigen::Vector2f::Zero();
+    // uv_best_match_ = Eigen::Vector2f::Zero();
     unit_epipolar_vector_ = Eigen::Vector2f::Zero();
     epipolar_length_ = -1;
 
@@ -108,17 +108,51 @@ void DebugInfo::clear()
     init_max_depth_ = -1;
     init_depth_ = -1;
 
-    min_depth_ = -1;
-    max_depth_ = -1;
-    depth_ = -1;
+
 }
 
 
 EpipolarSegment::EpipolarSegment(float min_inv_depth, float max_inv_depth):
 min_inv_depth_(min_inv_depth),
-max_inv_depth_(max_inv_depth)
+max_inv_depth_(max_inv_depth),
+min_depth_(1/max_inv_depth),
+max_depth_(1/min_inv_depth)
 {
 
+
+}
+
+EpipolarSegment::EpipolarSegment():
+EpipolarSegment(-1, -1)
+{
+
+}
+
+
+void EpipolarSegment::setMinInvDepth(float min_inv_depth)
+{
+
+    min_inv_depth_ = min_inv_depth;
+    max_depth_ = 1/min_inv_depth;
+
+}
+
+void EpipolarSegment::setMinDepth(float min_depth)
+{
+    max_inv_depth_ = 1/min_depth;
+    min_depth_ = min_depth;
+}
+
+void EpipolarSegment::setMaxInvDepth(float max_inv_depth)
+{
+    max_inv_depth_ = max_inv_depth;
+    min_depth_ = 1/max_inv_depth;
+}
+
+void EpipolarSegment::setMaxDepth(float max_depth)
+{
+    min_inv_depth_ = 1/max_depth;
+    max_depth_ = max_depth;
 
 }
 
@@ -130,6 +164,8 @@ void EpipolarSegment::clear()
     valid_uvs_.clear();
     inv_depths_.clear();
 }
+
+
 
 PixelPoint::PixelPoint():
     depth_(0),
@@ -149,8 +185,27 @@ void PixelPoint::setImagePtr(Image* const image)
     pose_id_ = image->getPoseId();
 }
 
+bool PixelPoint::DoesExistDepthIntersection(const PixelPoint& ref_pixel_point, int minimum_cost_epipolar_segment_idx) const
+{   
+    bool does_exist_depth_intersection = false;
+    const EpipolarSegment& epipolar_segment_with_minimum_cost_on_ref_pixel_point = ref_pixel_point.epipolar_segment_vec_[minimum_cost_epipolar_segment_idx];
 
-void PixelPoint::getMininumIdxTmpAggregatedCost(int &minimum_epipolar_segment_idx, int &minimum_cost_idx) const
+    for(int epipolar_segment_idx=0; epipolar_segment_idx<(int)epipolar_segment_vec_.size(); epipolar_segment_idx++)
+    {
+        const EpipolarSegment& epipolar_segment = epipolar_segment_vec_[epipolar_segment_idx];
+        if(!(epipolar_segment_with_minimum_cost_on_ref_pixel_point.min_inv_depth_ > epipolar_segment.max_inv_depth_ || epipolar_segment_with_minimum_cost_on_ref_pixel_point.max_inv_depth_ < epipolar_segment.min_inv_depth_))
+        {
+            does_exist_depth_intersection = true;
+            break;
+        }
+    }
+    
+    return does_exist_depth_intersection;
+
+}
+
+
+void PixelPoint::getMininumIdxTmpAggregatedCost(int &minimum_cost_epipolar_segment_idx, int &minimum_cost_idx) const
 {
 
     float mini_cost = std::numeric_limits<float>::infinity();
@@ -163,7 +218,7 @@ void PixelPoint::getMininumIdxTmpAggregatedCost(int &minimum_epipolar_segment_id
             if(epipolar_segment.tmp_aggregate_costs_[cost_idx] < mini_cost)
             {
                 mini_cost = epipolar_segment.tmp_aggregate_costs_[cost_idx];
-                minimum_epipolar_segment_idx = epipolar_segment_idx;
+                minimum_cost_epipolar_segment_idx = epipolar_segment_idx;
                 minimum_cost_idx = cost_idx;
             } 
         }
@@ -171,6 +226,35 @@ void PixelPoint::getMininumIdxTmpAggregatedCost(int &minimum_epipolar_segment_id
 
 
 }
+
+void PixelPoint::getGlobalMininumPeakIdx(int &global_minimum_peak_epipolar_segment_idx, int &global_minimum_peak_idx) const
+{
+
+    float mini_cost = std::numeric_limits<float>::infinity();
+    global_minimum_peak_epipolar_segment_idx = -1;
+    global_minimum_peak_idx = -1;
+
+    for(int epipolar_segment_idx=0; epipolar_segment_idx < (int)epipolar_segment_vec_.size(); epipolar_segment_idx++)
+    {
+        const EpipolarSegment& epipolar_segment = epipolar_segment_vec_[epipolar_segment_idx];
+        if(epipolar_segment.local_minimum_peaks_.size() == 0){
+            continue;
+        }
+
+        const MinimumPeak& local_minimum_peak = epipolar_segment.local_minimum_peaks_[0];
+        if(mini_cost > epipolar_segment.aggregate_costs_[local_minimum_peak.born_idx_])
+        {
+            mini_cost = epipolar_segment.aggregate_costs_[local_minimum_peak.born_idx_];
+            global_minimum_peak_epipolar_segment_idx = epipolar_segment_idx;
+            global_minimum_peak_idx = 0;
+        }
+
+    }
+
+
+
+}
+
 
 
 float PixelPoint::getInterpolatedTmpAggregatedCostByInvDepth(float ref_inv_depth) const
@@ -189,7 +273,7 @@ float PixelPoint::getInterpolatedTmpAggregatedCostByInvDepth(float ref_inv_depth
             float inv_depth = epipolar_segment.inv_depths_[inv_depth_idx];
             if(ref_inv_depth <= inv_depth && ref_inv_depth >= lower_inv_depth)
             {
-                interpolated_tmp_aggregated_cost =  epipolar_segment.tmp_aggregate_costs_[inv_depth_idx-1] + (inv_depth - lower_inv_depth) * (epipolar_segment.tmp_aggregate_costs_[inv_depth_idx] - epipolar_segment.tmp_aggregate_costs_[inv_depth_idx-1])/(inv_depth - lower_inv_depth);
+                interpolated_tmp_aggregated_cost =  epipolar_segment.tmp_aggregate_costs_[inv_depth_idx-1] + (ref_inv_depth - lower_inv_depth) * (epipolar_segment.tmp_aggregate_costs_[inv_depth_idx] - epipolar_segment.tmp_aggregate_costs_[inv_depth_idx-1])/(inv_depth - lower_inv_depth);
                 is_exist_interpolated_cost = true;
                 break;
             }
@@ -203,6 +287,9 @@ float PixelPoint::getInterpolatedTmpAggregatedCostByInvDepth(float ref_inv_depth
 
     return interpolated_tmp_aggregated_cost;
 }
+
+
+
 
 
 void PixelPoint::setUV(int u, int v)
@@ -528,8 +615,15 @@ void Image::loadDepthFromMinMaxInvDepth() const
             //     int test = 1;
             // }
             PixelPoint& pixel_point = ptr_pixel_point_matrix_[current_coord];
-            float min_depth = 1.0/pixel_point.epipolar_segment_vec_[0].max_inv_depth_;
-            float max_depth = 1.0/pixel_point.epipolar_segment_vec_[0].min_inv_depth_;
+            float min_depth = config_->min_depth_;
+            float max_depth = config_->max_depth_;
+
+            if(pixel_point.epipolar_segment_vec_.size() >= 1)
+            {
+                min_depth = 1.0/pixel_point.epipolar_segment_vec_[0].max_inv_depth_;
+                max_depth = 1.0/pixel_point.epipolar_segment_vec_[0].min_inv_depth_;
+            }
+
             float diff = abs(max_depth-min_depth);
             float depth = (min_depth+max_depth)/2.0;
             if(depth >= config_->min_depth_ && depth <= config_->max_depth_){

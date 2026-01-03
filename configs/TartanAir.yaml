@@ -12,9 +12,9 @@ system:
   tar_pose_start_idx: 50
   # tar_pose_start_idx: 8
   image_sequence_mode: forward_time_direction # option: forward_time_direction, backward_time_direction, full_time_direction, fixed_order_of_traj
-  min_depth: 0.3
+  min_depth: 1.0
   max_depth: 100
-  half_window_size: 3 # we only support odd size of window, like 3x3, 5x5, 7x7, 9x9 ...
+  half_window_size: 5 # we only support odd size of window, like 3x3, 5x5, 7x7, 9x9 ...
   save_figure_path: /root/multi_view_stereo/figs
   debug_plot: 1
 

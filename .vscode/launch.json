@@ -47,7 +47,7 @@
         "request": "launch",
         "program": "${workspaceFolder}/build/run_multi_view_stereo",
         "args": [
-            "../configs/TartanAir.yaml"
+            "../configs/Remode.yaml"
         ],
         "stopAtEntry": false,
         "cwd": "${fileDirname}",

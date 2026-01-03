@@ -167,8 +167,11 @@ ptr_pixel_point_on_the_down_ref_picked_pixel_point_(nullptr)
     float width = config_->cameras_[0].resolution_[0];
     float height = config_->cameras_[0].resolution_[1];
 
-    picked_uncertainty_point_position_ = Eigen::Vector3f(73.0f, 237.0f, 0.0f);
+    // picked_uncertainty_point_position_ = Eigen::Vector3f(41.0f, 4.0f, 0.0f);
 
+    // picked_uncertainty_point_position_ = Eigen::Vector3f(101.0f, 229.0f, 0.0f);
+
+    picked_uncertainty_point_position_ = Eigen::Vector3f(50.0f, 50.0f, 0.0f);
 
     // viewer_ = guik::LightViewer::instance(Eigen::Vector2i(1440, 960));
     viewer_ = guik::LightViewer::instance(Eigen::Vector2i(-1, -1));
@@ -222,15 +225,19 @@ ptr_pixel_point_on_the_down_ref_picked_pixel_point_(nullptr)
         ImGui::Begin("Cost Curve");
         if(ptr_picked_ref_ptr_pixel_point_ != nullptr){
 
-            for(int epipolar_segment_idx=0;  epipolar_segment_idx < ptr_picked_ref_ptr_pixel_point_->epipolar_segment_vec_.size(); epipolar_segment_idx++ )
+            for(int debug_info_idx=0;  debug_info_idx < ptr_picked_ref_ptr_pixel_point_->debug_info_vec_.size(); debug_info_idx++ )
             {  
-                EpipolarSegment& epipolar_segment = ptr_picked_ref_ptr_pixel_point_->epipolar_segment_vec_[epipolar_segment_idx];
-                DebugInfo& debug_info =  epipolar_segment.debug_info_;
+                DebugInfo& debug_info = ptr_picked_ref_ptr_pixel_point_->debug_info_vec_[debug_info_idx];
+                EpipolarSegment& epipolar_segment = debug_info.epipolar_segment_;
+
+                // std::cout << "debug info size:" << ptr_picked_ref_ptr_pixel_point_->debug_info_vec_.size() << ", " << ptr_picked_ref_ptr_pixel_point_->epipolar_segment_vec_[0].min_depth_ << "-" << ptr_picked_ref_ptr_pixel_point_->epipolar_segment_vec_[0].max_depth_ << std::endl;
+
                 if(epipolar_segment.costs_.size() == 0)
                 {
                     continue;
                 }
-                std::string manual_match_label = "manual match " + std::to_string(epipolar_segment_idx);
+
+                std::string manual_match_label = "manual match " + std::to_string(debug_info_idx);
                 
                 if(ImGui::SliderInt(manual_match_label.data(), &debug_info.manual_step_idx_, 0, debug_info.steps_.size()-1, "%d s"))
                 {
@@ -247,13 +254,15 @@ ptr_pixel_point_on_the_down_ref_picked_pixel_point_(nullptr)
                     std::cout << "epipolar_segment.aggregate_costs_ end" << std::endl;
                 }
 
-                if (ImPlot::BeginPlot("Cost Plots")) {
+                const std::string epipolar_segment_label = "Epipolar Segment Cost " + std::to_string(debug_info_idx);
+
+                if (ImPlot::BeginPlot(epipolar_segment_label.c_str())) {
 
                     ImPlot::SetupAxes("step","cost");
-                    std::string cost_label = "cost " + std::to_string(epipolar_segment_idx);
+                    std::string cost_label = "cost " + std::to_string(debug_info_idx);
                     ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);
                     ImPlot::PlotLine(cost_label.data(), debug_info.steps_.data(), epipolar_segment.costs_.data(), epipolar_segment.costs_.size());
-                    // std::string best_match_label = "best match " + std::to_string(epipolar_segment_idx);
+                    // std::string best_match_label = "best match " + std::to_string(debug_info_idx);
                     // ImPlot::PlotInfLines(best_match_label.data(), debug_info.steps_.data() + debug_info.best_step_idx_, 1);
                     // ImPlot::PlotInfLines(manual_match_label.data(), debug_info.steps_.data() + debug_info.manual_step_idx_, 1);
 
@@ -262,22 +271,23 @@ ptr_pixel_point_on_the_down_ref_picked_pixel_point_(nullptr)
 
                 if(ptr_picked_ref_ptr_pixel_point_->status_ != PixelPoint::Status::INVALID)
                 {
+                    
+                    const std::string epipolar_segment_label = "Epipolar Segment Aggregation Cost " + std::to_string(debug_info_idx);
 
-                    if (ImPlot::BeginPlot("Aggregation Cost Plots")) {
+                    if (ImPlot::BeginPlot(epipolar_segment_label.c_str())) {
 
                         ImPlot::SetupAxes("step","aggregated cost");
-                        std::string aggregated_cost_label = "aggregated cost " + std::to_string(epipolar_segment_idx);
+                        std::string aggregated_cost_label = "aggregated cost";
                         ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);
                         ImPlot::PlotLine(aggregated_cost_label.data(), debug_info.steps_.data(), epipolar_segment.aggregate_costs_.data(), epipolar_segment.aggregate_costs_.size());
-                        std::string best_match_label = "best match " + std::to_string(epipolar_segment_idx);
-                        ImPlot::PlotInfLines(best_match_label.data(), debug_info.steps_.data() + debug_info.best_step_idx_, 1);
+                        // std::string best_match_label = "best match " + std::to_string(debug_info_idx);
+                        // ImPlot::PlotInfLines(best_match_label.data(), debug_info.steps_.data() + debug_info.best_step_idx_, 1);
                         ImPlot::PlotInfLines(manual_match_label.data(), debug_info.steps_.data() + debug_info.manual_step_idx_, 1);
 
-                        for(int possible_minimum_peak_i = 0 ; possible_minimum_peak_i < (int)epipolar_segment.debug_info_.possible_minimum_peak_idxes_.size(); possible_minimum_peak_i++)
+                        for(int possible_minimum_peak_i = 0 ; possible_minimum_peak_i < (int)debug_info.possible_minimum_peak_idxes_.size(); possible_minimum_peak_i++)
                         {
                             std::string possible_minimum_peak_label = " possible_minimum_peak " + std::to_string(possible_minimum_peak_i);
-                            ImPlot::PlotInfLines(possible_minimum_peak_label.data(), debug_info.steps_.data() + epipolar_segment.debug_info_.possible_minimum_peak_idxes_[possible_minimum_peak_i], 1);
-
+                            ImPlot::PlotInfLines(possible_minimum_peak_label.data(), debug_info.steps_.data() + debug_info.possible_minimum_peak_idxes_[possible_minimum_peak_i], 1);
                         }
 
                         ImPlot::EndPlot();
@@ -286,128 +296,31 @@ ptr_pixel_point_on_the_down_ref_picked_pixel_point_(nullptr)
 
                     }
 
-                    if(ptr_pixel_point_on_the_left_ref_picked_pixel_point_ != nullptr && ptr_pixel_point_on_the_left_ref_picked_pixel_point_->status_ != PixelPoint::Status::INVALID)
-                    {
-
-                        EpipolarSegment& epipolar_segment_on_the_left = ptr_pixel_point_on_the_left_ref_picked_pixel_point_->epipolar_segment_vec_[epipolar_segment_idx];
-                        DebugInfo& debug_info_on_the_left =  epipolar_segment_on_the_left.debug_info_;
-
-                        if (ImPlot::BeginPlot("Aggregation Cost Plots on the Left")) {
-
-                            ImPlot::SetupAxes("step","aggregated cost");
-                            std::string aggregated_cost_label = "aggregated cost " + std::to_string(epipolar_segment_idx);
-                            ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);
-                            ImPlot::PlotLine(aggregated_cost_label.data(), debug_info_on_the_left.steps_.data(), epipolar_segment_on_the_left.aggregate_costs_.data(), epipolar_segment_on_the_left.aggregate_costs_.size());
-                            std::string best_match_label = "best match " + std::to_string(epipolar_segment_idx);
-                            ImPlot::PlotInfLines(best_match_label.data(), debug_info_on_the_left.steps_.data() + debug_info_on_the_left.best_step_idx_, 1);
-                            ImPlot::PlotInfLines(manual_match_label.data(), debug_info_on_the_left.steps_.data() + debug_info_on_the_left.manual_step_idx_, 1);
-
-                            for(int possible_minimum_peak_i = 0 ; possible_minimum_peak_i < (int)epipolar_segment_on_the_left.debug_info_.possible_minimum_peak_idxes_.size(); possible_minimum_peak_i++)
-                            {
-                                std::string possible_minimum_peak_label = " possible_minimum_peak " + std::to_string(possible_minimum_peak_i);
-                                ImPlot::PlotInfLines(possible_minimum_peak_label.data(), debug_info.steps_.data() + epipolar_segment_on_the_left.debug_info_.possible_minimum_peak_idxes_[possible_minimum_peak_i], 1);
-
-                            }
-
-                            ImPlot::EndPlot();
-                        }
-                    }
-
-                    if(ptr_pixel_point_on_the_right_ref_picked_pixel_point_ != nullptr && ptr_pixel_point_on_the_right_ref_picked_pixel_point_->status_ != PixelPoint::Status::INVALID)
-                    {
-
-                        EpipolarSegment& epipolar_segment_on_the_right = ptr_pixel_point_on_the_right_ref_picked_pixel_point_->epipolar_segment_vec_[epipolar_segment_idx];
-                        DebugInfo& debug_info_on_the_right =  epipolar_segment_on_the_right.debug_info_;
-
-                        if (ImPlot::BeginPlot("Aggregation Cost Plots on the Right")) {
-
-                            ImPlot::SetupAxes("step","aggregated cost");
-                            std::string aggregated_cost_label = "aggregated cost " + std::to_string(epipolar_segment_idx);
-                            ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);
-                            ImPlot::PlotLine(aggregated_cost_label.data(), debug_info_on_the_right.steps_.data(), epipolar_segment_on_the_right.aggregate_costs_.data(), epipolar_segment_on_the_right.aggregate_costs_.size());
-                            std::string best_match_label = "best match " + std::to_string(epipolar_segment_idx);
-                            ImPlot::PlotInfLines(best_match_label.data(), debug_info_on_the_right.steps_.data() + debug_info_on_the_right.best_step_idx_, 1);
-                            ImPlot::PlotInfLines(manual_match_label.data(), debug_info_on_the_right.steps_.data() + debug_info_on_the_right.manual_step_idx_, 1);
-
-                            for(int possible_minimum_peak_i = 0 ; possible_minimum_peak_i < (int)epipolar_segment_on_the_right.debug_info_.possible_minimum_peak_idxes_.size(); possible_minimum_peak_i++)
-                            {
-                                std::string possible_minimum_peak_label = " possible_minimum_peak " + std::to_string(possible_minimum_peak_i);
-                                ImPlot::PlotInfLines(possible_minimum_peak_label.data(), debug_info.steps_.data() + epipolar_segment_on_the_right.debug_info_.possible_minimum_peak_idxes_[possible_minimum_peak_i], 1);
-                            }
-
-                            ImPlot::EndPlot();
-                        }
-                    }
-
-                    if(ptr_pixel_point_on_the_up_ref_picked_pixel_point_ != nullptr && ptr_pixel_point_on_the_up_ref_picked_pixel_point_->status_ != PixelPoint::Status::INVALID)
-                    {
-
-                        EpipolarSegment& epipolar_segment_on_the_up = ptr_pixel_point_on_the_up_ref_picked_pixel_point_->epipolar_segment_vec_[epipolar_segment_idx];
-                        DebugInfo& debug_info_on_the_up =  epipolar_segment_on_the_up.debug_info_;
-
-                        if (ImPlot::BeginPlot("Aggregation Cost Plots on the Up")) {
-
-                            ImPlot::SetupAxes("step","aggregated cost");
-                            std::string aggregated_cost_label = "aggregated cost " + std::to_string(epipolar_segment_idx);
-                            ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);
-                            ImPlot::PlotLine(aggregated_cost_label.data(), debug_info_on_the_up.steps_.data(), epipolar_segment_on_the_up.aggregate_costs_.data(), epipolar_segment_on_the_up.aggregate_costs_.size());
-                            std::string best_match_label = "best match " + std::to_string(epipolar_segment_idx);
-                            ImPlot::PlotInfLines(best_match_label.data(), debug_info_on_the_up.steps_.data() + debug_info_on_the_up.best_step_idx_, 1);
-                            ImPlot::PlotInfLines(manual_match_label.data(), debug_info_on_the_up.steps_.data() + debug_info_on_the_up.manual_step_idx_, 1);
-
-                            for(int possible_minimum_peak_i = 0 ; possible_minimum_peak_i < (int)epipolar_segment_on_the_up.debug_info_.possible_minimum_peak_idxes_.size(); possible_minimum_peak_i++)
-                            {
-                                std::string possible_minimum_peak_label = " possible_minimum_peak " + std::to_string(possible_minimum_peak_i);
-                                ImPlot::PlotInfLines(possible_minimum_peak_label.data(), debug_info.steps_.data() + epipolar_segment_on_the_up.debug_info_.possible_minimum_peak_idxes_[possible_minimum_peak_i], 1);
-                            }
-
-                            ImPlot::EndPlot();
-                        }
-                    }
-
-                    if(ptr_pixel_point_on_the_down_ref_picked_pixel_point_ != nullptr && ptr_pixel_point_on_the_down_ref_picked_pixel_point_->status_ != PixelPoint::Status::INVALID)
-                    {
-
-                        EpipolarSegment& epipolar_segment_on_the_down = ptr_pixel_point_on_the_down_ref_picked_pixel_point_->epipolar_segment_vec_[epipolar_segment_idx];
-                        DebugInfo& debug_info_on_the_down =  epipolar_segment_on_the_down.debug_info_;
-
-                        if (ImPlot::BeginPlot("Aggregation Cost Plots on the Down")) {
-
-                            ImPlot::SetupAxes("step","aggregated cost");
-                            std::string aggregated_cost_label = "aggregated cost " + std::to_string(epipolar_segment_idx);
-                            ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);
-                            ImPlot::PlotLine(aggregated_cost_label.data(), debug_info_on_the_down.steps_.data(), epipolar_segment_on_the_down.aggregate_costs_.data(), epipolar_segment_on_the_down.aggregate_costs_.size());
-                            std::string best_match_label = "best match " + std::to_string(epipolar_segment_idx);
-                            ImPlot::PlotInfLines(best_match_label.data(), debug_info_on_the_down.steps_.data() + debug_info_on_the_down.best_step_idx_, 1);
-                            ImPlot::PlotInfLines(manual_match_label.data(), debug_info_on_the_down.steps_.data() + debug_info_on_the_down.manual_step_idx_, 1);
-
-                            for(int possible_minimum_peak_i = 0 ; possible_minimum_peak_i < (int)epipolar_segment_on_the_down.debug_info_.possible_minimum_peak_idxes_.size(); possible_minimum_peak_i++)
-                            {
-                                std::string possible_minimum_peak_label = " possible_minimum_peak " + std::to_string(possible_minimum_peak_i);
-                                ImPlot::PlotInfLines(possible_minimum_peak_label.data(), debug_info.steps_.data() + epipolar_segment_on_the_down.debug_info_.possible_minimum_peak_idxes_[possible_minimum_peak_i], 1);
-                            }
-
-                            ImPlot::EndPlot();
-                        }
-                    }
-
 
                     if (ImPlot::BeginPlot("Depth Plots")) {
 
                         ImPlot::SetupAxes("step","value");
                         ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);
-                        std::string depth_label = "depth " + std::to_string(epipolar_segment_idx);
+                        std::string depth_label = "depth " + std::to_string(debug_info_idx);
                         std::vector<float> depths(epipolar_segment.inv_depths_.size());
                         for (size_t i = 0; i < depths.size(); ++i) {
                             depths[i] = 1.0/epipolar_segment.inv_depths_[i];
                         }
                         ImPlot::PlotLine(depth_label.data(), debug_info.steps_.data(), depths.data(), depths.size());
                         ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);
-                        std::string inv_depth_label = "inv_depth " + std::to_string(epipolar_segment_idx);
+                        std::string inv_depth_label = "inv_depth " + std::to_string(debug_info_idx);
                         ImPlot::PlotLine(inv_depth_label.data(), debug_info.steps_.data(), epipolar_segment.inv_depths_.data(), epipolar_segment.inv_depths_.size());
-                        std::string best_match_label = "best match " + std::to_string(epipolar_segment_idx);
-                        ImPlot::PlotInfLines(best_match_label.data(), debug_info.steps_.data() + debug_info.best_step_idx_, 1);
+                        // std::string best_match_label = "best match " + std::to_string(epipolar_segment_idx);
+                        // ImPlot::PlotInfLines(best_match_label.data(), debug_info.steps_.data() + debug_info.best_step_idx_, 1);
+
+                        for(int possible_minimum_peak_i = 0 ; possible_minimum_peak_i < (int)debug_info.possible_minimum_peak_idxes_.size(); possible_minimum_peak_i++)
+                        {
+                            std::string possible_minimum_peak_label = " possible_minimum_peak " + std::to_string(possible_minimum_peak_i);
+                            ImPlot::PlotInfLines(possible_minimum_peak_label.data(), debug_info.steps_.data() + debug_info.possible_minimum_peak_idxes_[possible_minimum_peak_i], 1);
+                        }
+
                         ImPlot::PlotInfLines(manual_match_label.data(), debug_info.steps_.data() + debug_info.manual_step_idx_, 1);
+
 
                         ImPlot::EndPlot();
                     }
@@ -426,6 +339,194 @@ ptr_pixel_point_on_the_down_ref_picked_pixel_point_(nullptr)
         }
         
         ImGui::End();
+
+
+        ImGui::Begin("Aggregation Cost Plots on the Left");
+        if(ptr_pixel_point_on_the_left_ref_picked_pixel_point_ != nullptr && ptr_pixel_point_on_the_left_ref_picked_pixel_point_->status_ != PixelPoint::Status::INVALID)
+        {
+            
+            for(int debug_info_idx = 0; debug_info_idx < (int) ptr_pixel_point_on_the_left_ref_picked_pixel_point_->debug_info_vec_.size(); debug_info_idx++)
+            {
+                DebugInfo& debug_info_on_the_left =  ptr_pixel_point_on_the_left_ref_picked_pixel_point_->debug_info_vec_[debug_info_idx];
+                
+                std::string manual_match_label = "manual match " + std::to_string(debug_info_idx);
+                if(ImGui::SliderInt(manual_match_label.data(), &debug_info_on_the_left.manual_step_idx_, 0, debug_info_on_the_left.steps_.size()-1, "%d s"))
+                {
+                    // if we adjust slider
+                    DebugPlot();
+
+                }
+                
+                EpipolarSegment& epipolar_segment_on_the_left = debug_info_on_the_left.epipolar_segment_;
+                if(epipolar_segment_on_the_left.aggregate_costs_.size() > 0){
+
+                    const std::string epipolar_segment_label = "Epipolar Segment " + std::to_string(debug_info_idx);
+
+                    if (ImPlot::BeginPlot(epipolar_segment_label.c_str())) {
+                        ImPlot::SetupAxes("step","aggregated cost");
+                        std::string aggregated_cost_label = "aggregated cost ";
+                        ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);
+                        ImPlot::PlotLine(aggregated_cost_label.data(), debug_info_on_the_left.steps_.data(), epipolar_segment_on_the_left.aggregate_costs_.data(), epipolar_segment_on_the_left.aggregate_costs_.size());
+                        // std::string best_match_label = "best match " + std::to_string(epipolar_segment_idx);
+                        // ImPlot::PlotInfLines(best_match_label.data(), debug_info_on_the_left.steps_.data() + debug_info_on_the_left.best_step_idx_, 1);
+                        ImPlot::PlotInfLines(manual_match_label.data(), debug_info_on_the_left.steps_.data() + debug_info_on_the_left.manual_step_idx_, 1);
+
+                        for(int possible_minimum_peak_i = 0 ; possible_minimum_peak_i < (int)debug_info_on_the_left.possible_minimum_peak_idxes_.size(); possible_minimum_peak_i++)
+                        {
+                            std::string possible_minimum_peak_label = " possible_minimum_peak " + std::to_string(possible_minimum_peak_i);
+                            ImPlot::PlotInfLines(possible_minimum_peak_label.data(), debug_info_on_the_left.steps_.data() + debug_info_on_the_left.possible_minimum_peak_idxes_[possible_minimum_peak_i], 1);
+
+                        }
+
+                        ImPlot::EndPlot();
+                    }
+
+                }
+            }
+            
+        }
+        ImGui::End();
+
+        ImGui::Begin("Aggregation Cost Plots on the Right");
+        if(ptr_pixel_point_on_the_right_ref_picked_pixel_point_ != nullptr && ptr_pixel_point_on_the_right_ref_picked_pixel_point_->status_ != PixelPoint::Status::INVALID)
+        {
+            
+            for(int debug_info_idx = 0; debug_info_idx < (int) ptr_pixel_point_on_the_right_ref_picked_pixel_point_->debug_info_vec_.size(); debug_info_idx++)
+            {
+                DebugInfo& debug_info_on_the_right =  ptr_pixel_point_on_the_right_ref_picked_pixel_point_->debug_info_vec_[debug_info_idx];
+                
+                std::string manual_match_label = "manual match " + std::to_string(debug_info_idx);
+                if(ImGui::SliderInt(manual_match_label.data(), &debug_info_on_the_right.manual_step_idx_, 0, debug_info_on_the_right.steps_.size()-1, "%d s"))
+                {
+                    // if we adjust slider
+                    DebugPlot();
+
+                }
+                
+                EpipolarSegment& epipolar_segment_on_the_right = debug_info_on_the_right.epipolar_segment_;
+                if(epipolar_segment_on_the_right.aggregate_costs_.size() > 0){
+
+                    const std::string epipolar_segment_label = "Epipolar Segment " + std::to_string(debug_info_idx);
+
+                    if (ImPlot::BeginPlot(epipolar_segment_label.c_str())) {
+                        ImPlot::SetupAxes("step","aggregated cost");
+                        std::string aggregated_cost_label = "aggregated cost ";
+                        ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);
+                        ImPlot::PlotLine(aggregated_cost_label.data(), debug_info_on_the_right.steps_.data(), epipolar_segment_on_the_right.aggregate_costs_.data(), epipolar_segment_on_the_right.aggregate_costs_.size());
+                        // std::string best_match_label = "best match " + std::to_string(epipolar_segment_idx);
+                        // ImPlot::PlotInfLines(best_match_label.data(), debug_info_on_the_right.steps_.data() + debug_info_on_the_right.best_step_idx_, 1);
+                        ImPlot::PlotInfLines(manual_match_label.data(), debug_info_on_the_right.steps_.data() + debug_info_on_the_right.manual_step_idx_, 1);
+
+                        for(int possible_minimum_peak_i = 0 ; possible_minimum_peak_i < (int)debug_info_on_the_right.possible_minimum_peak_idxes_.size(); possible_minimum_peak_i++)
+                        {
+                            std::string possible_minimum_peak_label = " possible_minimum_peak " + std::to_string(possible_minimum_peak_i);
+                            ImPlot::PlotInfLines(possible_minimum_peak_label.data(), debug_info_on_the_right.steps_.data() + debug_info_on_the_right.possible_minimum_peak_idxes_[possible_minimum_peak_i], 1);
+
+                        }
+
+                        ImPlot::EndPlot();
+                    }
+
+                }
+            }
+            
+        }
+        ImGui::End();
+
+
+        ImGui::Begin("Aggregation Cost Plots on the Up");
+        if(ptr_pixel_point_on_the_up_ref_picked_pixel_point_ != nullptr && ptr_pixel_point_on_the_up_ref_picked_pixel_point_->status_ != PixelPoint::Status::INVALID)
+        {
+            
+            for(int debug_info_idx = 0; debug_info_idx < (int) ptr_pixel_point_on_the_up_ref_picked_pixel_point_->debug_info_vec_.size(); debug_info_idx++)
+            {
+                DebugInfo& debug_info_on_the_up =  ptr_pixel_point_on_the_up_ref_picked_pixel_point_->debug_info_vec_[debug_info_idx];
+                
+                std::string manual_match_label = "manual match " + std::to_string(debug_info_idx);
+                if(ImGui::SliderInt(manual_match_label.data(), &debug_info_on_the_up.manual_step_idx_, 0, debug_info_on_the_up.steps_.size()-1, "%d s"))
+                {
+                    // if we adjust slider
+                    DebugPlot();
+
+                }
+                
+                EpipolarSegment& epipolar_segment_on_the_up = debug_info_on_the_up.epipolar_segment_;
+                if(epipolar_segment_on_the_up.aggregate_costs_.size() > 0){
+
+                    const std::string epipolar_segment_label = "Epipolar Segment " + std::to_string(debug_info_idx);
+
+                    if (ImPlot::BeginPlot(epipolar_segment_label.c_str())) {
+                        ImPlot::SetupAxes("step","aggregated cost");
+                        std::string aggregated_cost_label = "aggregated cost ";
+                        ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);
+                        ImPlot::PlotLine(aggregated_cost_label.data(), debug_info_on_the_up.steps_.data(), epipolar_segment_on_the_up.aggregate_costs_.data(), epipolar_segment_on_the_up.aggregate_costs_.size());
+                        // std::string best_match_label = "best match " + std::to_string(epipolar_segment_idx);
+                        // ImPlot::PlotInfLines(best_match_label.data(), debug_info_on_the_up.steps_.data() + debug_info_on_the_up.best_step_idx_, 1);
+                        ImPlot::PlotInfLines(manual_match_label.data(), debug_info_on_the_up.steps_.data() + debug_info_on_the_up.manual_step_idx_, 1);
+
+                        for(int possible_minimum_peak_i = 0 ; possible_minimum_peak_i < (int)debug_info_on_the_up.possible_minimum_peak_idxes_.size(); possible_minimum_peak_i++)
+                        {
+                            std::string possible_minimum_peak_label = " possible_minimum_peak " + std::to_string(possible_minimum_peak_i);
+                            ImPlot::PlotInfLines(possible_minimum_peak_label.data(), debug_info_on_the_up.steps_.data() + debug_info_on_the_up.possible_minimum_peak_idxes_[possible_minimum_peak_i], 1);
+
+                        }
+
+                        ImPlot::EndPlot();
+                    }
+
+                }
+            }
+            
+        }
+        ImGui::End();
+
+
+        ImGui::Begin("Aggregation Cost Plots on the Down");
+        if(ptr_pixel_point_on_the_down_ref_picked_pixel_point_ != nullptr && ptr_pixel_point_on_the_down_ref_picked_pixel_point_->status_ != PixelPoint::Status::INVALID)
+        {
+            
+            for(int debug_info_idx = 0; debug_info_idx < (int) ptr_pixel_point_on_the_down_ref_picked_pixel_point_->debug_info_vec_.size(); debug_info_idx++)
+            {
+                DebugInfo& debug_info_on_the_down =  ptr_pixel_point_on_the_down_ref_picked_pixel_point_->debug_info_vec_[debug_info_idx];
+                
+                std::string manual_match_label = "manual match " + std::to_string(debug_info_idx);
+                if(ImGui::SliderInt(manual_match_label.data(), &debug_info_on_the_down.manual_step_idx_, 0, debug_info_on_the_down.steps_.size()-1, "%d s"))
+                {
+                    // if we adjust slider
+                    DebugPlot();
+
+                }
+                
+                EpipolarSegment& epipolar_segment_on_the_down = debug_info_on_the_down.epipolar_segment_;
+                if(epipolar_segment_on_the_down.aggregate_costs_.size() > 0){
+
+                    const std::string epipolar_segment_label = "Epipolar Segment " + std::to_string(debug_info_idx);
+
+                    if (ImPlot::BeginPlot(epipolar_segment_label.c_str())) {
+                        ImPlot::SetupAxes("step","aggregated cost");
+                        std::string aggregated_cost_label = "aggregated cost ";
+                        ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);
+                        ImPlot::PlotLine(aggregated_cost_label.data(), debug_info_on_the_down.steps_.data(), epipolar_segment_on_the_down.aggregate_costs_.data(), epipolar_segment_on_the_down.aggregate_costs_.size());
+                        // std::string best_match_label = "best match " + std::to_string(epipolar_segment_idx);
+                        // ImPlot::PlotInfLines(best_match_label.data(), debug_info_on_the_down.steps_.data() + debug_info_on_the_down.best_step_idx_, 1);
+                        ImPlot::PlotInfLines(manual_match_label.data(), debug_info_on_the_down.steps_.data() + debug_info_on_the_down.manual_step_idx_, 1);
+
+                        for(int possible_minimum_peak_i = 0 ; possible_minimum_peak_i < (int)debug_info_on_the_down.possible_minimum_peak_idxes_.size(); possible_minimum_peak_i++)
+                        {
+                            std::string possible_minimum_peak_label = " possible_minimum_peak " + std::to_string(possible_minimum_peak_i);
+                            ImPlot::PlotInfLines(possible_minimum_peak_label.data(), debug_info_on_the_down.steps_.data() + debug_info_on_the_down.possible_minimum_peak_idxes_[possible_minimum_peak_i], 1);
+
+                        }
+
+                        ImPlot::EndPlot();
+                    }
+
+                }
+            }
+            
+        }
+        ImGui::End();
+
 
 
 
@@ -569,10 +670,10 @@ void IridescenceVisualizer::DebugPlot()
         cv::Mat vis_cv_ref_rgb_data = ref_cv_bgr_data.clone();
         cv::Mat vis_cv_tar_rgb_data = tar_cv_bgr_data.clone();
 
-       for(int epipolar_segment_idx=0;  epipolar_segment_idx < ptr_picked_ref_ptr_pixel_point_->epipolar_segment_vec_.size(); epipolar_segment_idx++ )
+       for(int debug_info_idx=0;  debug_info_idx < ptr_picked_ref_ptr_pixel_point_->debug_info_vec_.size(); debug_info_idx++ )
        {  
-            EpipolarSegment& epipolar_segment = ptr_picked_ref_ptr_pixel_point_->epipolar_segment_vec_[epipolar_segment_idx];
-            DebugInfo& debug_info =  epipolar_segment.debug_info_;
+            DebugInfo& debug_info = ptr_picked_ref_ptr_pixel_point_->debug_info_vec_[debug_info_idx];
+            EpipolarSegment& epipolar_segment = debug_info.epipolar_segment_;
             // std::cout << "debug_info.costs " << debug_info.costs_.size() << std::endl;
             if(epipolar_segment.costs_.size() == 0)
             {
@@ -580,17 +681,23 @@ void IridescenceVisualizer::DebugPlot()
             }
 
             cv::Point2i cv_uv_manual(round(epipolar_segment.valid_uvs_[debug_info.manual_step_idx_][0]),round(epipolar_segment.valid_uvs_[debug_info.manual_step_idx_][1]));
-            cv::Point2i cv_uv_best(round(debug_info.uv_best_match_[0]),round(debug_info.uv_best_match_[1]));
+            for(int uv_possible_match_i =0; uv_possible_match_i < debug_info.uv_possible_matches_.size(); uv_possible_match_i++){
+
+                Eigen::Vector2f& uv_possible_match = debug_info.uv_possible_matches_[uv_possible_match_i];
+                cv::Point2i cv_uv_best(round(uv_possible_match[0]),round(uv_possible_match[1]));
+                cv::circle(vis_cv_tar_rgb_data, cv_uv_best, 2, cv::Scalar(255,0,255), 1); // pink
+
+            }
+
             cv::Point2i cv_uv_start(round(epipolar_segment.valid_uvs_.front()[0]),round(epipolar_segment.valid_uvs_.front()[1]));
             cv::Point2i cv_uv_end(round(epipolar_segment.valid_uvs_.back()[0]),round(epipolar_segment.valid_uvs_.back()[1]));
 
             cv::circle(vis_cv_tar_rgb_data, cv_uv_manual, 2, cv::Scalar(0,255,0), 1); // green
-            cv::circle(vis_cv_tar_rgb_data, cv_uv_best, 2, cv::Scalar(255,0,255), 1); // pink
             cv::circle(vis_cv_tar_rgb_data, cv_uv_start, 2, cv::Scalar(0,0,255), 1); // red
-            cv::putText(vis_cv_tar_rgb_data, "S",cv_uv_start, cv::FONT_HERSHEY_SIMPLEX, 0.6, cv::Scalar(0,0,255), 1.8);
+            cv::putText(vis_cv_tar_rgb_data, "S" + std::to_string(debug_info_idx), cv_uv_start, cv::FONT_HERSHEY_SIMPLEX, 0.4, cv::Scalar(0,0,255), 1.8);
             cv::line(vis_cv_tar_rgb_data, cv_uv_start, cv_uv_end, cv::Scalar(0,255,0), 1); // green
             cv::circle(vis_cv_tar_rgb_data, cv_uv_end, 2, cv::Scalar(255,0,0), 1); // blue
-            cv::putText(vis_cv_tar_rgb_data, "E",cv_uv_end, cv::FONT_HERSHEY_SIMPLEX, 0.6, cv::Scalar(255,0,0), 1.8);
+            cv::putText(vis_cv_tar_rgb_data, "E"  + std::to_string(debug_info_idx), cv_uv_end, cv::FONT_HERSHEY_SIMPLEX, 0.4, cv::Scalar(255,0,0), 1.8);
 
         }
 
@@ -686,9 +793,15 @@ void IridescenceVisualizer::showRefImageReconstruction(Image* const ref_image, I
         for(int u=0;u<width;u++)
         {   
             int coord = v*width+u;
-            float z = ref_ptr_pixel_point_matrix[coord].depth_;
-            float min_z = 1/ref_ptr_pixel_point_matrix[coord].epipolar_segment_vec_[0].max_inv_depth_;
-            float max_z = 1/ref_ptr_pixel_point_matrix[coord].epipolar_segment_vec_[0].min_inv_depth_;
+            PixelPoint& ref_ptr_pixel_point = ref_ptr_pixel_point_matrix[coord];
+            if(ref_ptr_pixel_point.epipolar_segment_vec_.size() > 1){
+                continue;
+            }
+
+            // float z = ref_ptr_pixel_point.epipolar_segment_vec_[0].output_data_.depth_;
+            float min_z = ref_ptr_pixel_point.epipolar_segment_vec_[0].min_depth_;
+            float max_z = ref_ptr_pixel_point.epipolar_segment_vec_[0].max_depth_;
+            float z = (max_z + min_z / 2.0f);
             float diff_z = max_z - min_z;
             if(diff_z > 100)
             {
@@ -698,10 +811,15 @@ void IridescenceVisualizer::showRefImageReconstruction(Image* const ref_image, I
             depth_uncertainty_vertices.push_back(Eigen::Vector3f(u,v,0.0f));
             depth_uncertainty_vertices.push_back(Eigen::Vector3f(u,v,diff_z));
 
-            if(max_z - min_z > 1.0f || z < config_->min_depth_ || z > config_->max_depth_)
+            if(max_z - min_z > 0.3f || z < config_->min_depth_ || z > config_->max_depth_)
             {
                 continue;
             }
+
+            if(z <= 2.0f){
+                // std::cout << "problem point: " << ref_ptr_pixel_point.u_  << "," << ref_ptr_pixel_point.v_ << "," << z << std::endl;
+            }
+
             float x = (u - K_cam0(0,2)) * z / K_cam0(0,0);
             float y = (v - K_cam0(1,2)) * z / K_cam0(1,1);
 

@@ -284,7 +284,7 @@ void DistortModel::undistort(Image* const image)
                 ptr_pixel_point_matrix[cidx].setImagePtr(image);
 
                 ptr_pixel_point_matrix[cidx].epipolar_segment_vec_.emplace_back(EpipolarSegment(image->config_->infinite_inv_depth_, 1/image->config_->min_depth_));
-                
+
                 if(cidx_distotred != float(cidx)){
 
                     ptr_pixel_point_matrix[cidx].setIntensity(getBilinearInterpolated(ptr_raw_gray_data, wOrg, hOrg, u_distorted, v_distorted));

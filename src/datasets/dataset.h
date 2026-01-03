@@ -9,6 +9,7 @@
 #include <stdexcept> 
 #include "../utils.h"
 #include "../configs.h"
+#include "../persistent_homology.h"
 
 namespace MVS
 {
@@ -27,6 +28,55 @@ class Visualizer;
 class Image;
 
 
+class OutputData{
+    public:
+
+    OutputData(){};
+    ~OutputData()= default;
+
+    float depth_;
+    float minimum_peak_aggregate_cost_;
+    float uncertainty_;
+
+};
+
+class EpipolarSegment
+{
+    public:
+
+
+    EpipolarSegment(float min_inv_depth, float max_inv_depth);
+    EpipolarSegment();
+
+    ~EpipolarSegment()= default;
+
+    void setMinInvDepth(float min_inv_depth);
+    void setMinDepth(float min_depth);
+
+    void setMaxInvDepth(float max_inv_depth);
+    void setMaxDepth(float max_depth);
+
+    void clear();
+
+    float min_inv_depth_;
+    float min_depth_;
+
+    float max_inv_depth_;
+    float max_depth_;
+
+    OutputData output_data_;
+
+
+
+    std::vector<float> costs_;
+    std::vector<float> tmp_aggregate_costs_;
+    std::vector<float> aggregate_costs_;
+    std::vector<Eigen::Vector2f> valid_uvs_;
+    std::vector<float> inv_depths_;
+    std::vector<MinimumPeak> local_minimum_peaks_;
+
+};
+
 class DebugInfo
 {
 
@@ -37,20 +87,20 @@ class DebugInfo
 
     void clear();
 
-    int tar_pose_id_;
-    int tar_camera_id_;
+    // int tar_pose_id_;
+    // int tar_camera_id_;
 
     std::vector<float> steps_;
 
-
     
-    int best_step_idx_;
+    // int best_step_idx_;
     std::vector<int> possible_minimum_peak_idxes_;
     int manual_step_idx_ = 0;
 
     Eigen::Vector2f uv_min_;
     Eigen::Vector2f uv_max_;
-    Eigen::Vector2f uv_best_match_;
+    // Eigen::Vector2f uv_best_match_;
+    std::vector<Eigen::Vector2f> uv_possible_matches_;
     Eigen::Vector2f unit_epipolar_vector_;
     float epipolar_length_;
 
@@ -59,36 +109,15 @@ class DebugInfo
     float init_depth_;
 
 
-    float min_depth_;
-    float max_depth_;
-    float depth_;
+    std::vector<float> updated_min_depths_;
+    std::vector<float> updated_max_depths_;
+    std::vector<float> updated_depths_;
+
+
+    EpipolarSegment epipolar_segment_;
 
 };
 
-
-class EpipolarSegment
-{
-    public:
-
-
-    EpipolarSegment(float min_inv_depth, float max_inv_depth);
-    ~EpipolarSegment()= default;
-
-
-    float min_inv_depth_;
-    float max_inv_depth_;
-
-    void clear();
-
-    std::vector<float> costs_;
-    std::vector<float> tmp_aggregate_costs_;
-    std::vector<float> aggregate_costs_;
-    std::vector<Eigen::Vector2f> valid_uvs_;
-    std::vector<float> inv_depths_;
-
-    DebugInfo debug_info_;
-
-};
 
 class PixelPoint
 {
@@ -114,8 +143,11 @@ class PixelPoint
 
     void setGradient(float gradient_u, float gradient_v);
 
-    void getMininumIdxTmpAggregatedCost(int &minimum_epipolar_segment_idx, int &minimum_cost_idx) const;
+    void getMininumIdxTmpAggregatedCost(int &minimum_cost_epipolar_segment_idx, int &minimum_cost_idx) const;
+    void getGlobalMininumPeakIdx(int &global_minimum_peak_epipolar_segment_idx, int &global_minimum_peak_idx) const;
+
     float getInterpolatedTmpAggregatedCostByInvDepth(float ref_inv_depth) const;
+    bool DoesExistDepthIntersection(const PixelPoint& ref_pixel_point, int minimum_cost_epipolar_segment_idx) const;
 
     ~PixelPoint() = default;
 
@@ -136,6 +168,7 @@ class PixelPoint
     
     Eigen::Vector2f unit_epipolar_vector_;
     std::vector<EpipolarSegment> epipolar_segment_vec_;  
+    std::vector<DebugInfo> debug_info_vec_;
 
 
 };

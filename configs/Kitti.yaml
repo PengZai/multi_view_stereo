@@ -1,7 +1,7 @@
 %YAML:1.0
 
 system:
-  num_used_camera: 1
+  num_used_camera: 2
   use_external_trajectory_id: 0
   is_use_GT_depth: 1
   maximum_traj: 271
@@ -12,11 +12,11 @@ system:
   tar_pose_start_idx: 0
   tar_camera_start_idx: 0
   image_sequence_mode: forward_time_direction # option: forward_time_direction, backward_time_direction, full_time_direction
-  min_depth: 0.5
+  min_depth: 1.0
   max_depth: 100
-  half_window_size: 3 # we only support odd size of window, like 3x3, 5x5, 7x7, 9x9 ...
+  half_window_size: 5 # we only support odd size of window, like 3x3, 5x5, 7x7, 9x9 ...
   save_figure_path: /root/multi_view_stereo/figs
-  debug_plot: 0
+  debug_plot: 1
 
 
 external_trajectory0:
