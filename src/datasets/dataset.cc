@@ -4,6 +4,8 @@
 #include "remode_dataset.h"
 #include "tartan_air_dataset.h"
 #include "kitti_dataset.h"
+#include "tanks_temples_dataset.h"
+#include "eth3d_dataset.h"
 // #include "virtual_kitti_dataset.h"
 #include "../visualizer.h"
 
@@ -42,6 +44,14 @@ Dataset* getDataset(Config* const config)
     else if(config->name_ == "Kitti")
     {
         dataset = new KittiDataset(config);
+    }
+    else if(config->name_ == "TanksTemples")
+    {
+        dataset = new TanksTemplesDataset(config);
+    }
+    else if(config->name_ == "ETH3D")
+    {
+        dataset = new ETH3DDataset(config);
     }
     // else if(config->name_ == "VirtualKitti")
     // {

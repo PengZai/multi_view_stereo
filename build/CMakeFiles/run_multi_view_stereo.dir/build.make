@@ -265,10 +265,38 @@ CMakeFiles/run_multi_view_stereo.dir/src/datasets/kitti_dataset.cc.s: cmake_forc
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/run_multi_view_stereo.dir/src/datasets/kitti_dataset.cc.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/multi_view_stereo/src/datasets/kitti_dataset.cc -o CMakeFiles/run_multi_view_stereo.dir/src/datasets/kitti_dataset.cc.s
 
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/tanks_temples_dataset.cc.o: CMakeFiles/run_multi_view_stereo.dir/flags.make
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/tanks_temples_dataset.cc.o: /root/multi_view_stereo/src/datasets/tanks_temples_dataset.cc
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/tanks_temples_dataset.cc.o: CMakeFiles/run_multi_view_stereo.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/run_multi_view_stereo.dir/src/datasets/tanks_temples_dataset.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/run_multi_view_stereo.dir/src/datasets/tanks_temples_dataset.cc.o -MF CMakeFiles/run_multi_view_stereo.dir/src/datasets/tanks_temples_dataset.cc.o.d -o CMakeFiles/run_multi_view_stereo.dir/src/datasets/tanks_temples_dataset.cc.o -c /root/multi_view_stereo/src/datasets/tanks_temples_dataset.cc
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/tanks_temples_dataset.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/run_multi_view_stereo.dir/src/datasets/tanks_temples_dataset.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/multi_view_stereo/src/datasets/tanks_temples_dataset.cc > CMakeFiles/run_multi_view_stereo.dir/src/datasets/tanks_temples_dataset.cc.i
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/tanks_temples_dataset.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/run_multi_view_stereo.dir/src/datasets/tanks_temples_dataset.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/multi_view_stereo/src/datasets/tanks_temples_dataset.cc -o CMakeFiles/run_multi_view_stereo.dir/src/datasets/tanks_temples_dataset.cc.s
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/eth3d_dataset.cc.o: CMakeFiles/run_multi_view_stereo.dir/flags.make
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/eth3d_dataset.cc.o: /root/multi_view_stereo/src/datasets/eth3d_dataset.cc
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/eth3d_dataset.cc.o: CMakeFiles/run_multi_view_stereo.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/run_multi_view_stereo.dir/src/datasets/eth3d_dataset.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/run_multi_view_stereo.dir/src/datasets/eth3d_dataset.cc.o -MF CMakeFiles/run_multi_view_stereo.dir/src/datasets/eth3d_dataset.cc.o.d -o CMakeFiles/run_multi_view_stereo.dir/src/datasets/eth3d_dataset.cc.o -c /root/multi_view_stereo/src/datasets/eth3d_dataset.cc
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/eth3d_dataset.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/run_multi_view_stereo.dir/src/datasets/eth3d_dataset.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/multi_view_stereo/src/datasets/eth3d_dataset.cc > CMakeFiles/run_multi_view_stereo.dir/src/datasets/eth3d_dataset.cc.i
+
+CMakeFiles/run_multi_view_stereo.dir/src/datasets/eth3d_dataset.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/run_multi_view_stereo.dir/src/datasets/eth3d_dataset.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/multi_view_stereo/src/datasets/eth3d_dataset.cc -o CMakeFiles/run_multi_view_stereo.dir/src/datasets/eth3d_dataset.cc.s
+
 CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.o: CMakeFiles/run_multi_view_stereo.dir/flags.make
 CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.o: /root/multi_view_stereo/src/datasets/dataset.cc
 CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.o: CMakeFiles/run_multi_view_stereo.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.o -MF CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.o.d -o CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.o -c /root/multi_view_stereo/src/datasets/dataset.cc
 
 CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.i: cmake_force
@@ -295,6 +323,8 @@ run_multi_view_stereo_OBJECTS = \
 "CMakeFiles/run_multi_view_stereo.dir/src/datasets/remode_dataset.cc.o" \
 "CMakeFiles/run_multi_view_stereo.dir/src/datasets/tartan_air_dataset.cc.o" \
 "CMakeFiles/run_multi_view_stereo.dir/src/datasets/kitti_dataset.cc.o" \
+"CMakeFiles/run_multi_view_stereo.dir/src/datasets/tanks_temples_dataset.cc.o" \
+"CMakeFiles/run_multi_view_stereo.dir/src/datasets/eth3d_dataset.cc.o" \
 "CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.o"
 
 # External object files for target run_multi_view_stereo
@@ -314,6 +344,8 @@ run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/src/datasets/fast_li
 run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/src/datasets/remode_dataset.cc.o
 run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/src/datasets/tartan_air_dataset.cc.o
 run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/src/datasets/kitti_dataset.cc.o
+run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/src/datasets/tanks_temples_dataset.cc.o
+run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/src/datasets/eth3d_dataset.cc.o
 run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.o
 run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/build.make
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libopencv_stitching.so.4.6.0
@@ -493,7 +525,7 @@ run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libpng.so
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libz.so
 run_multi_view_stereo: /usr/lib/x86_64-linux-gnu/libjpeg.so
 run_multi_view_stereo: CMakeFiles/run_multi_view_stereo.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Linking CXX executable run_multi_view_stereo"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Linking CXX executable run_multi_view_stereo"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/run_multi_view_stereo.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

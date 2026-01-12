@@ -157,7 +157,7 @@ void MultiViewStereo::match(Image* const ref_image, Image* const tar_image)
             //     std::cout << "debug" << std::endl;
             // }
 
-            if((u == 141 && v == 81))
+            if((u == 1369 && v == 5))
             {
                 std::cout << "debug" << std::endl;
             }
@@ -445,6 +445,10 @@ bool MultiViewStereo::epipolarSearch(PixelPoint* const ref_ptr_pixel_point_matri
 
     float s = 0;
     float min_cost = std::numeric_limits<float>::infinity();
+    int min_cost_idx = -1;
+    float max_cost = -1;
+    int max_cost_idx = -1;
+    int match_idx = 0;
     int best_s_idx = 0;
     int best_s_idx_temp = 0;
 
@@ -476,12 +480,19 @@ bool MultiViewStereo::epipolarSearch(PixelPoint* const ref_ptr_pixel_point_matri
             {
                 min_cost = cost;
                 uv_best_tmp = tar_uv_current;
+                min_cost_idx = match_idx;
                 // best_s_tmp = s;
 
                 if(config_->debug_plot_ == true){
-                    best_s_idx_temp = debug_info_ptr->steps_.size()-1;
+                    best_s_idx_temp = match_idx;
                 }
             }
+            if(cost > max_cost){
+                max_cost = cost;
+                max_cost_idx = match_idx;
+            }
+
+            match_idx+=1;
         }
         
     
@@ -534,7 +545,12 @@ bool MultiViewStereo::epipolarSearch(PixelPoint* const ref_ptr_pixel_point_matri
 
     // std::cout << "epipolar_length : " << epipolar_length << std::endl;
     // min_cost < std::numeric_limits<float>::infinity()
-    if(min_cost < ACCEPTABLE_MINI_COST){
+    if(min_cost <= ACCEPTABLE_MINI_COST && 
+       min_cost_idx != -1 &&
+       max_cost_idx != -1 &&
+       min_cost_idx != 0 && 
+       min_cost_idx != match_idx - 1 &&
+    max_cost - min_cost >= ACCEPTABLE_COST_DIFF){
         tar_uv_best_match = uv_best_tmp;
         pixel_point_in_ref_image.unit_epipolar_vector_ = unit_epipolar_vector;
 
@@ -559,7 +575,7 @@ void MultiViewStereo::cost_aggregation(Image* const ref_image)
     cost_aggregation_left_right(ref_image, false);
     cost_aggregation_up_down(ref_image, true);
     cost_aggregation_up_down(ref_image, false);
-    normalize_aggregated_cost(ref_image);
+    // normalize_aggregated_cost(ref_image);
 
 
 }
@@ -581,7 +597,7 @@ void MultiViewStereo::normalize_aggregated_cost(Image* const ref_image)
                 continue;
             }
 
-            if(u == 141 && v == 81){
+            if(u == 1369 && v == 5){
                     std::cout <<"debug" << std::endl;
             }
   
@@ -704,7 +720,7 @@ void MultiViewStereo::cost_aggregation_left_right(Image* const ref_image, bool i
                 continue;
             }
 
-            if((u == 141 && v == 81))
+            if((u == 1369 && v == 5))
             {
                 std::cout << "debug" << std::endl;
             }
@@ -841,25 +857,28 @@ bool MultiViewStereo::cost_aggregation_from_last_pixel(const PixelPoint& pixel_p
 
                 float inv_depth = epipolar_segment.inv_depths_[cost_idx];
                 float depth = 1/inv_depth;
-                float tmp_aggreagted_cost_in_last_pos = mini_tmp_aggregated_cost_in_last_pos;
+                float tmp_aggregated_cost_in_last_pos = mini_tmp_aggregated_cost_in_last_pos;
 
                 // if(cost_idx == 1)
                 // {
                 //     std::cout << "debug" << std::endl;
                 // }
 
-                if(depth <= depth_minus_in_last_pos_in_at_mini_cost){
+                // if(depth <= depth_minus_in_last_pos_in_at_mini_cost){
 
 
-                    tmp_aggreagted_cost_in_last_pos = pixel_point_in_last_pos.getInterpolatedTmpAggregatedCostByInvDepth(1.0f/(depth+acceptable_depth));
+                //     tmp_aggreagted_cost_in_last_pos = pixel_point_in_last_pos.getInterpolatedTmpAggregatedCostByInvDepth(1.0f/(depth+acceptable_depth));
 
-                }
-                else if(depth >= depth_plus_in_last_pos_in_at_mini_cost)
-                {
+                // }
+                // else if(depth >= depth_plus_in_last_pos_in_at_mini_cost)
+                // {
 
-                    tmp_aggreagted_cost_in_last_pos = pixel_point_in_last_pos.getInterpolatedTmpAggregatedCostByInvDepth(1.0f/(depth-acceptable_depth));
+                //     tmp_aggreagted_cost_in_last_pos = pixel_point_in_last_pos.getInterpolatedTmpAggregatedCostByInvDepth(1.0f/(depth-acceptable_depth));
 
-                }
+                // }
+
+                tmp_aggregated_cost_in_last_pos = pixel_point_in_last_pos.getInterpolatedTmpAggregatedCostByInvDepth(inv_depth);
+
 
                 // if(tmp_aggreagted_cost_in_last_pos < 0)
                 // {
@@ -868,8 +887,16 @@ bool MultiViewStereo::cost_aggregation_from_last_pixel(const PixelPoint& pixel_p
 
                 float tmp_aggregate_cost = aggregate_cost_func(
                     epipolar_segment.costs_[cost_idx], inv_depth, pixel_point.intensity_, 
-                    tmp_aggreagted_cost_in_last_pos, mini_tmp_aggregated_cost_in_last_pos, inv_depth_minus_in_last_pos_in_at_mini_cost,
+                    tmp_aggregated_cost_in_last_pos, mini_tmp_aggregated_cost_in_last_pos, inv_depth_minus_in_last_pos_in_at_mini_cost,
                     pixel_point_in_last_pos.intensity_);
+
+                // if(tmp_aggregate_cost < 0){
+                //     std::cout << "debug" << std::endl;
+                //     float tmp_tmp_aggregate_cost = aggregate_cost_func(
+                //     epipolar_segment.costs_[cost_idx], inv_depth, pixel_point.intensity_, 
+                //     tmp_aggregated_cost_in_last_pos, mini_tmp_aggregated_cost_in_last_pos, inv_depth_minus_in_last_pos_in_at_mini_cost,
+                //     pixel_point_in_last_pos.intensity_);
+                // }
                     
                 epipolar_segment.tmp_aggregate_costs_[cost_idx] = tmp_aggregate_cost;
                 epipolar_segment.aggregate_costs_[cost_idx] += epipolar_segment.tmp_aggregate_costs_[cost_idx]; 
@@ -982,9 +1009,10 @@ void MultiViewStereo::update_uncertainty(Image* const ref_image)
                 continue;
             }
 
-            if(u == 141 && v == 81){
+            if(u == 113 && v == 191){
                 std::cout <<"debug" << std::endl;
             }
+            // std::cout << "debug " << " u= " << u << ", v= " << v << std::endl;
 
             int current_coord = v*width + u;
 
@@ -992,6 +1020,16 @@ void MultiViewStereo::update_uncertainty(Image* const ref_image)
 
             if(pixel_point.status_ == PixelPoint::Status::INVALID){
                 continue;
+            }
+                
+            DebugInfo* debug_info_ptr = nullptr;
+            if(config_->debug_plot_ == true){
+                debug_info_ptr = &pixel_point.debug_info_vec_[0];
+            }
+
+            if(config_->debug_plot_ == true)
+            {
+                debug_info_ptr->epipolar_segment_ = pixel_point.epipolar_segment_vec_[0];
             }
 
             Eigen::Vector3f KRKi_uv_homo = KRKi * Eigen::Vector3f(u,v,1);
@@ -1012,137 +1050,135 @@ void MultiViewStereo::update_uncertainty(Image* const ref_image)
             pixel_point.getGlobalMininumPeakIdx(global_minimum_peak_epipolar_segment_idx, global_minimum_peak_idx);
             MinimumPeak& global_minimum_peak = pixel_point.epipolar_segment_vec_[global_minimum_peak_epipolar_segment_idx].local_minimum_peaks_[global_minimum_peak_idx];
             float min_aggregate_cost = pixel_point.epipolar_segment_vec_[global_minimum_peak_epipolar_segment_idx].aggregate_costs_[global_minimum_peak.born_idx_];
-            float acceptable_threshold = min_aggregate_cost + 0.2;
+            float mini_aggregate_cost_idx = global_minimum_peak.born_idx_;
+            int mini_aggregate_cost_idx_plus_1 = global_minimum_peak.born_idx_ + 1;
+            int mini_aggregate_cost_idx_minus_1 = global_minimum_peak.born_idx_ - 1;
 
+            float acceptable_threshold = min_aggregate_cost + ACCEPTABLE_MINI_COST/10;
 
-            std::vector<EpipolarSegment> finner_epipolar_segment_vec;
+            // when there are at least one aggregated cost point in plus and minus direction, 
+            // depth uncertainty will be considered to reduce
 
-            for(int epipolar_segment_idx = 0 ; epipolar_segment_idx < pixel_point.epipolar_segment_vec_.size(); epipolar_segment_idx++)
+            if( mini_aggregate_cost_idx_minus_1 >= 0 && mini_aggregate_cost_idx_plus_1 < pixel_point.epipolar_segment_vec_[global_minimum_peak_epipolar_segment_idx].aggregate_costs_.size())
             {
-                EpipolarSegment& epipolar_segment = pixel_point.epipolar_segment_vec_[epipolar_segment_idx];
-                DebugInfo* debug_info_ptr = nullptr;
-                if(config_->debug_plot_ == true){
-                    debug_info_ptr = &pixel_point.debug_info_vec_[epipolar_segment_idx];
+                float min_aggregate_cost_plus_1 = pixel_point.epipolar_segment_vec_[global_minimum_peak_epipolar_segment_idx].aggregate_costs_[mini_aggregate_cost_idx_plus_1];
+                float min_aggregate_cost_minus_1 = pixel_point.epipolar_segment_vec_[global_minimum_peak_epipolar_segment_idx].aggregate_costs_[mini_aggregate_cost_idx_minus_1];
+                float alpha2 = min_aggregate_cost_minus_1 + min_aggregate_cost_plus_1 - 2 * min_aggregate_cost;
+
+
+                float minus_beta2 = min_aggregate_cost_minus_1 - min_aggregate_cost_plus_1;
+                float beta_square = minus_beta2 * minus_beta2;
+                mini_aggregate_cost_idx = mini_aggregate_cost_idx + (minus_beta2)/ (2.0f * alpha2);
+                min_aggregate_cost = min_aggregate_cost - (minus_beta2) * (minus_beta2) / (8.0f* alpha2);
+
+                acceptable_threshold = min_aggregate_cost + ACCEPTABLE_MINI_COST/10;
+                float root_equation = sqrt(beta_square + 2 * alpha2 * ACCEPTABLE_MINI_COST/10);
+
+                float mini_aggregate_cost_idx_plus = global_minimum_peak.born_idx_ + 1;
+
+                if(min_aggregate_cost_plus_1 >= acceptable_threshold)
+                {
+                    mini_aggregate_cost_idx_plus = mini_aggregate_cost_idx + (minus_beta2/2 + root_equation)/alpha2;
+                }
+                else
+                {
+                    for(int cost_i = mini_aggregate_cost_idx_plus_1 + 1; cost_i < pixel_point.epipolar_segment_vec_[0].aggregate_costs_.size(); cost_i++)
+                    {
+                        float curr_cost = pixel_point.epipolar_segment_vec_[0].aggregate_costs_[cost_i];
+                        float last_cost = pixel_point.epipolar_segment_vec_[0].aggregate_costs_[cost_i-1];
+
+                        if(curr_cost > acceptable_threshold && last_cost <= acceptable_threshold)
+                        {
+                            mini_aggregate_cost_idx_plus = (float)(cost_i-1) + (acceptable_threshold - last_cost)/(curr_cost - last_cost);
+                            break;
+                        }
+                    }
+
                 }
 
-                std::vector<EpipolarSegment> tmp_finner_epipolar_segment_vec;
-                for(int peak_i=0; peak_i<(int)epipolar_segment.local_minimum_peaks_.size();peak_i++)
+
+                float mini_aggregate_cost_idx_minus = global_minimum_peak.born_idx_ - 1;
+
+                if(min_aggregate_cost_minus_1 >= acceptable_threshold)
                 {
-                    MVS::MinimumPeak& minimum_peak = epipolar_segment.local_minimum_peaks_[peak_i];
-                    float born_cost = epipolar_segment.aggregate_costs_[minimum_peak.born_idx_];
-                    if(born_cost <= acceptable_threshold){
-                        
-                        float uncertainty_aggregate_cost = born_cost + 0.1;
-                        float error_in_plus_direction = const_error_in_pixel;
-                        for(int cost_i = minimum_peak.born_idx_+1; cost_i < epipolar_segment.aggregate_costs_.size(); cost_i++)
+                    mini_aggregate_cost_idx_minus = mini_aggregate_cost_idx + (minus_beta2/2 - root_equation)/alpha2;
+
+                }
+                else
+                {
+                    for(int cost_i = mini_aggregate_cost_idx_minus_1 - 1; cost_i >= 0; cost_i--)
+                    {
+
+                        float curr_cost = pixel_point.epipolar_segment_vec_[0].aggregate_costs_[cost_i];
+                        float last_cost = pixel_point.epipolar_segment_vec_[0].aggregate_costs_[cost_i+1];
+
+                        if(curr_cost > acceptable_threshold && last_cost <= acceptable_threshold)
                         {
-                            float curr_cost = epipolar_segment.aggregate_costs_[cost_i];
-                            float last_cost = epipolar_segment.aggregate_costs_[cost_i-1];
-
-                            if(curr_cost > uncertainty_aggregate_cost && last_cost <= uncertainty_aggregate_cost)
-                            {
-                                error_in_plus_direction = (float)(cost_i - minimum_peak.born_idx_);
-                                break;
-                            }
+                            mini_aggregate_cost_idx_minus = (float)(cost_i+1) - (acceptable_threshold - last_cost)/(curr_cost - last_cost);
+                            break;
                         }
-
-                        float error_in_minus_direction = const_error_in_pixel;
-                        for(int cost_i = minimum_peak.born_idx_-1; cost_i >= 0; cost_i--)
-                        {
-
-                            float curr_cost = epipolar_segment.aggregate_costs_[cost_i];
-                            float last_cost = epipolar_segment.aggregate_costs_[cost_i+1];
-
-                            if(curr_cost > uncertainty_aggregate_cost && last_cost <= uncertainty_aggregate_cost)
-                            {
-                                error_in_minus_direction = (float)(minimum_peak.born_idx_ - cost_i);
-                                break;
-                            }
-                        }
-
-                        Eigen::Vector2f& uv_possible_match = epipolar_segment.valid_uvs_[minimum_peak.born_idx_];
-
-                        Eigen::Vector2f uv_possible_match_minus = uv_possible_match - error_in_minus_direction * pixel_point.unit_epipolar_vector_;
-                        Eigen::Vector2f uv_possible_match_plus = uv_possible_match + error_in_plus_direction * pixel_point.unit_epipolar_vector_;
-
-
-                        // Eigen::Vector2f uv_possible_match_minus = uv_possible_match - const_error_in_pixel*pixel_point.unit_epipolar_vector_;
-                        // Eigen::Vector2f uv_possible_match_plus = uv_possible_match + const_error_in_pixel*pixel_point.unit_epipolar_vector_;
-
-                        float min_inv_depth, max_inv_depth = -1.0f;
-                        pixel_depth_estimation(min_inv_depth, max_inv_depth, Kt, KRKi_uv_homo, uv_possible_match_minus, uv_possible_match_plus);
-                        
-
-                        EpipolarSegment finner_epipolar_segment(min_inv_depth, max_inv_depth);
-                        finner_epipolar_segment.output_data_.depth_ = (finner_epipolar_segment.min_depth_ + finner_epipolar_segment.max_depth_) / 2.0f;
-                        finner_epipolar_segment.output_data_.minimum_peak_aggregate_cost_ = born_cost;
-                        tmp_finner_epipolar_segment_vec.emplace_back(finner_epipolar_segment);
-
-                        if(config_->debug_plot_ == true){
-
-                            debug_info_ptr->possible_minimum_peak_idxes_.emplace_back(minimum_peak.born_idx_);
-                            debug_info_ptr->uv_possible_matches_.emplace_back(uv_possible_match);
-
-                            debug_info_ptr->updated_min_depths_.emplace_back(finner_epipolar_segment.min_depth_);
-                            debug_info_ptr->updated_max_depths_.emplace_back(finner_epipolar_segment.max_depth_);
-                            debug_info_ptr->updated_depths_.emplace_back(finner_epipolar_segment.output_data_.depth_);
-
-                            // std::cout << "min_depth : " << min_depth << " and max_depth : " << max_depth << " at uv_best_match (" << uv_best_match[0] << "," << uv_best_match[1] << ")" << std::endl;
-
-                        }
-
-
                     }
                 }
 
-                // copy epipolar_segment to debug_plot_ptr before erase
-                if(config_->debug_plot_ == true)
-                {
-                    debug_info_ptr->epipolar_segment_ = epipolar_segment;
-                }
 
-                if(tmp_finner_epipolar_segment_vec.size() == 0){
+                bool isUniquenessUncertaintyRegion = true;
+                for(int cost_i = 0; cost_i < pixel_point.epipolar_segment_vec_[0].aggregate_costs_.size(); cost_i++)
+                {
+                    if( cost_i >= mini_aggregate_cost_idx_minus && cost_i <= mini_aggregate_cost_idx_plus)
+                    {
+                        continue;
+                    }
+                    
+                    float curr_cost = pixel_point.epipolar_segment_vec_[0].aggregate_costs_[cost_i];
+
+                    if(curr_cost <=  acceptable_threshold)
+                    {
+                        //reject this uncertainty reduce
+                        isUniquenessUncertaintyRegion = false;
+                        break;
+                    }
+
+                }
+                if(isUniquenessUncertaintyRegion == false)
+                {
                     continue;
                 }
 
 
-                std::sort(tmp_finner_epipolar_segment_vec.begin(), tmp_finner_epipolar_segment_vec.end(),
-                [](const EpipolarSegment& a, const EpipolarSegment& b) {
-                    return a.min_depth_ < b.min_depth_;
-                });
 
-                finner_epipolar_segment_vec.emplace_back(tmp_finner_epipolar_segment_vec.front());
-                for(int i=1; i<(int)tmp_finner_epipolar_segment_vec.size();i++)
-                {
-                    EpipolarSegment& last = finner_epipolar_segment_vec.back();
-                    EpipolarSegment& current = tmp_finner_epipolar_segment_vec[i];
+                Eigen::Vector2f uv_possible_match = pixel_point.epipolar_segment_vec_[0].valid_uvs_[0] + mini_aggregate_cost_idx * pixel_point.unit_epipolar_vector_;
+                Eigen::Vector2f uv_possible_match_minus = pixel_point.epipolar_segment_vec_[0].valid_uvs_[0] + mini_aggregate_cost_idx_minus * pixel_point.unit_epipolar_vector_;
+                Eigen::Vector2f uv_possible_match_plus = pixel_point.epipolar_segment_vec_[0].valid_uvs_[0] + mini_aggregate_cost_idx_plus * pixel_point.unit_epipolar_vector_;
 
-                    if (current.min_depth_ <= last.max_depth_)
-                    {
-                        // Merge
-                        float max_depth = std::max(last.max_depth_, current.max_depth_);
-                        last.setMaxDepth(max_depth);
-                        if(last.output_data_.minimum_peak_aggregate_cost_ > current.output_data_.minimum_peak_aggregate_cost_)
-                        {
-                            last.output_data_ = current.output_data_;
-                        }
 
-                    }
-                    else
-                    {
-                        finner_epipolar_segment_vec.emplace_back(current);
-                    }
+                // Eigen::Vector2f uv_possible_match_minus = uv_possible_match - const_error_in_pixel*pixel_point.unit_epipolar_vector_;
+                // Eigen::Vector2f uv_possible_match_plus = uv_possible_match + const_error_in_pixel*pixel_point.unit_epipolar_vector_;
+
+                float min_inv_depth, max_inv_depth = -1.0f;
+                pixel_depth_estimation(min_inv_depth, max_inv_depth, Kt, KRKi_uv_homo, uv_possible_match_minus, uv_possible_match_plus);
+                pixel_point.epipolar_segment_vec_[0].setMaxInvDepth(max_inv_depth);
+                pixel_point.epipolar_segment_vec_[0].setMinInvDepth(min_inv_depth);
+                pixel_point.epipolar_segment_vec_[0].output_data_.depth_ = (pixel_point.epipolar_segment_vec_[0].min_depth_ + pixel_point.epipolar_segment_vec_[0].max_depth_) / 2.0f;
+
+        
+
+                if(config_->debug_plot_ == true){
+
+                    debug_info_ptr->possible_minimum_peak_idxes_.emplace_back(round(global_minimum_peak.born_idx_));
+                    debug_info_ptr->errors_in_minus_direction_.emplace_back(floor(mini_aggregate_cost_idx_minus));
+                    debug_info_ptr->errors_in_plus_direction_.emplace_back(ceil(mini_aggregate_cost_idx_plus));
+
+                    debug_info_ptr->uv_possible_matches_.emplace_back(uv_possible_match);
+
+                    debug_info_ptr->updated_min_depths_.emplace_back(pixel_point.epipolar_segment_vec_[0].min_depth_);
+                    debug_info_ptr->updated_max_depths_.emplace_back(pixel_point.epipolar_segment_vec_[0].max_depth_);
+                    debug_info_ptr->updated_depths_.emplace_back(pixel_point.epipolar_segment_vec_[0].output_data_.depth_);
+
+                    // std::cout << "min_depth : " << min_depth << " and max_depth : " << max_depth << " at uv_best_match (" << uv_best_match[0] << "," << uv_best_match[1] << ")" << std::endl;
 
                 }
 
             }
-
-            // copy to epipolar_segment_vec
-            if(finner_epipolar_segment_vec.size() >= 1)
-            {
-                pixel_point.epipolar_segment_vec_ = finner_epipolar_segment_vec;
-            }
-
 
 
         }

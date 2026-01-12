@@ -216,10 +216,11 @@ int Camera::getSynchronizedImageByTimeStamp(const double timestamp, double &mini
     {
         std::string name = image_names_[i];
 
-        long double t = std::stod(name); // convert string to double
-        t = t * 1e-9;
+        long long nanoseconds = std::stoll(name);
+
+        long double seconds = nanoseconds * 1e-9;
         // 2. Compare difference
-        double diff = std::abs(t - timestamp);
+        double diff = std::abs(seconds - timestamp);
         if (diff < mini_time_diff)
         {
             mini_time_diff = diff;

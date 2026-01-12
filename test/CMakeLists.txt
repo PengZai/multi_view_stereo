@@ -9,6 +9,8 @@ set(LIBRARY_DATASET_FOR_TEST_SOURCES
     ../src/datasets/remode_dataset.cc
     ../src/datasets/tartan_air_dataset.cc
     ../src/datasets/kitti_dataset.cc
+    ../src/datasets/tanks_temples_dataset.cc
+    ../src/datasets/eth3d_dataset.cc
     # ../src/datasets/virtual_kitti_dataset.cc
     ../src/datasets/dataset.cc
 )

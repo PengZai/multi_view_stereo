@@ -17,7 +17,7 @@ set(CMAKE_CXX_EXTENSIONS OFF) # Setting CMAKE_CXX_EXTENSIONS to OFF ensures stri
 
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION OFF)
 
-option(ENABLE_CMAKE_DEBUG "Enable detailed debug messages" OFF)
+option(ENABLE_CMAKE_DEBUG "Enable detailed debug messages" ON)
 
 if(ENABLE_CMAKE_DEBUG)
     # Debug or Release
@@ -65,6 +65,8 @@ set(LIBRARY_DATASET_SOURCES
     src/datasets/remode_dataset.cc
     src/datasets/tartan_air_dataset.cc
     src/datasets/kitti_dataset.cc
+    src/datasets/tanks_temples_dataset.cc
+    src/datasets/eth3d_dataset.cc
     # src/datasets/virtual_kitti_dataset.cc
     src/datasets/dataset.cc
 )

@@ -347,6 +347,39 @@ __/src/datasets/dataset.cc.s:
 	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_texture.dir/build.make test/CMakeFiles/Iridescence_texture.dir/__/src/datasets/dataset.cc.s
 .PHONY : __/src/datasets/dataset.cc.s
 
+__/src/datasets/eth3d_dataset.o: __/src/datasets/eth3d_dataset.cc.o
+.PHONY : __/src/datasets/eth3d_dataset.o
+
+# target to build an object file
+__/src/datasets/eth3d_dataset.cc.o:
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/eth3d_dataset.cc.o
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/eth3d_dataset.cc.o
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_example.dir/build.make test/CMakeFiles/Iridescence_example.dir/__/src/datasets/eth3d_dataset.cc.o
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_texture.dir/build.make test/CMakeFiles/Iridescence_texture.dir/__/src/datasets/eth3d_dataset.cc.o
+.PHONY : __/src/datasets/eth3d_dataset.cc.o
+
+__/src/datasets/eth3d_dataset.i: __/src/datasets/eth3d_dataset.cc.i
+.PHONY : __/src/datasets/eth3d_dataset.i
+
+# target to preprocess a source file
+__/src/datasets/eth3d_dataset.cc.i:
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/eth3d_dataset.cc.i
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/eth3d_dataset.cc.i
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_example.dir/build.make test/CMakeFiles/Iridescence_example.dir/__/src/datasets/eth3d_dataset.cc.i
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_texture.dir/build.make test/CMakeFiles/Iridescence_texture.dir/__/src/datasets/eth3d_dataset.cc.i
+.PHONY : __/src/datasets/eth3d_dataset.cc.i
+
+__/src/datasets/eth3d_dataset.s: __/src/datasets/eth3d_dataset.cc.s
+.PHONY : __/src/datasets/eth3d_dataset.s
+
+# target to generate assembly for a file
+__/src/datasets/eth3d_dataset.cc.s:
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/eth3d_dataset.cc.s
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/eth3d_dataset.cc.s
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_example.dir/build.make test/CMakeFiles/Iridescence_example.dir/__/src/datasets/eth3d_dataset.cc.s
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_texture.dir/build.make test/CMakeFiles/Iridescence_texture.dir/__/src/datasets/eth3d_dataset.cc.s
+.PHONY : __/src/datasets/eth3d_dataset.cc.s
+
 __/src/datasets/fast_livo2_dataset.o: __/src/datasets/fast_livo2_dataset.cc.o
 .PHONY : __/src/datasets/fast_livo2_dataset.o
 
@@ -445,6 +478,39 @@ __/src/datasets/remode_dataset.cc.s:
 	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_example.dir/build.make test/CMakeFiles/Iridescence_example.dir/__/src/datasets/remode_dataset.cc.s
 	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_texture.dir/build.make test/CMakeFiles/Iridescence_texture.dir/__/src/datasets/remode_dataset.cc.s
 .PHONY : __/src/datasets/remode_dataset.cc.s
+
+__/src/datasets/tanks_temples_dataset.o: __/src/datasets/tanks_temples_dataset.cc.o
+.PHONY : __/src/datasets/tanks_temples_dataset.o
+
+# target to build an object file
+__/src/datasets/tanks_temples_dataset.cc.o:
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tanks_temples_dataset.cc.o
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/tanks_temples_dataset.cc.o
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_example.dir/build.make test/CMakeFiles/Iridescence_example.dir/__/src/datasets/tanks_temples_dataset.cc.o
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_texture.dir/build.make test/CMakeFiles/Iridescence_texture.dir/__/src/datasets/tanks_temples_dataset.cc.o
+.PHONY : __/src/datasets/tanks_temples_dataset.cc.o
+
+__/src/datasets/tanks_temples_dataset.i: __/src/datasets/tanks_temples_dataset.cc.i
+.PHONY : __/src/datasets/tanks_temples_dataset.i
+
+# target to preprocess a source file
+__/src/datasets/tanks_temples_dataset.cc.i:
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tanks_temples_dataset.cc.i
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/tanks_temples_dataset.cc.i
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_example.dir/build.make test/CMakeFiles/Iridescence_example.dir/__/src/datasets/tanks_temples_dataset.cc.i
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_texture.dir/build.make test/CMakeFiles/Iridescence_texture.dir/__/src/datasets/tanks_temples_dataset.cc.i
+.PHONY : __/src/datasets/tanks_temples_dataset.cc.i
+
+__/src/datasets/tanks_temples_dataset.s: __/src/datasets/tanks_temples_dataset.cc.s
+.PHONY : __/src/datasets/tanks_temples_dataset.s
+
+# target to generate assembly for a file
+__/src/datasets/tanks_temples_dataset.cc.s:
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tanks_temples_dataset.cc.s
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/tanks_temples_dataset.cc.s
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_example.dir/build.make test/CMakeFiles/Iridescence_example.dir/__/src/datasets/tanks_temples_dataset.cc.s
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_texture.dir/build.make test/CMakeFiles/Iridescence_texture.dir/__/src/datasets/tanks_temples_dataset.cc.s
+.PHONY : __/src/datasets/tanks_temples_dataset.cc.s
 
 __/src/datasets/tartan_air_dataset.o: __/src/datasets/tartan_air_dataset.cc.o
 .PHONY : __/src/datasets/tartan_air_dataset.o
@@ -781,6 +847,9 @@ help:
 	@echo "... __/src/datasets/dataset.o"
 	@echo "... __/src/datasets/dataset.i"
 	@echo "... __/src/datasets/dataset.s"
+	@echo "... __/src/datasets/eth3d_dataset.o"
+	@echo "... __/src/datasets/eth3d_dataset.i"
+	@echo "... __/src/datasets/eth3d_dataset.s"
 	@echo "... __/src/datasets/fast_livo2_dataset.o"
 	@echo "... __/src/datasets/fast_livo2_dataset.i"
 	@echo "... __/src/datasets/fast_livo2_dataset.s"
@@ -790,6 +859,9 @@ help:
 	@echo "... __/src/datasets/remode_dataset.o"
 	@echo "... __/src/datasets/remode_dataset.i"
 	@echo "... __/src/datasets/remode_dataset.s"
+	@echo "... __/src/datasets/tanks_temples_dataset.o"
+	@echo "... __/src/datasets/tanks_temples_dataset.i"
+	@echo "... __/src/datasets/tanks_temples_dataset.s"
 	@echo "... __/src/datasets/tartan_air_dataset.o"
 	@echo "... __/src/datasets/tartan_air_dataset.i"
 	@echo "... __/src/datasets/tartan_air_dataset.s"

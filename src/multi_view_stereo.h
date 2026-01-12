@@ -59,6 +59,7 @@ protected:
     Image* ref_image_;
     Dataset* dataset_;
     float ACCEPTABLE_MINI_COST = 20;
+    float ACCEPTABLE_COST_DIFF = 2;
     float ACCEPTABLE_DEPTH_PARAMETER = 0.2;
     float MAXIMUM_AGGREAGTE_COST_PENALTY = 10;
      

@@ -279,6 +279,30 @@ src/datasets/dataset.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/dataset.cc.s
 .PHONY : src/datasets/dataset.cc.s
 
+src/datasets/eth3d_dataset.o: src/datasets/eth3d_dataset.cc.o
+.PHONY : src/datasets/eth3d_dataset.o
+
+# target to build an object file
+src/datasets/eth3d_dataset.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/eth3d_dataset.cc.o
+.PHONY : src/datasets/eth3d_dataset.cc.o
+
+src/datasets/eth3d_dataset.i: src/datasets/eth3d_dataset.cc.i
+.PHONY : src/datasets/eth3d_dataset.i
+
+# target to preprocess a source file
+src/datasets/eth3d_dataset.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/eth3d_dataset.cc.i
+.PHONY : src/datasets/eth3d_dataset.cc.i
+
+src/datasets/eth3d_dataset.s: src/datasets/eth3d_dataset.cc.s
+.PHONY : src/datasets/eth3d_dataset.s
+
+# target to generate assembly for a file
+src/datasets/eth3d_dataset.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/eth3d_dataset.cc.s
+.PHONY : src/datasets/eth3d_dataset.cc.s
+
 src/datasets/fast_livo2_dataset.o: src/datasets/fast_livo2_dataset.cc.o
 .PHONY : src/datasets/fast_livo2_dataset.o
 
@@ -350,6 +374,30 @@ src/datasets/remode_dataset.s: src/datasets/remode_dataset.cc.s
 src/datasets/remode_dataset.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/remode_dataset.cc.s
 .PHONY : src/datasets/remode_dataset.cc.s
+
+src/datasets/tanks_temples_dataset.o: src/datasets/tanks_temples_dataset.cc.o
+.PHONY : src/datasets/tanks_temples_dataset.o
+
+# target to build an object file
+src/datasets/tanks_temples_dataset.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/tanks_temples_dataset.cc.o
+.PHONY : src/datasets/tanks_temples_dataset.cc.o
+
+src/datasets/tanks_temples_dataset.i: src/datasets/tanks_temples_dataset.cc.i
+.PHONY : src/datasets/tanks_temples_dataset.i
+
+# target to preprocess a source file
+src/datasets/tanks_temples_dataset.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/tanks_temples_dataset.cc.i
+.PHONY : src/datasets/tanks_temples_dataset.cc.i
+
+src/datasets/tanks_temples_dataset.s: src/datasets/tanks_temples_dataset.cc.s
+.PHONY : src/datasets/tanks_temples_dataset.s
+
+# target to generate assembly for a file
+src/datasets/tanks_temples_dataset.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_multi_view_stereo.dir/build.make CMakeFiles/run_multi_view_stereo.dir/src/datasets/tanks_temples_dataset.cc.s
+.PHONY : src/datasets/tanks_temples_dataset.cc.s
 
 src/datasets/tartan_air_dataset.o: src/datasets/tartan_air_dataset.cc.o
 .PHONY : src/datasets/tartan_air_dataset.o
@@ -591,6 +639,9 @@ help:
 	@echo "... src/datasets/dataset.o"
 	@echo "... src/datasets/dataset.i"
 	@echo "... src/datasets/dataset.s"
+	@echo "... src/datasets/eth3d_dataset.o"
+	@echo "... src/datasets/eth3d_dataset.i"
+	@echo "... src/datasets/eth3d_dataset.s"
 	@echo "... src/datasets/fast_livo2_dataset.o"
 	@echo "... src/datasets/fast_livo2_dataset.i"
 	@echo "... src/datasets/fast_livo2_dataset.s"
@@ -600,6 +651,9 @@ help:
 	@echo "... src/datasets/remode_dataset.o"
 	@echo "... src/datasets/remode_dataset.i"
 	@echo "... src/datasets/remode_dataset.s"
+	@echo "... src/datasets/tanks_temples_dataset.o"
+	@echo "... src/datasets/tanks_temples_dataset.i"
+	@echo "... src/datasets/tanks_temples_dataset.s"
 	@echo "... src/datasets/tartan_air_dataset.o"
 	@echo "... src/datasets/tartan_air_dataset.i"
 	@echo "... src/datasets/tartan_air_dataset.s"

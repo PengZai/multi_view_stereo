@@ -171,7 +171,7 @@ ptr_pixel_point_on_the_down_ref_picked_pixel_point_(nullptr)
 
     // picked_uncertainty_point_position_ = Eigen::Vector3f(101.0f, 229.0f, 0.0f);
 
-    picked_uncertainty_point_position_ = Eigen::Vector3f(50.0f, 50.0f, 0.0f);
+    picked_uncertainty_point_position_ = Eigen::Vector3f(113.0f, 191.0f, 0.0f);
 
     // viewer_ = guik::LightViewer::instance(Eigen::Vector2i(1440, 960));
     viewer_ = guik::LightViewer::instance(Eigen::Vector2i(-1, -1));
@@ -244,14 +244,14 @@ ptr_pixel_point_on_the_down_ref_picked_pixel_point_(nullptr)
                     // if we adjust slider
 
                     DebugPlot();
-                    std::cout << "epipolar_segment.aggregate_costs_ start" << std::endl;
-                    for(int idx=0;idx < epipolar_segment.aggregate_costs_.size();idx++){
-                        std::cout << epipolar_segment.aggregate_costs_[idx] << ",";
-                        if(idx == epipolar_segment.aggregate_costs_.size()-1){
-                            std::cout<<std::endl;
-                        }
-                    }
-                    std::cout << "epipolar_segment.aggregate_costs_ end" << std::endl;
+                    // std::cout << "epipolar_segment.aggregate_costs_ start" << std::endl;
+                    // for(int idx=0;idx < epipolar_segment.aggregate_costs_.size();idx++){
+                    //     std::cout << epipolar_segment.aggregate_costs_[idx] << ",";
+                    //     if(idx == epipolar_segment.aggregate_costs_.size()-1){
+                    //         std::cout<<std::endl;
+                    //     }
+                    // }
+                    // std::cout << "epipolar_segment.aggregate_costs_ end" << std::endl;
                 }
 
                 const std::string epipolar_segment_label = "Epipolar Segment Cost " + std::to_string(debug_info_idx);
@@ -262,6 +262,8 @@ ptr_pixel_point_on_the_down_ref_picked_pixel_point_(nullptr)
                     std::string cost_label = "cost " + std::to_string(debug_info_idx);
                     ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);
                     ImPlot::PlotLine(cost_label.data(), debug_info.steps_.data(), epipolar_segment.costs_.data(), epipolar_segment.costs_.size());
+                    ImPlot::PlotInfLines(manual_match_label.data(), debug_info.steps_.data() + debug_info.manual_step_idx_, 1);
+
                     // std::string best_match_label = "best match " + std::to_string(debug_info_idx);
                     // ImPlot::PlotInfLines(best_match_label.data(), debug_info.steps_.data() + debug_info.best_step_idx_, 1);
                     // ImPlot::PlotInfLines(manual_match_label.data(), debug_info.steps_.data() + debug_info.manual_step_idx_, 1);
@@ -284,11 +286,21 @@ ptr_pixel_point_on_the_down_ref_picked_pixel_point_(nullptr)
                         // ImPlot::PlotInfLines(best_match_label.data(), debug_info.steps_.data() + debug_info.best_step_idx_, 1);
                         ImPlot::PlotInfLines(manual_match_label.data(), debug_info.steps_.data() + debug_info.manual_step_idx_, 1);
 
-                        for(int possible_minimum_peak_i = 0 ; possible_minimum_peak_i < (int)debug_info.possible_minimum_peak_idxes_.size(); possible_minimum_peak_i++)
-                        {
-                            std::string possible_minimum_peak_label = " possible_minimum_peak " + std::to_string(possible_minimum_peak_i);
-                            ImPlot::PlotInfLines(possible_minimum_peak_label.data(), debug_info.steps_.data() + debug_info.possible_minimum_peak_idxes_[possible_minimum_peak_i], 1);
-                        }
+                        if(debug_info.possible_minimum_peak_idxes_.size() > 0){
+                            
+                            std::string possible_minimum_peak_label = " possible_minimum_peak " + std::to_string(0);
+                            ImPlot::PlotInfLines(possible_minimum_peak_label.data(), debug_info.steps_.data() + debug_info.possible_minimum_peak_idxes_[0], 1);
+                            int index_in_plus_direction = debug_info.errors_in_plus_direction_[0];
+                            if(index_in_plus_direction < debug_info.steps_.size())
+                            {
+                                ImPlot::PlotInfLines(possible_minimum_peak_label.data(), debug_info.steps_.data() + index_in_plus_direction, 1);
+                            }
+                            int index_in_minus_direction = debug_info.errors_in_minus_direction_[0];
+                            if(index_in_minus_direction >=0){
+                                ImPlot::PlotInfLines(possible_minimum_peak_label.data(), debug_info.steps_.data() + index_in_minus_direction, 1);
+                            }
+
+                        } 
 
                         ImPlot::EndPlot();
 
@@ -307,6 +319,8 @@ ptr_pixel_point_on_the_down_ref_picked_pixel_point_(nullptr)
                             depths[i] = 1.0/epipolar_segment.inv_depths_[i];
                         }
                         ImPlot::PlotLine(depth_label.data(), debug_info.steps_.data(), depths.data(), depths.size());
+                        ImPlot::PlotInfLines(manual_match_label.data(), debug_info.steps_.data() + debug_info.manual_step_idx_, 1);
+
                         ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);
                         std::string inv_depth_label = "inv_depth " + std::to_string(debug_info_idx);
                         ImPlot::PlotLine(inv_depth_label.data(), debug_info.steps_.data(), epipolar_segment.inv_depths_.data(), epipolar_segment.inv_depths_.size());
@@ -319,7 +333,6 @@ ptr_pixel_point_on_the_down_ref_picked_pixel_point_(nullptr)
                             ImPlot::PlotInfLines(possible_minimum_peak_label.data(), debug_info.steps_.data() + debug_info.possible_minimum_peak_idxes_[possible_minimum_peak_i], 1);
                         }
 
-                        ImPlot::PlotInfLines(manual_match_label.data(), debug_info.steps_.data() + debug_info.manual_step_idx_, 1);
 
 
                         ImPlot::EndPlot();

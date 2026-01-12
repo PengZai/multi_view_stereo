@@ -21,6 +21,8 @@ class FastLivo2Dataset;
 class RemodeDataset;
 class TartanAirDataset;
 class KittiDataset;
+class TanksTemplesDataset;
+class ETH3DDataset;
 // class VirtualKittiDataset;
 class Visualizer;
 
@@ -95,6 +97,9 @@ class DebugInfo
     
     // int best_step_idx_;
     std::vector<int> possible_minimum_peak_idxes_;
+    std::vector<float> errors_in_minus_direction_;
+    std::vector<float> errors_in_plus_direction_;
+
     int manual_step_idx_ = 0;
 
     Eigen::Vector2f uv_min_;

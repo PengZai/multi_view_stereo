@@ -28,6 +28,7 @@ float MinimumPeak::get_persistence(const std::vector<float>& costs) const
 void get_peaks_with_persistent_homology(const std::vector<float>& costs, std::vector<MinimumPeak>& minimum_peaks)
 {
 
+    minimum_peaks.clear();
     int Ncosts = costs.size();
     std::vector<int> idxtopeak(Ncosts, -1);
 
