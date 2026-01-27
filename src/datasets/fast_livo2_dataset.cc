@@ -40,42 +40,49 @@ void FastLivo2Dataset::readTrajectory()
             Nline++;
             continue; 
         }
-        double timestamp = std::stod(str_timestamp);
-        str_timestamp.erase(std::remove(str_timestamp.begin(), str_timestamp.end(), '.'), str_timestamp.end());
 
-        // std::string str_timestamp = std::to_string(timestamp);
+        if(Ntraj >= minimum_traj_)
+        {
+            double timestamp = std::stod(str_timestamp);
+            str_timestamp.erase(std::remove(str_timestamp.begin(), str_timestamp.end(), '.'), str_timestamp.end());
 
-        Eigen::Matrix4f T_world_pose = Eigen::Matrix4f::Identity();
-        T_world_pose.block<3,3>(0,0) = Eigen::Quaternionf(qw,qx,qy,qz).toRotationMatrix();
-        T_world_pose.block<3,1>(0,3) = Eigen::Vector3f(x,y,z);
+            // std::string str_timestamp = std::to_string(timestamp);
 
-        // T_world_camera
-        for(size_t cam_id=0;cam_id<config_->num_used_camera_; cam_id++){
-            Image *image = new Image(config_);
-            Eigen::Matrix4f T_world_camid = T_world_pose * config_->trajectory_->T_pose_camidx_[cam_id];
+            Eigen::Matrix4f T_world_pose = Eigen::Matrix4f::Identity();
+            T_world_pose.block<3,3>(0,0) = Eigen::Quaternionf(qw,qx,qy,qz).toRotationMatrix();
+            T_world_pose.block<3,1>(0,3) = Eigen::Vector3f(x,y,z);
 
-            double min_diff = std::numeric_limits<double>::max();
-            int image_idx = cameras_[cam_id].getSynchronizedImageByTimeStamp(timestamp, min_diff, config_->trajectory_->sync_time_diff_tolerance_);
-            
-            if(image_idx == -1){
-                continue;
+            // T_world_camera
+            for(size_t cam_id=0;cam_id<config_->num_used_camera_; cam_id++){
+                Image *image = new Image(config_);
+                Eigen::Matrix4f T_world_camid = T_world_pose * config_->trajectory_->T_pose_camidx_[cam_id];
+
+                double min_diff = std::numeric_limits<double>::max();
+                int image_idx = cameras_[cam_id].getSynchronizedImageByTimeStamp(timestamp, min_diff, config_->trajectory_->sync_time_diff_tolerance_);
+                
+                if(image_idx == -1){
+                    continue;
+                }
+
+                image->setTranslation(T_world_camid.block<3,1>(0,3));
+                image->setQuaternion(Eigen::Quaternionf(T_world_camid.block<3,3>(0,0)));
+                image->setName(cameras_[cam_id].image_names_[image_idx]);
+                image->setPath(cameras_[cam_id].dir_path_ + "/" + cameras_[cam_id].image_names_[image_idx]+".png");
+                image->setTimestamp(timestamp);
+                image->setCameraId(cam_id);
+                image->setPoseId(Ntraj-minimum_traj_);
+                image->setWidthOrg(config_->cameras_[cam_id].original_resolution_[0]);
+                image->setHeightOrg(config_->cameras_[cam_id].original_resolution_[1]);
+
+
+                if(config_->is_use_GT_depth_ == true){
+                    std::string gt_depth_path = config_->cameras_[cam_id].gt_depth_->path_ + "/" + image->getImageName() + ".tiff";
+                    image->setGTDepthPath(gt_depth_path);
+                }
+
+                images_.push_back(image);
+
             }
-
-            image->setTranslation(T_world_camid.block<3,1>(0,3));
-            image->setQuaternion(Eigen::Quaternionf(T_world_camid.block<3,3>(0,0)));
-            image->setName(cameras_[cam_id].image_names_[image_idx]);
-            image->setPath(cameras_[cam_id].dir_path_ + "/" + cameras_[cam_id].image_names_[image_idx]+".png");
-            image->setTimestamp(timestamp);
-            image->setCameraId(cam_id);
-            image->setPoseId(Ntraj);
-
-            if(config_->is_use_GT_depth_ == true){
-                std::string gt_depth_path = config_->cameras_[cam_id].gt_depth_->path_ + "/" + image->getImageName() + ".tiff";
-                image->setGTDepthPath(gt_depth_path);
-            }
-
-            images_.push_back(image);
-
         }
 
         Nline++;

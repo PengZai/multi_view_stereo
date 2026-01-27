@@ -47,7 +47,7 @@
         "request": "launch",
         "program": "${workspaceFolder}/build/run_multi_view_stereo",
         "args": [
-            "../configs/TartanAir.yaml"
+            "../configs/BotanicGarden.yaml"
         ],
         "stopAtEntry": false,
         "cwd": "${fileDirname}",

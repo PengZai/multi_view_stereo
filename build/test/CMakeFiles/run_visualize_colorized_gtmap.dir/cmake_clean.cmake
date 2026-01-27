@@ -17,6 +17,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/tanks_temples_dataset.cc.o.d"
   "CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/tartan_air_dataset.cc.o"
   "CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/datasets/tartan_air_dataset.cc.o.d"
+  "CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/multi_view_stereo.cc.o"
+  "CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/multi_view_stereo.cc.o.d"
   "CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/pangolin_visualizer.cc.o"
   "CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/pangolin_visualizer.cc.o.d"
   "CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/undistort.cc.o"

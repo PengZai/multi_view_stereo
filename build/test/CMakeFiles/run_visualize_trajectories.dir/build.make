@@ -83,10 +83,24 @@ test/CMakeFiles/run_visualize_trajectories.dir/visualize_trajectories.cc.s: cmak
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/run_visualize_trajectories.dir/visualize_trajectories.cc.s"
 	cd /root/multi_view_stereo/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/multi_view_stereo/test/visualize_trajectories.cc -o CMakeFiles/run_visualize_trajectories.dir/visualize_trajectories.cc.s
 
+test/CMakeFiles/run_visualize_trajectories.dir/__/src/multi_view_stereo.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/flags.make
+test/CMakeFiles/run_visualize_trajectories.dir/__/src/multi_view_stereo.cc.o: /root/multi_view_stereo/src/multi_view_stereo.cc
+test/CMakeFiles/run_visualize_trajectories.dir/__/src/multi_view_stereo.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/multi_view_stereo.cc.o"
+	cd /root/multi_view_stereo/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/run_visualize_trajectories.dir/__/src/multi_view_stereo.cc.o -MF CMakeFiles/run_visualize_trajectories.dir/__/src/multi_view_stereo.cc.o.d -o CMakeFiles/run_visualize_trajectories.dir/__/src/multi_view_stereo.cc.o -c /root/multi_view_stereo/src/multi_view_stereo.cc
+
+test/CMakeFiles/run_visualize_trajectories.dir/__/src/multi_view_stereo.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/run_visualize_trajectories.dir/__/src/multi_view_stereo.cc.i"
+	cd /root/multi_view_stereo/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/multi_view_stereo/src/multi_view_stereo.cc > CMakeFiles/run_visualize_trajectories.dir/__/src/multi_view_stereo.cc.i
+
+test/CMakeFiles/run_visualize_trajectories.dir/__/src/multi_view_stereo.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/run_visualize_trajectories.dir/__/src/multi_view_stereo.cc.s"
+	cd /root/multi_view_stereo/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/multi_view_stereo/src/multi_view_stereo.cc -o CMakeFiles/run_visualize_trajectories.dir/__/src/multi_view_stereo.cc.s
+
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/configs.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/flags.make
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/configs.cc.o: /root/multi_view_stereo/src/configs.cc
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/configs.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/configs.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/configs.cc.o"
 	cd /root/multi_view_stereo/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/run_visualize_trajectories.dir/__/src/configs.cc.o -MF CMakeFiles/run_visualize_trajectories.dir/__/src/configs.cc.o.d -o CMakeFiles/run_visualize_trajectories.dir/__/src/configs.cc.o -c /root/multi_view_stereo/src/configs.cc
 
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/configs.cc.i: cmake_force
@@ -100,7 +114,7 @@ test/CMakeFiles/run_visualize_trajectories.dir/__/src/configs.cc.s: cmake_force
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/undistort.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/flags.make
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/undistort.cc.o: /root/multi_view_stereo/src/undistort.cc
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/undistort.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/undistort.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/undistort.cc.o"
 	cd /root/multi_view_stereo/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/run_visualize_trajectories.dir/__/src/undistort.cc.o -MF CMakeFiles/run_visualize_trajectories.dir/__/src/undistort.cc.o.d -o CMakeFiles/run_visualize_trajectories.dir/__/src/undistort.cc.o -c /root/multi_view_stereo/src/undistort.cc
 
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/undistort.cc.i: cmake_force
@@ -114,7 +128,7 @@ test/CMakeFiles/run_visualize_trajectories.dir/__/src/undistort.cc.s: cmake_forc
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/utils.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/flags.make
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/utils.cc.o: /root/multi_view_stereo/src/utils.cc
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/utils.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/utils.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/utils.cc.o"
 	cd /root/multi_view_stereo/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/run_visualize_trajectories.dir/__/src/utils.cc.o -MF CMakeFiles/run_visualize_trajectories.dir/__/src/utils.cc.o.d -o CMakeFiles/run_visualize_trajectories.dir/__/src/utils.cc.o -c /root/multi_view_stereo/src/utils.cc
 
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/utils.cc.i: cmake_force
@@ -128,7 +142,7 @@ test/CMakeFiles/run_visualize_trajectories.dir/__/src/utils.cc.s: cmake_force
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/visualizer.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/flags.make
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/visualizer.cc.o: /root/multi_view_stereo/src/visualizer.cc
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/visualizer.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/visualizer.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/visualizer.cc.o"
 	cd /root/multi_view_stereo/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/run_visualize_trajectories.dir/__/src/visualizer.cc.o -MF CMakeFiles/run_visualize_trajectories.dir/__/src/visualizer.cc.o.d -o CMakeFiles/run_visualize_trajectories.dir/__/src/visualizer.cc.o -c /root/multi_view_stereo/src/visualizer.cc
 
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/visualizer.cc.i: cmake_force
@@ -142,7 +156,7 @@ test/CMakeFiles/run_visualize_trajectories.dir/__/src/visualizer.cc.s: cmake_for
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/pangolin_visualizer.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/flags.make
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/pangolin_visualizer.cc.o: /root/multi_view_stereo/src/pangolin_visualizer.cc
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/pangolin_visualizer.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/pangolin_visualizer.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/pangolin_visualizer.cc.o"
 	cd /root/multi_view_stereo/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/run_visualize_trajectories.dir/__/src/pangolin_visualizer.cc.o -MF CMakeFiles/run_visualize_trajectories.dir/__/src/pangolin_visualizer.cc.o.d -o CMakeFiles/run_visualize_trajectories.dir/__/src/pangolin_visualizer.cc.o -c /root/multi_view_stereo/src/pangolin_visualizer.cc
 
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/pangolin_visualizer.cc.i: cmake_force
@@ -156,7 +170,7 @@ test/CMakeFiles/run_visualize_trajectories.dir/__/src/pangolin_visualizer.cc.s: 
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/botanic_gardent_dataset.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/flags.make
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/botanic_gardent_dataset.cc.o: /root/multi_view_stereo/src/datasets/botanic_gardent_dataset.cc
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/botanic_gardent_dataset.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/botanic_gardent_dataset.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/botanic_gardent_dataset.cc.o"
 	cd /root/multi_view_stereo/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/botanic_gardent_dataset.cc.o -MF CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/botanic_gardent_dataset.cc.o.d -o CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/botanic_gardent_dataset.cc.o -c /root/multi_view_stereo/src/datasets/botanic_gardent_dataset.cc
 
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/botanic_gardent_dataset.cc.i: cmake_force
@@ -170,7 +184,7 @@ test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/botanic_gardent_d
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/fast_livo2_dataset.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/flags.make
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/fast_livo2_dataset.cc.o: /root/multi_view_stereo/src/datasets/fast_livo2_dataset.cc
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/fast_livo2_dataset.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/fast_livo2_dataset.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/fast_livo2_dataset.cc.o"
 	cd /root/multi_view_stereo/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/fast_livo2_dataset.cc.o -MF CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/fast_livo2_dataset.cc.o.d -o CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/fast_livo2_dataset.cc.o -c /root/multi_view_stereo/src/datasets/fast_livo2_dataset.cc
 
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/fast_livo2_dataset.cc.i: cmake_force
@@ -184,7 +198,7 @@ test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/fast_livo2_datase
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/remode_dataset.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/flags.make
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/remode_dataset.cc.o: /root/multi_view_stereo/src/datasets/remode_dataset.cc
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/remode_dataset.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/remode_dataset.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/remode_dataset.cc.o"
 	cd /root/multi_view_stereo/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/remode_dataset.cc.o -MF CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/remode_dataset.cc.o.d -o CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/remode_dataset.cc.o -c /root/multi_view_stereo/src/datasets/remode_dataset.cc
 
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/remode_dataset.cc.i: cmake_force
@@ -198,7 +212,7 @@ test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/remode_dataset.cc
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tartan_air_dataset.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/flags.make
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tartan_air_dataset.cc.o: /root/multi_view_stereo/src/datasets/tartan_air_dataset.cc
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tartan_air_dataset.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tartan_air_dataset.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tartan_air_dataset.cc.o"
 	cd /root/multi_view_stereo/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tartan_air_dataset.cc.o -MF CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tartan_air_dataset.cc.o.d -o CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tartan_air_dataset.cc.o -c /root/multi_view_stereo/src/datasets/tartan_air_dataset.cc
 
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tartan_air_dataset.cc.i: cmake_force
@@ -212,7 +226,7 @@ test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tartan_air_datase
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/kitti_dataset.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/flags.make
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/kitti_dataset.cc.o: /root/multi_view_stereo/src/datasets/kitti_dataset.cc
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/kitti_dataset.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/kitti_dataset.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/kitti_dataset.cc.o"
 	cd /root/multi_view_stereo/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/kitti_dataset.cc.o -MF CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/kitti_dataset.cc.o.d -o CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/kitti_dataset.cc.o -c /root/multi_view_stereo/src/datasets/kitti_dataset.cc
 
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/kitti_dataset.cc.i: cmake_force
@@ -226,7 +240,7 @@ test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/kitti_dataset.cc.
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tanks_temples_dataset.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/flags.make
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tanks_temples_dataset.cc.o: /root/multi_view_stereo/src/datasets/tanks_temples_dataset.cc
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tanks_temples_dataset.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tanks_temples_dataset.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tanks_temples_dataset.cc.o"
 	cd /root/multi_view_stereo/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tanks_temples_dataset.cc.o -MF CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tanks_temples_dataset.cc.o.d -o CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tanks_temples_dataset.cc.o -c /root/multi_view_stereo/src/datasets/tanks_temples_dataset.cc
 
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tanks_temples_dataset.cc.i: cmake_force
@@ -240,7 +254,7 @@ test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/tanks_temples_dat
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/eth3d_dataset.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/flags.make
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/eth3d_dataset.cc.o: /root/multi_view_stereo/src/datasets/eth3d_dataset.cc
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/eth3d_dataset.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/eth3d_dataset.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/eth3d_dataset.cc.o"
 	cd /root/multi_view_stereo/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/eth3d_dataset.cc.o -MF CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/eth3d_dataset.cc.o.d -o CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/eth3d_dataset.cc.o -c /root/multi_view_stereo/src/datasets/eth3d_dataset.cc
 
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/eth3d_dataset.cc.i: cmake_force
@@ -254,7 +268,7 @@ test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/eth3d_dataset.cc.
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/dataset.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/flags.make
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/dataset.cc.o: /root/multi_view_stereo/src/datasets/dataset.cc
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/dataset.cc.o: test/CMakeFiles/run_visualize_trajectories.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/dataset.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/dataset.cc.o"
 	cd /root/multi_view_stereo/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/dataset.cc.o -MF CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/dataset.cc.o.d -o CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/dataset.cc.o -c /root/multi_view_stereo/src/datasets/dataset.cc
 
 test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/dataset.cc.i: cmake_force
@@ -268,6 +282,7 @@ test/CMakeFiles/run_visualize_trajectories.dir/__/src/datasets/dataset.cc.s: cma
 # Object files for target run_visualize_trajectories
 run_visualize_trajectories_OBJECTS = \
 "CMakeFiles/run_visualize_trajectories.dir/visualize_trajectories.cc.o" \
+"CMakeFiles/run_visualize_trajectories.dir/__/src/multi_view_stereo.cc.o" \
 "CMakeFiles/run_visualize_trajectories.dir/__/src/configs.cc.o" \
 "CMakeFiles/run_visualize_trajectories.dir/__/src/undistort.cc.o" \
 "CMakeFiles/run_visualize_trajectories.dir/__/src/utils.cc.o" \
@@ -286,6 +301,7 @@ run_visualize_trajectories_OBJECTS = \
 run_visualize_trajectories_EXTERNAL_OBJECTS =
 
 test/run_visualize_trajectories: test/CMakeFiles/run_visualize_trajectories.dir/visualize_trajectories.cc.o
+test/run_visualize_trajectories: test/CMakeFiles/run_visualize_trajectories.dir/__/src/multi_view_stereo.cc.o
 test/run_visualize_trajectories: test/CMakeFiles/run_visualize_trajectories.dir/__/src/configs.cc.o
 test/run_visualize_trajectories: test/CMakeFiles/run_visualize_trajectories.dir/__/src/undistort.cc.o
 test/run_visualize_trajectories: test/CMakeFiles/run_visualize_trajectories.dir/__/src/utils.cc.o
@@ -477,7 +493,7 @@ test/run_visualize_trajectories: /usr/lib/x86_64-linux-gnu/libpng.so
 test/run_visualize_trajectories: /usr/lib/x86_64-linux-gnu/libz.so
 test/run_visualize_trajectories: /usr/lib/x86_64-linux-gnu/libjpeg.so
 test/run_visualize_trajectories: test/CMakeFiles/run_visualize_trajectories.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Linking CXX executable run_visualize_trajectories"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/root/multi_view_stereo/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Linking CXX executable run_visualize_trajectories"
 	cd /root/multi_view_stereo/build/test && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/run_visualize_trajectories.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

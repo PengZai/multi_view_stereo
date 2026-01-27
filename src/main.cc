@@ -20,12 +20,12 @@ int main(int argv, char ** argc)
     MVS::Visualizer* visualizer = new MVS::IridescenceVisualizer(config);
     visualizer->setDataset(dataset);
 
-    MVS::MultiViewStereo multi_view_stereo(config);
-    multi_view_stereo.setDataset(dataset);
-    multi_view_stereo.setVisualizer(visualizer);
+    MVS::MultiViewStereo* multi_view_stereo = new MVS::MultiViewStereo(config);
+    multi_view_stereo->setDataset(dataset);
+    multi_view_stereo->setVisualizer(visualizer);
+    visualizer->setMultiViewStereo(multi_view_stereo);
 
-
-    multi_view_stereo.run();
+    multi_view_stereo->run();
 
 
     // delete dataset;

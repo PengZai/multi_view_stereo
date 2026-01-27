@@ -7,12 +7,10 @@
 #include <numeric>  // for std::accumulate
 #include <cmath>
 
-#include "undistort.h"
 
 namespace MVS
 {
 
-class DistortModel;
 
 
 class GT_depth
@@ -50,7 +48,7 @@ class Camera
     std::vector<std::string> image_names_;
     int use_GT_depth_id_;
     GT_depth* gt_depth_;
-    DistortModel* undistort_;
+    class DistortModel* undistort_;
    
 
 };
@@ -86,6 +84,7 @@ class Config
     int use_external_trajectory_id_;
     bool is_use_GT_depth_;
     int maximum_traj_;
+    int minimum_traj_;
     int ref_pose_idx_;
     int ref_camera_idx_;
     int tar_pose_start_idx_;

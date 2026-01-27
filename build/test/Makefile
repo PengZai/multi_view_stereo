@@ -572,6 +572,39 @@ __/src/iridescence_visualizer.cc.s:
 	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_texture.dir/build.make test/CMakeFiles/Iridescence_texture.dir/__/src/iridescence_visualizer.cc.s
 .PHONY : __/src/iridescence_visualizer.cc.s
 
+__/src/multi_view_stereo.o: __/src/multi_view_stereo.cc.o
+.PHONY : __/src/multi_view_stereo.o
+
+# target to build an object file
+__/src/multi_view_stereo.cc.o:
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/multi_view_stereo.cc.o
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/multi_view_stereo.cc.o
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_example.dir/build.make test/CMakeFiles/Iridescence_example.dir/__/src/multi_view_stereo.cc.o
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_texture.dir/build.make test/CMakeFiles/Iridescence_texture.dir/__/src/multi_view_stereo.cc.o
+.PHONY : __/src/multi_view_stereo.cc.o
+
+__/src/multi_view_stereo.i: __/src/multi_view_stereo.cc.i
+.PHONY : __/src/multi_view_stereo.i
+
+# target to preprocess a source file
+__/src/multi_view_stereo.cc.i:
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/multi_view_stereo.cc.i
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/multi_view_stereo.cc.i
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_example.dir/build.make test/CMakeFiles/Iridescence_example.dir/__/src/multi_view_stereo.cc.i
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_texture.dir/build.make test/CMakeFiles/Iridescence_texture.dir/__/src/multi_view_stereo.cc.i
+.PHONY : __/src/multi_view_stereo.cc.i
+
+__/src/multi_view_stereo.s: __/src/multi_view_stereo.cc.s
+.PHONY : __/src/multi_view_stereo.s
+
+# target to generate assembly for a file
+__/src/multi_view_stereo.cc.s:
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_trajectories.dir/build.make test/CMakeFiles/run_visualize_trajectories.dir/__/src/multi_view_stereo.cc.s
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/run_visualize_colorized_gtmap.dir/build.make test/CMakeFiles/run_visualize_colorized_gtmap.dir/__/src/multi_view_stereo.cc.s
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_example.dir/build.make test/CMakeFiles/Iridescence_example.dir/__/src/multi_view_stereo.cc.s
+	cd /root/multi_view_stereo/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/Iridescence_texture.dir/build.make test/CMakeFiles/Iridescence_texture.dir/__/src/multi_view_stereo.cc.s
+.PHONY : __/src/multi_view_stereo.cc.s
+
 __/src/pangolin_visualizer.o: __/src/pangolin_visualizer.cc.o
 .PHONY : __/src/pangolin_visualizer.o
 
@@ -868,6 +901,9 @@ help:
 	@echo "... __/src/iridescence_visualizer.o"
 	@echo "... __/src/iridescence_visualizer.i"
 	@echo "... __/src/iridescence_visualizer.s"
+	@echo "... __/src/multi_view_stereo.o"
+	@echo "... __/src/multi_view_stereo.i"
+	@echo "... __/src/multi_view_stereo.s"
 	@echo "... __/src/pangolin_visualizer.o"
 	@echo "... __/src/pangolin_visualizer.i"
 	@echo "... __/src/pangolin_visualizer.s"

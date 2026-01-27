@@ -5,6 +5,7 @@ system:
   use_external_trajectory_id: 0
   is_use_GT_depth: 1
   maximum_traj: 203
+  minimum_traj: 0
   ref_pose_idx: 0
   ref_camera_idx: 0
   start_match_uv: [0, 0]

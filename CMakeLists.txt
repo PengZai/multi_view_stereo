@@ -17,7 +17,7 @@ set(CMAKE_CXX_EXTENSIONS OFF) # Setting CMAKE_CXX_EXTENSIONS to OFF ensures stri
 
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION OFF)
 
-option(ENABLE_CMAKE_DEBUG "Enable detailed debug messages" ON)
+option(ENABLE_CMAKE_DEBUG "Enable detailed debug messages" OFF)
 
 if(ENABLE_CMAKE_DEBUG)
     # Debug or Release

@@ -1,4 +1,5 @@
 #include "configs.h"
+#include "undistort.h"
 
 
 namespace MVS
@@ -42,6 +43,7 @@ trajectory_(nullptr)
     (*fs)["system"]["use_external_trajectory_id"] >> use_external_trajectory_id_;
     (*fs)["system"]["is_use_GT_depth"] >> is_use_GT_depth_;
     (*fs)["system"]["maximum_traj"] >> maximum_traj_;
+    (*fs)["system"]["minimum_traj"] >> minimum_traj_;
     (*fs)["system"]["ref_pose_idx"] >> ref_pose_idx_;
     (*fs)["system"]["ref_camera_idx"] >> ref_camera_idx_;
     (*fs)["system"]["tar_pose_start_idx"] >> tar_pose_start_idx_;

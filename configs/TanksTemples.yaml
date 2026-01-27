@@ -5,6 +5,7 @@ system:
   use_external_trajectory_id: 0
   is_use_GT_depth: 1
   maximum_traj: 200
+  minimum_traj: 0
   ref_pose_idx: 0
   # ref_pose_idx: 8
   ref_camera_idx: 0
@@ -21,7 +22,8 @@ system:
 external_trajectory0:
   name: GT_pose
   world_coordinate: camera0
-  trajectory_path: /root/datasets2/tankandtemples/trainning_data/Barn_data/Barn_COLMAP_SfM.log 
+  # trajectory_path: /root/datasets2/tankandtemples/trainning_data/Barn_data/Barn_COLMAP_SfM.log 
+  trajectory_path: /root/datasets2/tankandtemples/trainning_data/Barn_data/colmap_data_Barn_10_fps_1080p/sparse/cameras.log 
   # trajectory_path: /root/datasets2/tartan_air/seasonsforest_winter_sample_P006/P006/pose_left.txt  
   # trajectory_path: /root/datasets2/tartan_air/seasonsforest_sample_P002/P002/pose_left.txt  
   is_all_cameras_in_same_traj_file: 1
@@ -51,11 +53,13 @@ external_trajectory0:
 
 cam0:
   name: camera0
-  dir_path: /root/datasets2/tankandtemples/trainning_data/Barn_data/Barn
+  # dir_path: /root/datasets2/tankandtemples/trainning_data/Barn_data/Barn
+  dir_path: /root/datasets2/tankandtemples/trainning_data/Barn_data/colmap_data_Barn_10_fps_1080p/images
   original_resolution: [1920, 1080] # width x height
-  resolution: [480, 270] # width x height, don't larger than original resolution
+  resolution: [1920, 1080] # width x height, don't larger than original resolution
   camera_model: pinhole
-  original_intrinsics: [1344, 1344, 960, 540] #fx, fy, cu, cv
+  # original_intrinsics: [1344, 1344, 960, 540] #fx, fy, cu, cv
+  original_intrinsics: [1186.3110047343757, 1184.8719963813496, 960, 540] #fx, fy, cu, cv
   distortion_model: radtan
   distortion_coeffs: [0,0,0,0] #k1,k2,p1,p2
   use_deeplearning_depth_id: 0

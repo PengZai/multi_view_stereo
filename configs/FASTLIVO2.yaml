@@ -5,6 +5,7 @@ system:
   use_external_trajectory_id: 0
   is_use_GT_depth: 1
   maximum_traj: 400
+  minimum_traj: 0
   ref_pose_idx: 181
   ref_camera_idx: 0
   start_match_uv: [0, 0]
@@ -50,7 +51,7 @@ cam0:
   # dir_path: /root/datasets2/colmap_datasets/BotanicGarden_1018_00_16/images/left_rgb
   dir_path: /root/datasets2/fast_livo2_datasets/HKU_Landmark/left_camera
   original_resolution: [1280, 1024] # width x height
-  resolution: [1280, 1024] # width x height, don't larger than original resolution
+  resolution: [640, 512] # width x height, don't larger than original resolution
   camera_model: pinhole
   original_intrinsics: [1176.2874292149932, 1176.21585445307, 592.1187382755453, 509.0864309628322] #fx, fy, cu, cv
   distortion_model: radtan

@@ -1,8 +1,17 @@
 #include "visualizer.h"
 
+
 namespace MVS{
 
-Visualizer::Visualizer(Config* const config)
+
+
+
+Visualizer::Visualizer(Config* const config):
+ptr_picked_ref_ptr_pixel_point_(nullptr),
+ptr_pixel_point_on_the_left_ref_picked_pixel_point_(nullptr),
+ptr_pixel_point_on_the_right_ref_picked_pixel_point_(nullptr),
+ptr_pixel_point_on_the_up_ref_picked_pixel_point_(nullptr),
+ptr_pixel_point_on_the_down_ref_picked_pixel_point_(nullptr)
 {
 
     config_ = config;
@@ -19,6 +28,16 @@ Visualizer::Visualizer(Config* const config)
 void Visualizer::setDataset(Dataset* const dataset)
 {
     dataset_ = dataset;
+}
+
+void Visualizer::setMultiViewStereo(MultiViewStereo* const multi_view_stereo)
+{
+    multi_view_stereo_ = multi_view_stereo;
+}
+
+void Visualizer::setIsNextAction(bool isNextAction)
+{
+    isNextAction_ = isNextAction;
 }
 
 // Save depth image as point cloud in PLY format
@@ -161,7 +180,7 @@ void Visualizer::showColorizedMinMaxDiffDepth(const float* const min_depth_ptr, 
 
 }
 
-void Visualizer::ColorizedCVDepth(const PixelPoint* const ptr_pixel_point_matrix, int width, int height, float min_depth, float max_depth, cv::Mat& colorized_depth)
+void Visualizer::ColorizedCVDepth(Config* config, const PixelPoint* const ptr_pixel_point_matrix, int width, int height, float min_depth, float max_depth, cv::Mat& colorized_depth)
 {
 
     float acceptable_maximum_depth = 0;
@@ -169,7 +188,10 @@ void Visualizer::ColorizedCVDepth(const PixelPoint* const ptr_pixel_point_matrix
     
     for(int i=0;i<wh;i++)
     {
-        float d = ptr_pixel_point_matrix[i].depth_;
+        float d = ptr_pixel_point_matrix[i].output_data_.depth_;
+        if(ptr_pixel_point_matrix[i].min_inv_depth_ == config->infinite_inv_depth_ && ptr_pixel_point_matrix[i].max_inv_depth_ == 1/config->min_depth_){
+            continue;
+        }
         if(d >= min_depth && d <= max_depth){
 
             if(d > acceptable_maximum_depth)
@@ -185,7 +207,8 @@ void Visualizer::ColorizedCVDepth(const PixelPoint* const ptr_pixel_point_matrix
     {
         for(int u=0;u<width;u++){
             
-            float d = ptr_pixel_point_matrix[v*width+u].depth_;
+            int coord = v*width+u;
+            float d = ptr_pixel_point_matrix[coord].output_data_.depth_;
             if(d >= min_depth && d <= max_depth && d <= acceptable_maximum_depth){
 
                 float norm_d = d / acceptable_maximum_depth;
@@ -281,5 +304,15 @@ void Visualizer::showGrayImage(const float* const ptr_gray_data, int width, int 
     cv::imshow(name, vis_gray);
 }
 
+
+void Visualizer::setSelectedRefImageId(int selected_ref_image_id)
+{
+    selected_ref_image_id_ = selected_ref_image_id;
+}
+
+void Visualizer::setSelectedTarImageId(int selected_tar_image_id)
+{
+    selected_tar_image_id_ = selected_tar_image_id;
+}
 
 }

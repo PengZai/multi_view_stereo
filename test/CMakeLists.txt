@@ -18,6 +18,7 @@ set(LIBRARY_DATASET_FOR_TEST_SOURCES
 add_executable(
     run_visualize_trajectories
     visualize_trajectories.cc
+    ../src/multi_view_stereo.cc
     ../src/configs.cc
     ../src/undistort.cc
     ../src/utils.cc
@@ -40,6 +41,7 @@ target_link_libraries(run_visualize_trajectories
 add_executable(
     run_visualize_colorized_gtmap
     visualize_colorized_gtmap.cc
+    ../src/multi_view_stereo.cc
     ../src/configs.cc
     ../src/undistort.cc
     ../src/utils.cc
@@ -77,6 +79,7 @@ target_link_libraries(run_pixel_operation_comparison
 add_executable(
     Iridescence_example
     Iridescence_example.cc
+    ../src/multi_view_stereo.cc
     ../src/iridescence_visualizer.cc
     ../src/configs.cc
     ../src/undistort.cc
@@ -93,6 +96,7 @@ target_link_libraries(Iridescence_example PUBLIC ${LIBRARY_THIRDPARTY})
 add_executable(
     Iridescence_texture
     Iridescence_texture.cc
+    ../src/multi_view_stereo.cc
     ../src/iridescence_visualizer.cc
     ../src/configs.cc
     ../src/undistort.cc

@@ -23,7 +23,7 @@ class PangolinVisualizer : public Visualizer
     void drawFrame(const Eigen::Matrix4f &T_w_c, const Eigen::Vector4i &bgra, bool drawAxis, const std::string &text);
     void drawPoint(const Eigen::Vector3f &pt3f, const Eigen::Vector3i &bgr);
     void drawPoint(const Eigen::Vector3f &pt3f, float gray);
-    void showRefImageReconstruction(Image* const ref_image, Image* const tar_image) override;
+    void showInterface() override;
 
 
     protected:

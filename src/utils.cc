@@ -1,4 +1,5 @@
 #include "utils.h"
+#include "datasets/dataset.h"
 
 
 
@@ -251,6 +252,230 @@ Eigen::Matrix4f invertTransform(const Eigen::Matrix4f& T)
     T_inv.block<3,1>(0,3) = -R.transpose() * t;
     return T_inv;
 }
+
+
+float ASW(const PixelPoint* ptr_ref_pixel_point_matrix, uint32_t ref_u, uint32_t ref_v, uint32_t ref_width, const PixelPoint* ptr_tar_pixel_point_matrix, uint32_t tar_u, uint32_t tar_v, uint32_t tar_width, int half_ws)
+{
+    float gamma_c = 45;
+    float gamma_p = 5;
+    float k = 100;
+
+    const PixelPoint& ref_center_pixel = ptr_ref_pixel_point_matrix[ref_v*ref_width + ref_u];
+    const PixelPoint& tar_center_pixel = ptr_tar_pixel_point_matrix[tar_v*tar_width + tar_u];
+
+    float topsum = 0;
+    float downsum = 0;
+
+    for (int y = -half_ws; y <= half_ws; y++)
+    {
+        uint32_t ref_row = (ref_v + y)*ref_width;
+        uint32_t tar_row = (tar_v + y)*tar_width;
+        for (int x = -half_ws; x <= half_ws; x++)
+        {
+
+            const PixelPoint& ref_neighbor_pixel = ptr_ref_pixel_point_matrix[ref_row + ref_u + x];
+            const PixelPoint& tar_neighbor_pixel = ptr_tar_pixel_point_matrix[tar_row + tar_u + x];
+
+            float ref_color_cost = std::abs(ref_center_pixel.intensity_ - ref_neighbor_pixel.intensity_)/gamma_c;
+            float tar_color_cost = std::abs(tar_center_pixel.intensity_ - tar_neighbor_pixel.intensity_)/gamma_c;
+
+            float distance_cost = std::sqrt(x*x+y*y)/gamma_p;
+            float ref_weight = k*std::exp(-(ref_color_cost+distance_cost));
+            float tar_weight = k*std::exp(-(tar_color_cost+distance_cost));
+            float ad_error = std::abs(ref_neighbor_pixel.intensity_-tar_neighbor_pixel.intensity_);
+            float weight = ref_weight*tar_weight;
+            topsum += weight*ad_error;
+            downsum += weight;     
+        
+        }
+    }
+
+    float cost = topsum/downsum;
+
+    return cost;
+    
+}
+
+float SAD(const PixelPoint* ptr_ref_pixel_point_matrix, uint32_t ref_u, uint32_t ref_v, uint32_t ref_width, const PixelPoint* ptr_tar_pixel_point_matrix, uint32_t tar_u, uint32_t tar_v, uint32_t tar_width, int half_ws)
+{
+
+    float cost = 0;
+    for (int y = -half_ws; y <= half_ws; y++)
+    {
+        uint32_t ref_row = (ref_v + y)*ref_width;
+        uint32_t tar_row = (tar_v + y)*tar_width;
+        for (int x = -half_ws; x <= half_ws; x++)
+        {
+            cost += std::abs(ptr_ref_pixel_point_matrix[ref_row + ref_u + x].intensity_-ptr_tar_pixel_point_matrix[tar_row+tar_u+x].intensity_);
+        }
+    }
+
+    // cost /= N;
+
+
+    return cost;
+
+}
+
+float ZSAD(const PixelPoint* ptr_ref_pixel_point_matrix, uint32_t ref_u, uint32_t ref_v, uint32_t ref_width, const PixelPoint* ptr_tar_pixel_point_matrix, uint32_t tar_u, uint32_t tar_v, uint32_t tar_width, int half_ws)
+{
+
+    const int ws = 2 * half_ws + 1;
+    const int N  = ws * ws;
+    float sum_ref = 0.0f, sum_tar = 0.0f;
+
+    for (int y = -half_ws; y <= half_ws; ++y) {
+        uint32_t ref_row = (ref_v + y) * ref_width;
+        uint32_t tar_row = (tar_v + y) * tar_width;
+
+        for (int x = -half_ws; x <= half_ws; ++x) {
+            sum_ref += ptr_ref_pixel_point_matrix[ref_row + ref_u + x].intensity_;
+            sum_tar += ptr_tar_pixel_point_matrix[tar_row + tar_u + x].intensity_;
+        }
+    }
+
+    const float mean_ref = sum_ref / (float)N;
+    const float mean_tar = sum_tar / (float)N;
+    float meam_tar_minus_mean_ref = mean_tar - mean_ref;
+
+    float cost = 0;
+    for (int y = -half_ws; y <= half_ws; y++)
+    {
+        uint32_t ref_row = (ref_v + y)*ref_width;
+        uint32_t tar_row = (tar_v + y)*tar_width;
+        for (int x = -half_ws; x <= half_ws; x++)
+        {
+            cost += std::abs(ptr_ref_pixel_point_matrix[ref_row + ref_u + x].intensity_-ptr_tar_pixel_point_matrix[tar_row+tar_u+x].intensity_ + meam_tar_minus_mean_ref);
+        }
+    }
+
+    // cost /= N;
+
+
+    return cost;
+
+}
+
+
+float ZSAD(const PixelPoint* ptr_ref_pixel_point_matrix, uint32_t ref_u, uint32_t ref_v, float mean_ref, uint32_t ref_width, const PixelPoint* ptr_tar_pixel_point_matrix, uint32_t tar_u, uint32_t tar_v, uint32_t tar_width, int half_ws)
+{
+
+    const int ws = 2 * half_ws + 1;
+    const int N  = ws * ws;
+    float sum_tar = 0.0f;
+
+    for (int y = -half_ws; y <= half_ws; ++y) {
+        uint32_t tar_row = (tar_v + y) * tar_width;
+
+        for (int x = -half_ws; x <= half_ws; ++x) {
+            sum_tar += ptr_tar_pixel_point_matrix[tar_row + tar_u + x].intensity_;
+        }
+    }
+
+    const float mean_tar = sum_tar / (float)N;
+    float meam_tar_minus_mean_ref = mean_tar - mean_ref;
+
+    float cost = 0;
+    for (int y = -half_ws; y <= half_ws; y++)
+    {
+        uint32_t ref_row = (ref_v + y)*ref_width;
+        uint32_t tar_row = (tar_v + y)*tar_width;
+        for (int x = -half_ws; x <= half_ws; x++)
+        {
+            cost += std::abs(ptr_ref_pixel_point_matrix[ref_row + ref_u + x].intensity_-ptr_tar_pixel_point_matrix[tar_row+tar_u+x].intensity_ + meam_tar_minus_mean_ref);
+        }
+    }
+
+    // cost /= N;
+
+    return cost;
+
+}
+
+float ZSAD(const cv::Mat p1, const cv::Mat p2)
+{
+    CV_Assert(p1.size() == p2.size());
+
+    // Compute mean intensity of both patches
+    cv::Scalar mean1 = cv::mean(p1);
+    cv::Scalar mean2 = cv::mean(p2);
+    float m2_minus_m1 = (float)mean2[0] - (float)mean1[0];
+
+    float cost = 0.0f;
+
+    for (int y = 0; y < p1.rows; y++) {
+        const float* row1 = p1.ptr<float>(y);
+        const float* row2 = p2.ptr<float>(y);
+
+        for (int x = 0; x < p1.cols; x++) {
+            cost += std::abs(row1[x] - row2[x] + m2_minus_m1);
+        }
+    }
+    return cost;
+}
+
+
+float NCC(const cv::Mat& p1, const cv::Mat& p2) 
+{
+    CV_Assert(p1.size() == p2.size());
+
+    cv::Scalar mean1, std1, mean2, std2;
+    cv::meanStdDev(p1, mean1, std1);
+    cv::meanStdDev(p2, mean2, std2);
+
+    float num = 0;
+    for (int y = 0; y < p1.rows; y++)
+        for (int x = 0; x < p1.cols; x++) {
+            float v1 = p1.at<float>(y,x) - (float)mean1[0];
+            float v2 = p2.at<float>(y,x) - (float)mean2[0];
+            num += v1 * v2;
+        }
+    return num / ((std1[0]*std2[0] + 1e-6f) * p1.total());
+}
+
+
+float Census(const cv::Mat& p1, const cv::Mat& p2) 
+{
+    CV_Assert(p1.size() == p2.size());
+
+    int rows = p1.rows;
+    int cols = p1.cols;
+
+    // Encode patch1
+    uint64_t desc1 = 0;
+    float center1 = p1.at<float>(rows/2, cols/2);
+
+    for (int y = 0; y < rows; y++) {
+        for (int x = 0; x < cols; x++) {
+            if (x == cols/2 && y == rows/2) continue; // skip center
+            desc1 <<= 1;
+            desc1 |= (p1.at<float>(y, x) < center1) ? 1 : 0;
+        }
+    }
+
+    // Encode patch2
+    uint64_t desc2 = 0;
+    float center2 = p2.at<float>(rows/2, cols/2);
+
+    for (int y = 0; y < rows; y++) {
+        for (int x = 0; x < cols; x++) {
+            if (x == cols/2 && y == rows/2) continue;
+            desc2 <<= 1;
+            desc2 |= (p2.at<float>(y, x) < center2) ? 1 : 0;
+        }
+    }
+
+    // Hamming distance
+    uint64_t v = desc1 ^ desc2;
+    int cost = 0;
+    while (v) {
+        cost += v & 1;
+        v >>= 1;
+    }
+
+    return static_cast<float>(cost);
+}
+
 
 }
 

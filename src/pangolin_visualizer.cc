@@ -1,4 +1,5 @@
 #include "pangolin_visualizer.h"
+#include "multi_view_stereo.h"
 
 
 
@@ -84,10 +85,13 @@ PangolinVisualizer::~PangolinVisualizer()
 }
 
 
-void PangolinVisualizer::showRefImageReconstruction(Image* const ref_image, Image* const tar_image)
+void PangolinVisualizer::showInterface()
 {
 
     std::vector<Image*> images = dataset_->getImages();
+    Image* const ref_image = multi_view_stereo_->getReferenceImage();
+    Image* const tar_image = multi_view_stereo_->getTargetImage();
+    
     int height = ref_image->getHeight();
     int width = ref_image->getWidth();
     int wh = width*height;
@@ -165,8 +169,8 @@ void PangolinVisualizer::showRefImageReconstruction(Image* const ref_image, Imag
             for(int u=0;u<width;u++)
             {   
                 int coord = v*width+u;
-                float z = ref_ptr_pixel_point_matrix[coord].depth_;
-                if(z < config_->min_depth_ || z > config_->max_depth_)
+                float z = ref_ptr_pixel_point_matrix[coord].output_data_.depth_;
+                if(z < config_->min_depth_ || z > config_->max_depth_ || ref_ptr_pixel_point_matrix[coord].max_depth_ - ref_ptr_pixel_point_matrix[coord].min_depth_ > 0.3 )
                 {
                     continue;
                 }
@@ -194,7 +198,7 @@ void PangolinVisualizer::showRefImageReconstruction(Image* const ref_image, Imag
                 // showColorizedMinMaxDiffDepth(min_depth_ptr, max_depth_ptr, width, height, config_->min_depth_, config_->max_depth_, "ref_diff_depth");
                 
                 cv::Mat colorized_depth(height, width, CV_8UC3);
-                ColorizedCVDepth(ref_ptr_pixel_point_matrix, width, height, config_->min_depth_, config_->max_depth_, colorized_depth);
+                ColorizedCVDepth(config_, ref_ptr_pixel_point_matrix, width, height, config_->min_depth_, config_->max_depth_, colorized_depth);
                 cv::imshow("ref_depth", colorized_depth);
 
                 // showGrayImage(ptr_gray_data, width, height, "ref_image");

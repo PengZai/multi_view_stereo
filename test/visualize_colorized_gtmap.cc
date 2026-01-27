@@ -71,8 +71,8 @@ int main(int argc, char** argv)
     // cv::waitKey(0);
 
     Eigen::Matrix4f T_first_camera_world = MVS::invertTransform(ref_image->getTransformationMatrix());
-    int height = ref_image->getHeight();
-    int width = ref_image->getWidth();
+    uint32_t height = ref_image->getHeight();
+    uint32_t width = ref_image->getWidth();
     Eigen::Matrix3f K_cam0 = config->cameras_[0].getIntrinsicsMatrix();
 
     while (!pangolin::ShouldQuit()) {

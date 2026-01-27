@@ -16,7 +16,7 @@
 #include <guik/viewer/light_viewer_context.hpp>
 
 #include <implot.h>
-
+#include <imgui.h>
 
 #include <unordered_map> 
 
@@ -75,8 +75,15 @@ class IridescenceVisualizer : public Visualizer
     IridescenceVisualizer(Config* const config);
     ~IridescenceVisualizer() = default;
 
+    void showInterface() override;
 
-    void showRefImageReconstruction(Image* const ref_image, Image* const tar_image) override;
+    void showReconstruction();
+    void showRefImagePointCloud(Image* ref_image);
+
+
+    void NextRefImageEvent();
+    void NextTarImageEvent();
+
     void DebugPlot();
 
     protected:
@@ -85,23 +92,12 @@ class IridescenceVisualizer : public Visualizer
     guik::LightViewer* viewer_;
     std::shared_ptr<guik::LightViewerContext> depth_uncertainty_viewer_;
 
-
-
     Eigen::Matrix4f Tcl_;
-
-    bool isProcessNextTarImage_ = false;
 
     std::shared_ptr<glk::Mesh> ref_image_canvas_;
 
     Eigen::Vector3f picked_uncertainty_point_position_;
-    PixelPoint* ptr_picked_ref_ptr_pixel_point_;
-    PixelPoint* ptr_pixel_point_on_the_left_ref_picked_pixel_point_;
-    PixelPoint* ptr_pixel_point_on_the_right_ref_picked_pixel_point_;
-    PixelPoint* ptr_pixel_point_on_the_up_ref_picked_pixel_point_;
-    PixelPoint* ptr_pixel_point_on_the_down_ref_picked_pixel_point_;
 
-    Image* ref_image_;
-    Image* tar_image_;  
 
 
 

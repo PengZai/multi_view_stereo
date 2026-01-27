@@ -7,26 +7,13 @@
 #include <fstream>   
 #include <sstream>   
 #include <stdexcept> 
-#include "../utils.h"
 #include "../configs.h"
-#include "../persistent_homology.h"
 
 namespace MVS
 {
 
 class Config;
 class Camera;
-class BotanicGardenDataset;
-class FastLivo2Dataset;
-class RemodeDataset;
-class TartanAirDataset;
-class KittiDataset;
-class TanksTemplesDataset;
-class ETH3DDataset;
-// class VirtualKittiDataset;
-class Visualizer;
-
-
 class Image;
 
 
@@ -42,42 +29,8 @@ class OutputData{
 
 };
 
-class EpipolarSegment
-{
-    public:
 
 
-    EpipolarSegment(float min_inv_depth, float max_inv_depth);
-    EpipolarSegment();
-
-    ~EpipolarSegment()= default;
-
-    void setMinInvDepth(float min_inv_depth);
-    void setMinDepth(float min_depth);
-
-    void setMaxInvDepth(float max_inv_depth);
-    void setMaxDepth(float max_depth);
-
-    void clear();
-
-    float min_inv_depth_;
-    float min_depth_;
-
-    float max_inv_depth_;
-    float max_depth_;
-
-    OutputData output_data_;
-
-
-
-    std::vector<float> costs_;
-    std::vector<float> tmp_aggregate_costs_;
-    std::vector<float> aggregate_costs_;
-    std::vector<Eigen::Vector2f> valid_uvs_;
-    std::vector<float> inv_depths_;
-    std::vector<MinimumPeak> local_minimum_peaks_;
-
-};
 
 class DebugInfo
 {
@@ -92,20 +45,27 @@ class DebugInfo
     // int tar_pose_id_;
     // int tar_camera_id_;
 
+    void setZerosTmpAggregateCostsFromCertainDirection(const int N, int direction_num);
+    void appendTmpAggregateCostsFromCertainDirection(float tmp_aggregate_cost, int direction_num);
+
     std::vector<float> steps_;
+    std::vector<float> tmp_aggregate_costs_from_left_direction_;
+    std::vector<float> tmp_aggregate_costs_from_right_direction_;
+    std::vector<float> tmp_aggregate_costs_from_up_direction_;
+    std::vector<float> tmp_aggregate_costs_from_down_direction_;
 
     
     // int best_step_idx_;
-    std::vector<int> possible_minimum_peak_idxes_;
-    std::vector<float> errors_in_minus_direction_;
-    std::vector<float> errors_in_plus_direction_;
+    int mini_aggregate_cost_idx_;
+    int mini_aggregate_cost_idx_minus_;
+    int mini_aggregate_cost_idx_plus_;
 
     int manual_step_idx_ = 0;
 
     Eigen::Vector2f uv_min_;
     Eigen::Vector2f uv_max_;
     // Eigen::Vector2f uv_best_match_;
-    std::vector<Eigen::Vector2f> uv_possible_matches_;
+    Eigen::Vector2f uv_possible_match_;
     Eigen::Vector2f unit_epipolar_vector_;
     float epipolar_length_;
 
@@ -113,13 +73,9 @@ class DebugInfo
     float init_max_depth_;
     float init_depth_;
 
-
-    std::vector<float> updated_min_depths_;
-    std::vector<float> updated_max_depths_;
-    std::vector<float> updated_depths_;
-
-
-    EpipolarSegment epipolar_segment_;
+    float updated_min_depth_;
+    float updated_max_depth_;
+    float updated_depth_;
 
 };
 
@@ -129,11 +85,28 @@ class PixelPoint
     public:
 
     enum Status {
-        UNINITIALIZED = 0,
-        UNCERTAINTY_DEPTH = 1,
-        INVALID,
-        GOOD
+        UNINITIALIZED = 0,                // a point have done nothing 
+        DISABLE,                          // disable point
+        NORMAL,                           // normal situation
+        INVALID_COST_OBSERVATION,         // cost match is invalid
+        INVALID_AGGREGATION_COST_OBSERVATION,  // aggregation cost is invalid
+        INVALID_NON_UNIQUENESSS,          // there are many ambiguous
+        READ_TO_SHOW                      // low uncertainty depth and ready to show
     };
+
+    static inline std::string StatusToString(Status v)
+    {
+        switch (v)
+        {
+            case UNINITIALIZED:   return "UNINITIALIZED";
+            case DISABLE:   return "DISABLE";
+            case NORMAL:   return "NORMAL";
+            case INVALID_COST_OBSERVATION: return "INVALID_COST_OBSERVATION";
+            case INVALID_NON_UNIQUENESSS:   return "INVALID_NON_UNIQUENESSS";
+            case READ_TO_SHOW: return "READ_TO_SHOW";
+            default:      return "[Unknown OS_type]";
+        }
+    }
 
 
     static int NPixelPoint_;
@@ -148,11 +121,17 @@ class PixelPoint
 
     void setGradient(float gradient_u, float gradient_v);
 
-    void getMininumIdxTmpAggregatedCost(int &minimum_cost_epipolar_segment_idx, int &minimum_cost_idx) const;
-    void getGlobalMininumPeakIdx(int &global_minimum_peak_epipolar_segment_idx, int &global_minimum_peak_idx) const;
+    void setMinInvDepth(float min_inv_depth);
+    void setMinDepth(float min_depth);
+
+    void setMaxInvDepth(float max_inv_depth);
+    void setMaxDepth(float max_depth);
+
+    void clearMatchInformation();
 
     float getInterpolatedTmpAggregatedCostByInvDepth(float ref_inv_depth) const;
-    bool DoesExistDepthIntersection(const PixelPoint& ref_pixel_point, int minimum_cost_epipolar_segment_idx) const;
+
+    bool DoesExistDepthIntersection(const PixelPoint& ref_pixel_point) const;
 
     ~PixelPoint() = default;
 
@@ -163,6 +142,7 @@ class PixelPoint
     
     Status status_;
 
+
     int u_;
     int v_;
 
@@ -172,8 +152,27 @@ class PixelPoint
     float depth_;
     
     Eigen::Vector2f unit_epipolar_vector_;
-    std::vector<EpipolarSegment> epipolar_segment_vec_;  
-    std::vector<DebugInfo> debug_info_vec_;
+
+    float min_inv_depth_;
+    float min_depth_;
+
+    float max_inv_depth_;
+    float max_depth_;
+    float confidence_; // 
+    int num_correct_consistency_check_;
+
+    OutputData output_data_;
+
+
+    std::vector<float> costs_;
+    std::vector<float> tmp_aggregate_costs_;
+    std::vector<float> aggregate_costs_;
+    std::vector<Eigen::Vector2f> valid_uvs_;
+    std::vector<float> inv_depths_;
+    int mini_cost_idx_;
+    int mini_aggregate_cost_idx_;
+    int num_has_been_aggregated_;
+    DebugInfo debug_info_;
 
 
 };
@@ -193,6 +192,8 @@ class Image
         void setQuaternion(const Eigen::Quaternionf &quaternion);
         const Eigen::Matrix3f getRotationMatrix() const;
         const Eigen::Matrix4f getTransformationMatrix() const;
+        std::map<int, Image*>& getMapOfImagesHasBeenMatched();
+
         void setName(const std::string &name);
         void setPath(const std::string &path);
         void setGTDepthPath(const std::string &path);
@@ -203,6 +204,8 @@ class Image
         void setTarImagePtr(Image* const ptr_tar_image);
         void setKRKi(const Eigen::Matrix3f& KRKi);
         void setKt(const Eigen::Vector3f& Kt);
+        void setWidthOrg(uint32_t widthOrg);
+        void setHeightOrg(uint32_t heightOrg);
     
 
         int getCameraId() const;
@@ -211,6 +214,7 @@ class Image
         const std::string getGTDepthPath() const;
         bool loadData();
         void calGraident();
+        void calDisablePixelPoint();
 
         std::string getImageName() const;
         uint32_t getWidthOrg() const;
@@ -250,6 +254,8 @@ class Image
         uint8_t* ptr_raw_gray_data_;
         PixelPoint* ptr_pixel_point_matrix_;
 
+        std::map<int, Image*> map_of_images_has_been_matched_;
+
 
         Eigen::Vector3f t_;
         Eigen::Quaternionf q_;
@@ -261,6 +267,9 @@ class Image
         Image* ptr_tar_image_;
         Eigen::Matrix3f KRKi_; // KRKi = K_tar * R_tar_ref * K_ref.inverse();
         Eigen::Vector3f Kt_; // K_tar * t_tar_ref;
+        
+        float ACCEPTABLE_COST_DIFF = 2;
+
 
 };
 
@@ -283,7 +292,7 @@ class Dataset
     // std::string trajectory_path_;
     bool is_all_cameras_in_same_traj_file_;
     int maximum_traj_;
-
+    int minimum_traj_;
 };
 
 

@@ -9,6 +9,7 @@
 namespace MVS
 {
 
+class PixelPoint;
 
 
 // struct NpyArray {
@@ -36,7 +37,15 @@ cv::Mat getSubpixelPatch(const cv::Mat img, float u, float v,
 void getRoundPixelPatch(const cv::Mat& img, float u, float v,
                          int width, int height, cv::Mat& out_patch);
 Eigen::Matrix4f invertTransform(const Eigen::Matrix4f& T);
-    
+
+float ASW(const PixelPoint* ptr_ref_pixel_point_matrix, uint32_t ref_u, uint32_t ref_v, uint32_t ref_width, const PixelPoint* ptr_tar_pixel_point_matrix, uint32_t tar_u, uint32_t tar_v, uint32_t tar_width, int half_ws);
+float SAD(const PixelPoint* ptr_ref_pixel_point_matrix, uint32_t ref_u, uint32_t ref_v, uint32_t ref_width, const PixelPoint* ptr_tar_pixel_point_matrix, uint32_t tar_u, uint32_t tar_v, uint32_t tar_width, int half_ws);
+float ZSAD(const PixelPoint* ptr_ref_pixel_point_matrix, uint32_t ref_u, uint32_t ref_v, uint32_t ref_width, const PixelPoint* ptr_tar_pixel_point_matrix, uint32_t tar_u, uint32_t tar_v, uint32_t tar_width, int half_ws);
+float ZSAD(const PixelPoint* ptr_ref_pixel_point_matrix, uint32_t ref_u, uint32_t ref_v, float mean_ref, uint32_t ref_width, const PixelPoint* ptr_tar_pixel_point_matrix, uint32_t tar_u, uint32_t tar_v, uint32_t tar_width, int half_ws);
+float ZSAD(const cv::Mat p1, const cv::Mat p2);
+float NCC(const cv::Mat& p1, const cv::Mat& p2);
+float Census(const cv::Mat& p1, const cv::Mat& p2);
+
 } // namespace MVS
 
 

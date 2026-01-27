@@ -4,13 +4,14 @@ system:
   num_used_camera: 1
   use_external_trajectory_id: 0
   is_use_GT_depth: 1
-  maximum_traj: 200
-  # ref_pose_idx: 61
-  ref_pose_idx: 20
+  maximum_traj: 300
+  minimum_traj: 270
+  # ref_pose_idx: 300
+  ref_pose_idx: 0
   ref_camera_idx: 0
   start_match_uv: [0, 0]
-  # tar_pose_start_idx: 80
-  tar_pose_start_idx: 20
+  # tar_pose_start_idx: 300
+  tar_pose_start_idx: 0
   tar_camera_start_idx: 0
   image_sequence_mode: forward_time_direction # option: forward_time_direction, backward_time_direction, full_time_direction
   min_depth: 1.0

@@ -41,33 +41,41 @@ void VirtualKittiDataset::readTrajectory()
             Nline++;
             continue; 
         }
-        // double timestamp = std::stod(str_timestamp);
-        // str_timestamp.erase(std::remove(str_timestamp.begin(), str_timestamp.end(), '.'), str_timestamp.end());
-        // std::string str_timestamp = std::to_string(timestamp);
 
-        Eigen::Matrix4f T_pose_world;
-        T_pose_world << 
-        r11, r12, r13, t1, 
-        r21, r22, r23, t2, 
-        r31, r32, r33, t3,
-        0, 0, 0, 1.0;
+        if(Ntraj >= minimum_traj_)
+        {
 
-        Eigen::Matrix4f T_world_pose = invertTransform(T_pose_world);
+            // double timestamp = std::stod(str_timestamp);
+            // str_timestamp.erase(std::remove(str_timestamp.begin(), str_timestamp.end(), '.'), str_timestamp.end());
+            // std::string str_timestamp = std::to_string(timestamp);
 
-        // T_world_camera
-        for(size_t cam_id=0;cam_id<config_->num_used_camera_; cam_id++){
-            Image *image = new Image(config_);
-            Eigen::Matrix4f T_world_camid = T_world_pose * config_->trajectory_->T_pose_camidx_[cam_id];
-            std::string image_name = config_->cameras_[cam_id].image_names_[frame_idx];
+            Eigen::Matrix4f T_pose_world;
+            T_pose_world << 
+            r11, r12, r13, t1, 
+            r21, r22, r23, t2, 
+            r31, r32, r33, t3,
+            0, 0, 0, 1.0;
 
-            image->setTranslation(T_world_camid.block<3,1>(0,3));
-            image->setQuaternion(Eigen::Quaternionf(T_world_camid.block<3,3>(0,0)));
-            image->setName(image_name);
-            image->setPath(cameras_[cam_id].dir_path_ + "/" + image_name +".png");
-            image->setCameraId(cam_id);
-            image->setPoseId(Ntraj);
-            images_.push_back(image);
+            Eigen::Matrix4f T_world_pose = invertTransform(T_pose_world);
 
+            // T_world_camera
+            for(size_t cam_id=0;cam_id<config_->num_used_camera_; cam_id++){
+                Image *image = new Image(config_);
+                Eigen::Matrix4f T_world_camid = T_world_pose * config_->trajectory_->T_pose_camidx_[cam_id];
+                std::string image_name = config_->cameras_[cam_id].image_names_[frame_idx];
+
+                image->setTranslation(T_world_camid.block<3,1>(0,3));
+                image->setQuaternion(Eigen::Quaternionf(T_world_camid.block<3,3>(0,0)));
+                image->setName(image_name);
+                image->setPath(cameras_[cam_id].dir_path_ + "/" + image_name +".png");
+                image->setCameraId(cam_id);
+                image->setPoseId(Ntraj-minimum_traj_);
+                images_.push_back(image);
+                image->setWidthOrg(config_->cameras_[cam_id].original_resolution_[0]);
+                image->setHeightOrg(config_->cameras_[cam_id].original_resolution_[1]);
+
+
+            }
         }
 
         Nline++;

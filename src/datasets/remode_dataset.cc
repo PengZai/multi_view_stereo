@@ -34,7 +34,6 @@ void RemodeDataset::readTrajectory()
             continue;
         }
         std::istringstream iss(line);        
-        Image *image = new Image(config_);
         std::string image_name;
         float x, y, z, qx, qy, qz, qw;
         if (!(iss >> image_name >> x >> y >> z >> qx >> qy >> qz >> qw)) {
@@ -42,30 +41,38 @@ void RemodeDataset::readTrajectory()
             Nline++;
             continue; 
         }
-        image_name = image_name.substr(0, image_name.find('.'));
 
-        Eigen::Matrix4f T_world_pose = Eigen::Matrix4f::Identity();
-        T_world_pose.block<3,3>(0,0) = Eigen::Quaternionf(qw,qx,qy,qz).toRotationMatrix();
-        T_world_pose.block<3,1>(0,3) = Eigen::Vector3f(x,y,z);
+        if(Ntraj >= minimum_traj_)
+        {
+            Image *image = new Image(config_);
+            image_name = image_name.substr(0, image_name.find('.'));
 
-        Eigen::Matrix4f T_world_camid = T_world_pose * config_->trajectory_->T_pose_camidx_[0];
+            Eigen::Matrix4f T_world_pose = Eigen::Matrix4f::Identity();
+            T_world_pose.block<3,3>(0,0) = Eigen::Quaternionf(qw,qx,qy,qz).toRotationMatrix();
+            T_world_pose.block<3,1>(0,3) = Eigen::Vector3f(x,y,z);
 
-        // T_world_camera
-        image->setTranslation(T_world_camid.block<3,1>(0,3));
-        image->setQuaternion(Eigen::Quaternionf(T_world_camid.block<3,3>(0,0)));
-        image->setName(image_name);
-        image->setPath(cameras_[0].dir_path_ + "/" + image_name+".png");
-        image->setCameraId(0);
-        image->setPoseId(Ntraj);
-        if(config_->is_use_GT_depth_ == true){
+            Eigen::Matrix4f T_world_camid = T_world_pose * config_->trajectory_->T_pose_camidx_[0];
 
-            std::string gt_depth_path = config_->cameras_[0].gt_depth_->path_ + "/" + image->getImageName() + ".depth";
-            image->setGTDepthPath(gt_depth_path);
-            
+            // T_world_camera
+            image->setTranslation(T_world_camid.block<3,1>(0,3));
+            image->setQuaternion(Eigen::Quaternionf(T_world_camid.block<3,3>(0,0)));
+            image->setName(image_name);
+            image->setPath(cameras_[0].dir_path_ + "/" + image_name+".png");
+            image->setCameraId(0);
+            image->setPoseId(Ntraj-minimum_traj_);
+            image->setWidthOrg(config_->cameras_[0].original_resolution_[0]);
+            image->setHeightOrg(config_->cameras_[0].original_resolution_[1]);
+
+
+            if(config_->is_use_GT_depth_ == true){
+
+                std::string gt_depth_path = config_->cameras_[0].gt_depth_->path_ + "/" + image->getImageName() + ".depth";
+                image->setGTDepthPath(gt_depth_path);
+                
+            }
+        
+            images_.push_back(image);
         }
-       
-
-        images_.push_back(image);
 
      
 

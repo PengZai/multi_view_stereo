@@ -7,7 +7,7 @@
 #include "tanks_temples_dataset.h"
 #include "eth3d_dataset.h"
 // #include "virtual_kitti_dataset.h"
-#include "../visualizer.h"
+#include "../undistort.h"
 
 
 namespace MVS
@@ -83,6 +83,7 @@ Dataset::Dataset(Config* const config)
     config_ = config;
     cameras_ = config_->cameras_;
     maximum_traj_ = config_->maximum_traj_;
+    minimum_traj_ = config_->minimum_traj_;
 
 
 }
@@ -108,6 +109,11 @@ void DebugInfo::clear()
 
     steps_.clear();
 
+    tmp_aggregate_costs_from_left_direction_.clear();
+    tmp_aggregate_costs_from_right_direction_.clear();
+    tmp_aggregate_costs_from_up_direction_.clear();
+    tmp_aggregate_costs_from_down_direction_.clear();
+
     uv_min_ = Eigen::Vector2f::Zero();
     uv_max_ = Eigen::Vector2f::Zero();
     // uv_best_match_ = Eigen::Vector2f::Zero();
@@ -118,28 +124,74 @@ void DebugInfo::clear()
     init_max_depth_ = -1;
     init_depth_ = -1;
 
+    uv_possible_match_ = Eigen::Vector2f::Zero();
+    mini_aggregate_cost_idx_ = -1;
+    mini_aggregate_cost_idx_minus_ = -1;
+    mini_aggregate_cost_idx_plus_ = -1;
+    updated_min_depth_ = -1;
+    updated_max_depth_ = -1;
+    updated_depth_ = -1;
+
 
 }
 
 
-EpipolarSegment::EpipolarSegment(float min_inv_depth, float max_inv_depth):
-min_inv_depth_(min_inv_depth),
-max_inv_depth_(max_inv_depth),
-min_depth_(1/max_inv_depth),
-max_depth_(1/min_inv_depth)
+void DebugInfo::appendTmpAggregateCostsFromCertainDirection(float tmp_aggregate_cost, int direction_num)
 {
 
+    if(direction_num == 0)
+    {
+        tmp_aggregate_costs_from_right_direction_.emplace_back(tmp_aggregate_cost);
+    }
+    else if(direction_num == 1)
+    {
+        tmp_aggregate_costs_from_left_direction_.emplace_back(tmp_aggregate_cost);
+    }
+    else if(direction_num == 2)
+    {
+        tmp_aggregate_costs_from_down_direction_.emplace_back(tmp_aggregate_cost); 
+
+    }
+    else if(direction_num == 3)
+    {
+        tmp_aggregate_costs_from_up_direction_.emplace_back(tmp_aggregate_cost);
+
+    }
+    
+
 
 }
 
-EpipolarSegment::EpipolarSegment():
-EpipolarSegment(-1, -1)
+void DebugInfo::setZerosTmpAggregateCostsFromCertainDirection(const int N, int direction_num)
 {
+    
+    if(direction_num == 0)
+    {
+        tmp_aggregate_costs_from_right_direction_.resize(N, 0);
+
+    }
+    else if(direction_num == 1)
+    {
+        tmp_aggregate_costs_from_left_direction_.resize(N, 0);
+
+    }
+    else if(direction_num == 2)
+    {
+        tmp_aggregate_costs_from_down_direction_.resize(N, 0); 
+
+    }
+    else if(direction_num == 3)
+    {
+        
+        tmp_aggregate_costs_from_up_direction_.resize(N, 0);
+
+    }
 
 }
 
 
-void EpipolarSegment::setMinInvDepth(float min_inv_depth)
+
+void PixelPoint::setMinInvDepth(float min_inv_depth)
 {
 
     min_inv_depth_ = min_inv_depth;
@@ -147,19 +199,19 @@ void EpipolarSegment::setMinInvDepth(float min_inv_depth)
 
 }
 
-void EpipolarSegment::setMinDepth(float min_depth)
+void PixelPoint::setMinDepth(float min_depth)
 {
     max_inv_depth_ = 1/min_depth;
     min_depth_ = min_depth;
 }
 
-void EpipolarSegment::setMaxInvDepth(float max_inv_depth)
+void PixelPoint::setMaxInvDepth(float max_inv_depth)
 {
     max_inv_depth_ = max_inv_depth;
     min_depth_ = 1/max_inv_depth;
 }
 
-void EpipolarSegment::setMaxDepth(float max_depth)
+void PixelPoint::setMaxDepth(float max_depth)
 {
     min_inv_depth_ = 1/max_depth;
     max_depth_ = max_depth;
@@ -167,21 +219,29 @@ void EpipolarSegment::setMaxDepth(float max_depth)
 }
 
 
-void EpipolarSegment::clear()
+void PixelPoint::clearMatchInformation()
 {
     costs_.clear();
     aggregate_costs_.clear();
     valid_uvs_.clear();
     inv_depths_.clear();
+    mini_cost_idx_ = -1;
+    mini_aggregate_cost_idx_ = -1;
 }
 
 
 
 PixelPoint::PixelPoint():
     depth_(0),
-    status_(Status::UNINITIALIZED)
+    status_(Status::UNINITIALIZED),
+    min_inv_depth_(-1),
+    max_inv_depth_(-1),
+    min_depth_(-1),
+    max_depth_(-1),
+    num_has_been_aggregated_(0),
+    confidence_(0),
+    num_correct_consistency_check_(0)
 {
-
     id_ = NPixelPoint_;
     NPixelPoint_++ ;
 
@@ -195,75 +255,20 @@ void PixelPoint::setImagePtr(Image* const image)
     pose_id_ = image->getPoseId();
 }
 
-bool PixelPoint::DoesExistDepthIntersection(const PixelPoint& ref_pixel_point, int minimum_cost_epipolar_segment_idx) const
+bool PixelPoint::DoesExistDepthIntersection(const PixelPoint& ref_pixel_point) const
 {   
     bool does_exist_depth_intersection = false;
-    const EpipolarSegment& epipolar_segment_with_minimum_cost_on_ref_pixel_point = ref_pixel_point.epipolar_segment_vec_[minimum_cost_epipolar_segment_idx];
-
-    for(int epipolar_segment_idx=0; epipolar_segment_idx<(int)epipolar_segment_vec_.size(); epipolar_segment_idx++)
+    if(!(ref_pixel_point.min_depth_ > min_depth_ || ref_pixel_point.max_depth_ < max_depth_))
     {
-        const EpipolarSegment& epipolar_segment = epipolar_segment_vec_[epipolar_segment_idx];
-        if(!(epipolar_segment_with_minimum_cost_on_ref_pixel_point.min_inv_depth_ > epipolar_segment.max_inv_depth_ || epipolar_segment_with_minimum_cost_on_ref_pixel_point.max_inv_depth_ < epipolar_segment.min_inv_depth_))
-        {
-            does_exist_depth_intersection = true;
-            break;
-        }
+        does_exist_depth_intersection = true;
     }
-    
+
     return does_exist_depth_intersection;
 
 }
 
 
-void PixelPoint::getMininumIdxTmpAggregatedCost(int &minimum_cost_epipolar_segment_idx, int &minimum_cost_idx) const
-{
 
-    float mini_cost = std::numeric_limits<float>::infinity();
-    for(int epipolar_segment_idx=0; epipolar_segment_idx < (int)epipolar_segment_vec_.size(); epipolar_segment_idx++)
-    {
-
-        const EpipolarSegment& epipolar_segment = epipolar_segment_vec_[epipolar_segment_idx];
-        for(int cost_idx = 0; cost_idx < (int)epipolar_segment.tmp_aggregate_costs_.size(); cost_idx++ )
-        {
-            if(epipolar_segment.tmp_aggregate_costs_[cost_idx] < mini_cost)
-            {
-                mini_cost = epipolar_segment.tmp_aggregate_costs_[cost_idx];
-                minimum_cost_epipolar_segment_idx = epipolar_segment_idx;
-                minimum_cost_idx = cost_idx;
-            } 
-        }
-    }
-
-
-}
-
-void PixelPoint::getGlobalMininumPeakIdx(int &global_minimum_peak_epipolar_segment_idx, int &global_minimum_peak_idx) const
-{
-
-    float mini_cost = std::numeric_limits<float>::infinity();
-    global_minimum_peak_epipolar_segment_idx = -1;
-    global_minimum_peak_idx = -1;
-
-    for(int epipolar_segment_idx=0; epipolar_segment_idx < (int)epipolar_segment_vec_.size(); epipolar_segment_idx++)
-    {
-        const EpipolarSegment& epipolar_segment = epipolar_segment_vec_[epipolar_segment_idx];
-        if(epipolar_segment.local_minimum_peaks_.size() == 0){
-            continue;
-        }
-
-        const MinimumPeak& local_minimum_peak = epipolar_segment.local_minimum_peaks_[0];
-        if(mini_cost > epipolar_segment.aggregate_costs_[local_minimum_peak.born_idx_])
-        {
-            mini_cost = epipolar_segment.aggregate_costs_[local_minimum_peak.born_idx_];
-            global_minimum_peak_epipolar_segment_idx = epipolar_segment_idx;
-            global_minimum_peak_idx = 0;
-        }
-
-    }
-
-
-
-}
 
 
 
@@ -272,28 +277,23 @@ float PixelPoint::getInterpolatedTmpAggregatedCostByInvDepth(float ref_inv_depth
 
     bool is_exist_interpolated_cost = false;
     float interpolated_tmp_aggregated_cost = std::numeric_limits<float>::infinity();
-    for(int epipolar_segment_idx = 0; epipolar_segment_idx < (int)epipolar_segment_vec_.size(); epipolar_segment_idx++)
-    {
+
         
-        const EpipolarSegment& epipolar_segment = epipolar_segment_vec_[epipolar_segment_idx];
-
-        for(int inv_depth_idx = 1; inv_depth_idx < (int)epipolar_segment.inv_depths_.size(); inv_depth_idx++)
+    for(int inv_depth_idx = 1; inv_depth_idx < (int)inv_depths_.size(); inv_depth_idx++)
+    {
+        float lower_inv_depth = inv_depths_[inv_depth_idx-1];
+        float inv_depth = inv_depths_[inv_depth_idx];
+        if(ref_inv_depth <= inv_depth && ref_inv_depth >= lower_inv_depth)
         {
-            float lower_inv_depth = epipolar_segment.inv_depths_[inv_depth_idx-1];
-            float inv_depth = epipolar_segment.inv_depths_[inv_depth_idx];
-            if(ref_inv_depth <= inv_depth && ref_inv_depth >= lower_inv_depth)
-            {
-                interpolated_tmp_aggregated_cost =  epipolar_segment.tmp_aggregate_costs_[inv_depth_idx-1] + (ref_inv_depth - lower_inv_depth) * (epipolar_segment.tmp_aggregate_costs_[inv_depth_idx] - epipolar_segment.tmp_aggregate_costs_[inv_depth_idx-1])/(inv_depth - lower_inv_depth);
-                is_exist_interpolated_cost = true;
-                break;
-            }
-        }
-
-        if(is_exist_interpolated_cost == true)
-        {
+            interpolated_tmp_aggregated_cost =  tmp_aggregate_costs_[inv_depth_idx-1] + (ref_inv_depth - lower_inv_depth) * 
+                (tmp_aggregate_costs_[inv_depth_idx] - tmp_aggregate_costs_[inv_depth_idx-1])/(inv_depth - lower_inv_depth);
+            is_exist_interpolated_cost = true;
             break;
         }
     }
+
+
+    
 
     return interpolated_tmp_aggregated_cost;
 }
@@ -324,6 +324,8 @@ Image::Image(Config* const config)
 ptr_pixel_point_matrix_(nullptr),
 ptr_tar_image_(nullptr),
 GT_depth_path_(""),
+width_(0),
+height_(0),
 config_(config)
 {   
     id_ = Nimage_;
@@ -372,6 +374,12 @@ const Eigen::Matrix4f Image::getTransformationMatrix() const
 
     return T_world_camera;
 }
+
+std::map<int, Image*>& Image::getMapOfImagesHasBeenMatched()
+{
+    return map_of_images_has_been_matched_;
+}
+
 
 
 void Image::setName(const std::string &name)
@@ -457,6 +465,7 @@ bool Image::loadData()
         std::cout <<  "path of image id :" << id_ << " is empty " << std::endl;
     }
 
+
     cv::Mat cv_raw_gray_data;
     if(ptr_raw_gray_data_ != nullptr)
     {
@@ -475,8 +484,12 @@ bool Image::loadData()
 
     // cv::resize(cv_bgr_data_, cv_mini_bgr_data_, cv::Size(160, 120), 0, 0, cv::INTER_LINEAR);
 
-    wOrg_ = cv_raw_gray_data.cols;
-    hOrg_ = cv_raw_gray_data.rows;
+    if(wOrg_ != cv_raw_gray_data.cols || hOrg_ != cv_raw_gray_data.rows)
+    {
+        std::cout << "setting of original resolution (" << wOrg_ << "," << hOrg_ <<  ") is conflict with data (" << cv_raw_gray_data.cols << "," <<  cv_raw_gray_data.rows << ")" << std::endl;
+        return false;
+    }
+
     whOrg_ = wOrg_ * hOrg_;
 
 
@@ -521,7 +534,11 @@ bool Image::loadData()
 
     // ptr_gradient_gray_data_ = new float[2 * wh_]();
 
-    calGraident();
+    // calGraident();
+    calDisablePixelPoint();
+
+    std::cout <<  " we has loaded image with " << id_ << std::endl;
+
 
     return true;
 
@@ -544,10 +561,74 @@ void Image::calGraident()
                             ptr_pixel_point_matrix_[(y - 1) * width_ + (x)].intensity_);
 
             ptr_pixel_point_matrix_[cidx].setGradient(Gu, Gv);
-
+ 
         }
     }
 
+}
+
+void Image::calDisablePixelPoint()
+{
+
+    float ws_2 = (2*config_->half_window_size_+1)*(2*config_->half_window_size_+1);
+    for (int v = 1 + config_->half_window_size_; v < height_ - config_->half_window_size_ - 1; ++v)
+    {
+        for (int u = 1 + config_->half_window_size_; u < width_ - config_->half_window_size_ - 1; ++u)
+        {
+            int cidx = v * width_ + u;
+            // float sum_ref = 0;
+            // for (int y = -config_->half_window_size_; y <= config_->half_window_size_; ++y) {
+            //     uint32_t ref_row = (v + y) * width_;
+
+            //     for (int x = -config_->half_window_size_; x <= config_->half_window_size_; ++x) {
+            //         sum_ref += ptr_pixel_point_matrix_[ref_row + u + x].intensity_;
+            //     }
+            // }
+
+            // const float mean_ref = sum_ref / (float)ws_2;
+
+            // float self_cost_left = ZSAD(ptr_pixel_point_matrix_, u, v, mean_ref, ptr_pixel_point_matrix_, u-1, v, width_, height_, config_->half_window_size_)/(ws_2);
+            // float self_cost_right = ZSAD(ptr_pixel_point_matrix_, u, v, mean_ref, ptr_pixel_point_matrix_, u+1, v, width_, height_, config_->half_window_size_)/(ws_2);
+            // float self_cost_up = ZSAD(ptr_pixel_point_matrix_, u, v, mean_ref, ptr_pixel_point_matrix_, u, v+1, width_, height_, config_->half_window_size_)/(ws_2);
+            // float self_cost_down = ZSAD(ptr_pixel_point_matrix_, u, v, mean_ref, ptr_pixel_point_matrix_, u, v-1, width_, height_, config_->half_window_size_)/(ws_2);
+            
+            // float self_cost_left_up = ZSAD(ptr_pixel_point_matrix_, u, v, mean_ref, ptr_pixel_point_matrix_, u-1, v+1, width_, height_, config_->half_window_size_)/(ws_2);
+            // float self_cost_left_down = ZSAD(ptr_pixel_point_matrix_, u, v, mean_ref, ptr_pixel_point_matrix_, u-1, v-1, width_, height_, config_->half_window_size_)/(ws_2);
+            // float self_cost_right_up = ZSAD(ptr_pixel_point_matrix_, u, v, mean_ref, ptr_pixel_point_matrix_, u+1, v+1, width_, height_, config_->half_window_size_)/(ws_2);
+            // float self_cost_right_down = ZSAD(ptr_pixel_point_matrix_, u, v, mean_ref, ptr_pixel_point_matrix_, u+1, v-1, width_, height_, config_->half_window_size_)/(ws_2);
+
+            float self_cost_left = SAD(ptr_pixel_point_matrix_, u, v, width_, ptr_pixel_point_matrix_, u-1, v, width_, config_->half_window_size_)/(ws_2);
+            float self_cost_right = SAD(ptr_pixel_point_matrix_, u, v, width_, ptr_pixel_point_matrix_, u+1, v, width_, config_->half_window_size_)/(ws_2);
+            float self_cost_up = SAD(ptr_pixel_point_matrix_, u, v, width_, ptr_pixel_point_matrix_, u, v+1, width_, config_->half_window_size_)/(ws_2);
+            float self_cost_down = SAD(ptr_pixel_point_matrix_, u, v, width_, ptr_pixel_point_matrix_, u, v-1, width_, config_->half_window_size_)/(ws_2);
+            
+            float self_cost_left_up = SAD(ptr_pixel_point_matrix_, u, v, width_, ptr_pixel_point_matrix_, u-1, v+1, width_, config_->half_window_size_)/(ws_2);
+            float self_cost_left_down = SAD(ptr_pixel_point_matrix_, u, v, width_, ptr_pixel_point_matrix_, u-1, v-1, width_, config_->half_window_size_)/(ws_2);
+            float self_cost_right_up = SAD(ptr_pixel_point_matrix_, u, v, width_, ptr_pixel_point_matrix_, u+1, v+1, width_, config_->half_window_size_)/(ws_2);
+            float self_cost_right_down = SAD(ptr_pixel_point_matrix_, u, v, width_, ptr_pixel_point_matrix_, u+1, v-1, width_, config_->half_window_size_)/(ws_2);
+
+
+            // float self_cost_left = ASW(ptr_pixel_point_matrix_, u, v, width_, ptr_pixel_point_matrix_, u-1, v, width_, config_->half_window_size_);
+            // float self_cost_right = ASW(ptr_pixel_point_matrix_, u, v, width_, ptr_pixel_point_matrix_, u+1, v, width_, config_->half_window_size_);
+            // float self_cost_up = ASW(ptr_pixel_point_matrix_, u, v, width_, ptr_pixel_point_matrix_, u, v+1, width_, config_->half_window_size_);
+            // float self_cost_down = ASW(ptr_pixel_point_matrix_, u, v, width_, ptr_pixel_point_matrix_, u, v-1, width_, config_->half_window_size_);
+            
+            // float self_cost_left_up = ASW(ptr_pixel_point_matrix_, u, v, width_, ptr_pixel_point_matrix_, u-1, v+1, width_, config_->half_window_size_);
+            // float self_cost_left_down = ASW(ptr_pixel_point_matrix_, u, v, width_, ptr_pixel_point_matrix_, u-1, v-1, width_, config_->half_window_size_);
+            // float self_cost_right_up = ASW(ptr_pixel_point_matrix_, u, v, width_, ptr_pixel_point_matrix_, u+1, v+1, width_, config_->half_window_size_);
+            // float self_cost_right_down = ASW(ptr_pixel_point_matrix_, u, v, width_, ptr_pixel_point_matrix_, u+1, v-1, width_, config_->half_window_size_);
+
+            
+
+            float self_cost = std::max(std::max(std::max(std::max(std::max(std::max(std::max(self_cost_left, self_cost_right), self_cost_up), self_cost_down), self_cost_left_up), self_cost_left_down), self_cost_right_up), self_cost_right_down);
+            
+            if(self_cost <= ACCEPTABLE_COST_DIFF)
+            {
+                ptr_pixel_point_matrix_[cidx].status_ = PixelPoint::Status::DISABLE;
+            }
+ 
+        }
+    }
 }
 
 
@@ -570,6 +651,17 @@ uint32_t Image::getWidth() const
 uint32_t Image::getHeight() const
 {
     return height_;
+}
+
+
+void Image::setWidthOrg(uint32_t widthOrg)
+{
+    wOrg_ = widthOrg;
+}
+
+void Image::setHeightOrg(uint32_t heightOrg)
+{
+    hOrg_ = heightOrg;
 }
 
 
@@ -612,38 +704,7 @@ const cv::Mat& Image::getGTDepthData() const
 }
 
 
-void Image::loadDepthFromMinMaxInvDepth() const
-{
 
-    int half_ws = config_->half_window_size_;
-    for(size_t v=half_ws; v < height_ - half_ws; v++)
-    {
-        for(size_t u=half_ws; u < width_ - half_ws; u++)
-        {   
-            int current_coord = v*width_+u;
-            // if(v>200&&u>300){
-            //     int test = 1;
-            // }
-            PixelPoint& pixel_point = ptr_pixel_point_matrix_[current_coord];
-            float min_depth = config_->min_depth_;
-            float max_depth = config_->max_depth_;
-
-            if(pixel_point.epipolar_segment_vec_.size() >= 1)
-            {
-                min_depth = 1.0/pixel_point.epipolar_segment_vec_[0].max_inv_depth_;
-                max_depth = 1.0/pixel_point.epipolar_segment_vec_[0].min_inv_depth_;
-            }
-
-            float diff = abs(max_depth-min_depth);
-            float depth = (min_depth+max_depth)/2.0;
-            if(depth >= config_->min_depth_ && depth <= config_->max_depth_){
-                pixel_point.depth_ = depth;
-            }
-
-        }
-    }
-
-}
 
 cv::Mat Image::getCVDepth() const
 {

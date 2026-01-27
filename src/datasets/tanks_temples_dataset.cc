@@ -47,29 +47,34 @@ void TanksTemplesDataset::readTrajectory()
         fgets( buffer, 1024, f );
         sscanf( buffer, "%f %f %f %f", &T_world_pose(3,0), &T_world_pose(3,1), &T_world_pose(3,2), &T_world_pose(3,3) );
 
+        if(Ntraj >= minimum_traj_)
+        {
+            // std::string str_timestamp = std::to_string(timestamp);
+            for(size_t cam_id=0;cam_id<config_->num_used_camera_; cam_id++){
+                Image *image = new Image(config_);
+                Eigen::Matrix4f T_world_camid = T_world_pose * config_->trajectory_->T_pose_camidx_[cam_id];
+
+                std::string image_name = config_->cameras_[cam_id].image_names_[Ntraj];
+                // T_world_camera
+                image->setTranslation(T_world_camid.block<3,1>(0,3));
+                image->setQuaternion(Eigen::Quaternionf(T_world_camid.block<3,3>(0,0)));
+                image->setName(image_name);
+                image->setPath(cameras_[cam_id].dir_path_ + "/" + image_name+".jpg");
+                image->setCameraId(cam_id);
+                image->setPoseId(Ntraj-minimum_traj_);
+                image->setWidthOrg(config_->cameras_[cam_id].original_resolution_[0]);
+                image->setHeightOrg(config_->cameras_[cam_id].original_resolution_[1]);
 
 
-        // std::string str_timestamp = std::to_string(timestamp);
-        for(size_t cam_id=0;cam_id<config_->num_used_camera_; cam_id++){
-            Image *image = new Image(config_);
-            Eigen::Matrix4f T_world_camid = T_world_pose * config_->trajectory_->T_pose_camidx_[cam_id];
+                if(config_->is_use_GT_depth_ == true){
+                    // std::string gt_depth_path = config_->cameras_[cam_id].gt_depth_->path_ + "/" + image->getImageName() + "_depth" + ".npy";
+                    std::string gt_depth_path = config_->cameras_[cam_id].gt_depth_->path_ + "/" + image->getImageName() + "_depth" + ".tiff";
 
-            std::string image_name = config_->cameras_[cam_id].image_names_[Ntraj];
-            // T_world_camera
-            image->setTranslation(T_world_camid.block<3,1>(0,3));
-            image->setQuaternion(Eigen::Quaternionf(T_world_camid.block<3,3>(0,0)));
-            image->setName(image_name);
-            image->setPath(cameras_[cam_id].dir_path_ + "/" + image_name+".jpg");
-            image->setCameraId(cam_id);
-            image->setPoseId(Ntraj);
-            if(config_->is_use_GT_depth_ == true){
-                // std::string gt_depth_path = config_->cameras_[cam_id].gt_depth_->path_ + "/" + image->getImageName() + "_depth" + ".npy";
-                std::string gt_depth_path = config_->cameras_[cam_id].gt_depth_->path_ + "/" + image->getImageName() + "_depth" + ".tiff";
+                    image->setGTDepthPath(gt_depth_path);    
+                }
 
-                image->setGTDepthPath(gt_depth_path);    
+                images_.push_back(image);
             }
-
-            images_.push_back(image);
         }
 
         Nline++;
